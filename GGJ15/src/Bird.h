@@ -16,7 +16,7 @@ using namespace ci;
 class Bird
 {
 public:
-	Bird(Vec2f pos, Vec2f vel, )
+	Bird(Vec2f pos, Vec2f vel)
 	{
 		
 	}
