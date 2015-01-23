@@ -1,0 +1,3 @@
+[submodule "GGJ15/lib/cinder"]
+	path = GGJ15/lib/cinder
+	url = https://github.com/cinder/Cinder.git
