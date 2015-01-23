@@ -16,9 +16,9 @@ using namespace ci;
 class Bird
 {
 public:
-	Bird(Vec2f pos, Vec2f vel)
+	Bird (Vec2f pos, Vec2f vel, float angle)
+	: position (pos), velocity (vel), orientation (angle)
 	{
-		
 	}
 	
 	void update()
@@ -31,18 +31,18 @@ public:
 		gl::pushMatrices();
 		gl::translate (position * -1.f);
 		gl::rotate (Vec3f (0., 0., orientation));
+		gl::translate (position);
 		gl::color (1., 0., 0.);
 		gl::begin (GL_TRIANGLES);
-		gl::vertex (10., 3., 0.);
-		gl::vertex (10., 8., 0.);
-		gl::vertex (0., 0., 0.);
+		gl::vertex (position.x + 10., position.y + 3., 0.);
+		gl::vertex (position.x + 10., position.y + 8., 0.);
+		gl::vertex (position.x + 0., position.y + 0., 0.);
 		gl::end();
 		gl::begin (GL_TRIANGLES);
-		gl::vertex (20., 0., 0.);
-		gl::vertex (10., 8., 0.);
-		gl::vertex (10., 3., 0.);
+		gl::vertex (position.x + 20., position.y + 0., 0.);
+		gl::vertex (position.x + 10., position.y + 8., 0.);
+		gl::vertex (position.x + 10., position.y + 3., 0.);
 		gl::end();
-		gl::translate (position);
 		gl::popMatrices();
 	}
 	
