@@ -15,34 +15,49 @@
 #include "cinder/gl/gl.h"
 
 using namespace ci;
+using namespace ci::app;
 
-class Bird : Agent
+class Bird : public Agent
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float angle)
+	Bird (Vec2f pos, Vec2f vel, float radius, float angle)
 	:orientation (angle)
 	{
-        Agent(pos,vel,2.);
+        Agent(pos, vel, radius);
 	}
 	
 	void update()
 	{
 		//position += velocity;
+		
 	}
 	
 	void draw()
 	{
+		gl::pushMatrices();
+		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (0., 0., 0.));
-		gl::vertex (Vec3f (5., 7., 0.));
-		gl::vertex (Vec3f (10., 0., 0.));
+		gl::vertex (Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius() ));
+		gl::vertex (Vec3f (0., -getRadius(), 0.));
+		gl::vertex (Vec3f (0., getRadius() / 2., 0.));
+		gl::vertex (Vec3f (0., -getRadius(), 0.));
+		gl::vertex (Vec3f (-getRadius(), getRadius(), -sin(getElapsedSeconds() * 20.) * getRadius()));
 		gl::end();
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
+		gl::popMatrices();
 	}
 	
+	void setOrientation (float o)
+	{
+		orientation = o;
+	}
+	float getOrientation()
+	{
+		return orientation;
+	}
 private:
 	float orientation;
 };
