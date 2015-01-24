@@ -38,6 +38,8 @@ public:
 	
 	void draw()
 	{
+		shader.bind();
+		shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
@@ -52,6 +54,7 @@ public:
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
 		gl::popMatrices();
+		shader.unbind();
 	}
 	
 	void setOrientation (float o)
