@@ -42,14 +42,11 @@ public:
     
     void draw()
     {
-        gl::clear( Color(255,255,255));
-        gl::color(1., 0., 0.);
-        gl::begin(GL_QUADS);
-            gl::vertex(1, 1);
-            gl::vertex(1, -1);
-            gl::vertex(-1,-1);
-            gl::vertex(-1, 1);
-        gl::end();
+        gl::color( 1 , 0 , 1 );
+        gl::setViewport( getWindowBounds() );
+        gl::setMatricesWindow( getWindowSize() );
+
+        gl::drawSolidRect( getWindowBounds() );
     }
 private:
     int m_width, m_height;

@@ -46,8 +46,8 @@ public:
 	void update()
 	{
 		//position += velocity;
-		left = Vec3f (-getRadius(), getRadius(), -sin(getElapsedSeconds() * 20.) * getRadius());
-		right = Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius());
+        left = Vec3f (-getRadius(), getRadius(), 1);//-sin(getElapsedSeconds() * 20.) * getRadius());
+        right = Vec3f (getRadius(), getRadius(), 1);//sin(getElapsedSeconds() * 20.) * getRadius());
 		calculateNormals();
 	}
 	
