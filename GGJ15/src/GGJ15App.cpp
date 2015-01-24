@@ -186,8 +186,14 @@ void GGJ15App::setup()
     }
   
     
-	addBirdAtGridPosition (10, 0, 0., 1., 20.);
-	addBirdAtGridPosition (0, 10, 1., 0., 20.);
+	addBirdAtGridPosition (0, 0, 1., 1., 40.);
+	addBirdAtGridPosition (19, 19, -1., -1., 40.);
+	addBirdAtGridPosition (0, 19, 1., -1., 40.);
+	addBirdAtGridPosition (19, 0, -1., 1., 40.);
+	addBirdAtGridPosition (9, 0, 0., 1., 40.);
+	addBirdAtGridPosition (9, 19, 0., -1., 40.);
+	addBirdAtGridPosition (0, 9, 1., 0., 40.);
+	addBirdAtGridPosition (19, 9, -1., 0., 40.);
 }
 
 void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
@@ -216,6 +222,14 @@ void GGJ15App::mouseDown( MouseEvent event )
         }
 }
 
+float clamp (float term, float lower, float higher)
+{
+	float ans = term;
+	if (ans < lower) ans = lower;
+	if (ans > higher) ans = higher;
+	return ans;
+}
+
 void GGJ15App::update()
 {
     // once collision, remove from list of clicked and set rules back
@@ -228,8 +242,11 @@ void GGJ15App::update()
 			 {
 				 //birds[i]->setColor(0.0,0.0,1.0);
 				// if they collide, remove from list and set norules
-				 Vec2f newDirection = (_flap->getVelocity() + (*a)->getVelocity()).normalized();
-				 //console()<<newDirection<<endl;
+				 Vec2f f = _flap->getVelocity();
+				 Vec2f newComer = (*a)->getVelocity();
+				 Vec2f newDirection = Vec2f (clamp (f.x + newComer.x, -1, 1), clamp (f.y + newComer.y, -1., 1.));
+				 //clamp(_flap->getVelocity() + (*a)->getVelocity(), 0, 1);
+				 console()<<newDirection<<endl;
 				 _flap->setVelocity(newDirection);
 				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
 				 float ori = _flap->getOrientation() + (*a)->getOrientation();
