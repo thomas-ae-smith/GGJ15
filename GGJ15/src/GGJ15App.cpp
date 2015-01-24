@@ -275,7 +275,7 @@ void GGJ15App::update()
 {
     // once collision, remove from list of clicked and set rules back
 	// for every clicked bird, check if it is colliding with the any other bird of the flock
-	bool win = true;
+	bool win = false;
 	for( std::list<Bird*>::iterator a = clickedbirds.begin(); a != clickedbirds.end();a++)
 	{
 	    for(int i=0; i< birds.size(); i++)
@@ -303,24 +303,26 @@ void GGJ15App::update()
 			 }
 		}
 	}
-	for (int i = 0; i < birds.size(); i++)
+	if (birds[0]->collisionOptimized (m_goal))
 	{
-		if(!m_goal->collisionOptimized (birds[i]))
+		for (int i = 1; i < birds.size(); i++)
 		{
-			win = false;
-			break;
+			if (!birds[i]->hasRules())
+			{
+				break;
+			}
+			win = true;
 		}
 	}
 	if (win)
 	{
-		for(int i=0; i< birds.size(); i++)
-		{
-			setupLevel();
-		}
+		setupLevel();
 	}
-
-	// this applies the rules and updates attractor
-	_flap->update(birds);
+	else
+	{
+		// this applies the rules and updates attractor
+		_flap->update(birds);
+	}
 
 }
 
