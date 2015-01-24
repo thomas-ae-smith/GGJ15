@@ -16,3 +16,7 @@ bool Agent::collision( Agent *otherAgent){
     float dist = lAB - this->getRadius() - otherAgent->getRadius();
     return dist <= 0;
 }
+
+bool Agent::collision( Map *map){
+    return true;
+}
