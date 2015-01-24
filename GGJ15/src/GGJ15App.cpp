@@ -37,12 +37,15 @@ void GGJ15App::update()
 
 void GGJ15App::draw()
 {
+	
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
 	for (int i = 0; i < 1; i++)
 	{
 		birds[0]->draw();
 	}
+	gl::color(Color(0,255,0));
+	gl::drawSolidCircle( Vec2f( 50, 50 ) + getWindowSize() / 2, 20.0f );
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
