@@ -74,9 +74,10 @@ void GGJ15App::setupShaders()
 
 void GGJ15App::setup()
 {
+	setWindowSize (800, 800);
 	setupShaders();
     // Parsing the file
-    std::ifstream setupFile("london.ggj");
+    std::ifstream setupFile("../../../resources/london.ggj");
     std::string line;
 	
     bool initMap = true;
@@ -84,13 +85,13 @@ void GGJ15App::setup()
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
-    map = new Map(50,50);
+    map = new Map(20,20);
 	
 	if (!setupFile.is_open())
 	{
 		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
 	}
-    while( std::getline( setupFile, line ) )
+    while( !std::getline( setupFile, line ).eof() )
     {
         if(line.size() == 0 || line.at(0) == '#')
             continue;
@@ -174,11 +175,16 @@ void GGJ15App::setup()
         
     }
     
-    
-    
-	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-
-	birds.push_back(new Bird (Vec2f (getWindowSize().x - 20, getWindowSize().y/2. ), Vec2f (-1, 0.), -90, 20.));
+	for (int i = 0; i < 7; i++)
+	{
+		birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
+	}
+	birds[0]->setPosition (4 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
+	birds[0]->setPosition (6 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
+	birds[0]->setPosition (16 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
+	birds[0]->setPosition (0 * 40 + birds[0]->getRadius() / 2., 11 * 40 + birds[0]->getRadius() / 2.);
+	birds[0]->setPosition (19 * 40 + birds[0]->getRadius() / 2., 13 * 40 + birds[0]->getRadius() / 2.);
+	birds[0]->setPosition (19 * 40 + birds[0]->getRadius() / 2., 19 * 40 + birds[0]->getRadius() / 2.);
 
 }
 

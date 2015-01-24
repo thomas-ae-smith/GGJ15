@@ -5,7 +5,7 @@ precision mediump float;
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
-uniform vec2 normedBirdPosition;
+uniform vec2 normedGoalPosition;
 uniform vec2 radius;
 
 uniform vec3 outputColor;
