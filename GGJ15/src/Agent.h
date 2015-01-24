@@ -10,7 +10,6 @@
 #define __Stephane__Agent__
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-
 using namespace ci;
 
 #include "Map.h"
@@ -25,7 +24,7 @@ public:
     Agent(Vec2f position, float radius):m_position(position),
                                         m_velocity(Vec2f(0.,0.)),
                                         m_radius(radius){}
-    
+	
     Agent(Vec2f position, Vec2f velocity, float radius):m_position(position),
                                         m_velocity(velocity),
                                         m_radius(radius){}
@@ -72,7 +71,7 @@ public:
     
     void updatePosition()
     {
-        m_position += m_velocity;
+        m_position += m_dir*m_velocity;
     }
     
     bool collision( Agent *otherAgent);
@@ -81,6 +80,7 @@ private:
     Vec2f m_position;
     Vec2f m_velocity;
     float m_radius;
+	Vec2f m_dir;
     
 };
 

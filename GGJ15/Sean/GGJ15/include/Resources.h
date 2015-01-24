@@ -1,7 +1,8 @@
 #pragma once
 #include "cinder/CinderResources.h"
 
-//#define RES_MY_RES			CINDER_RESOURCE( ../resources/, image_name.png, 128, IMAGE )
+#define BIRD_VERT			CINDER_RESOURCE( ../../../resources/, bird_vert.glsl, 128, GLSL )
+#define BIRD_FRAG			CINDER_RESOURCE( ../../../resources/, bird_frag.glsl, 129, GLSL )
 
 
 

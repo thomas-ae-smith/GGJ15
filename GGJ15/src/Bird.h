@@ -14,7 +14,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
-
+#include "Resources.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -22,10 +22,12 @@ using namespace ci::app;
 class Bird : public Agent
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float radius, float angle)
-	:orientation (angle)
+	Bird (Vec2f pos, Vec2f vel, float angle, float radius)
+	: Agent (pos, vel, radius),
+	  orientation (angle)
+	
 	{
-        Agent(pos, vel, radius);
+		shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
 	}
 	
 	void update()
@@ -35,7 +37,9 @@ public:
 	}
 	
 	void draw()
-    {
+	{
+		shader.bind();
+		shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
@@ -50,6 +54,7 @@ public:
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
 		gl::popMatrices();
+		shader.unbind();
 	}
 	
 	void setOrientation (float o)
@@ -62,6 +67,7 @@ public:
 	}
 private:
 	float orientation;
+	gl::GlslProg shader;
 };
 
 #endif /* defined(__GGJ15__Bird__) */
