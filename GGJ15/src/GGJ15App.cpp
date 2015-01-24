@@ -69,29 +69,6 @@ GGJ15App::~GGJ15App()
     delete map;
 }
 
-void GGJ15App::setupCamera()
-{
-	cam.setPerspective (60.0f, getWindowAspectRatio(), 5.0f, 3000.0f);
-	eye        = Vec3f( 0.0f, 0.0f, 300.0f );
-	Vec3f center     = Vec3f::zero();
-	Vec3f up         = Vec3f::yAxis();
-	cam.lookAt (eye, center, up);
-	gl::setMatrices (cam);
-}
-
-void GGJ15App::setupLighting()
-{
-	lighting = new Lighting();
-	lighting->setLPos (Vec3f (0., 0., 500.));
-	lighting->setShininess (6.);
-	lighting->setSpecular (Vec3f (1., 1., 1.));
-	lighting->setDiffuse (Vec3f (0.6, 0.6, 0.6));
-	lighting->setAmbient (Vec3f (0.3, 0.3, 0.3));
-	lighting->setSpecularIntensity (1.);
-	lighting->setDiffuseIntensity (0.2);
-	lighting->setSpecularRadius (200.);
-}
-
 void GGJ15App::setupShaders()
 {
 	birdShader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
@@ -99,8 +76,6 @@ void GGJ15App::setupShaders()
 
 void GGJ15App::setup()
 {
-	setupCamera();
-	setupLighting();
 	setupShaders();
     // Parsing the file
     std::ifstream setupFile;
@@ -230,7 +205,7 @@ void GGJ15App::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    map->draw();
+    //map->draw();
 	
 	// Birds
 	gl::enableAlphaBlending();
@@ -239,20 +214,9 @@ void GGJ15App::draw()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	birdShader.bind();
 	birdShader.uniform ("time" , (float) getElapsedSeconds());
-	birdShader.uniform ("eyePos", Vec3f (0., 0., 300.));
-	birdShader.uniform ("lPos", lighting->lPos);
-	birdShader.uniform ("shininess", lighting->shininess);
-	birdShader.uniform ("specular", lighting->specular);
-	birdShader.uniform ("diffuse", lighting->diffuse);
-	birdShader.uniform ("ambient", lighting->ambient);
-	birdShader.uniform ("diffuseIntensity", lighting->diffuseIntensity);
-	birdShader.uniform ("specularRadius", lighting->specularRadius);
-	birdShader.uniform ("specularIntensity", lighting->specularIntensity);
     for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->draw();
-		birdShader.uniform ("normedBirdPosition", birds[i]->getNormedPosition());
-		birdShader.uniform ("radius", Vec2f (birds[i]->getRadius() / getWindowWidth(), birds[i]->getRadius() / getWindowHeight()) * 2. - Vec2f (1.f, 1.f));
 	}
 	birdShader.unbind();
     //
