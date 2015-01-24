@@ -10,8 +10,6 @@
 #define __Stephane__Map__
 
 #include <stdio.h>
-#include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
 
 class Map
 {
