@@ -30,7 +30,9 @@ class GGJ15App : public AppNative {
 	void setupShaders();
 	void addBirdAtGridPosition (int x, int y, float vX, float vY, float r);
 	void addGoalAtPosition (int x, int y, float vX, float vY, float r);
-
+	void setupLevel();
+	void keyDown( KeyEvent event );
+	
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
@@ -83,8 +85,7 @@ void GGJ15App::setupShaders()
 
 void GGJ15App::setup()
 {
-	m_firstClicked = true;
-	_flap = new Flap();
+	
 
 	setWindowSize (800, 800);
 	setupShaders();
@@ -97,7 +98,7 @@ void GGJ15App::setup()
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
-    map = new Map(20,20);
+	
 	
 	if (!setupFile.is_open())
 	{
@@ -186,22 +187,49 @@ void GGJ15App::setup()
         
         
     }
-  
-    //For inner-facing circle (good for testing collision detection / velocities)
-//	addBirdAtGridPosition (0, 0, 1., 1., 20.);
-//	addBirdAtGridPosition (19, 19, -1., -1., 20.);
-//	addBirdAtGridPosition (0, 19, 1., -1., 20.);
-//	addBirdAtGridPosition (19, 0, -1., 1., 20.);
-//	addBirdAtGridPosition (9, 0, 0., 1., 20.);
-//	addBirdAtGridPosition (9, 19, 0., -1., 20.);
-//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
-//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
-//	addGoalAtPosition (16, 12, 0., 0., 20.);
+	setupLevel();
+	
+
+}
+
+void GGJ15App::setupLevel()
+{
+	map = new Map(20,20);
+	m_firstClicked = true;
+	_flap = new Flap();
+	birds.clear();
+	
+	//For inner-facing circle (good for testing collision detection / velocities)
+	//	addBirdAtGridPosition (0, 0, 1., 1., 20.);
+	//	addBirdAtGridPosition (19, 19, -1., -1., 20.);
+	//	addBirdAtGridPosition (0, 19, 1., -1., 20.);
+	//	addBirdAtGridPosition (19, 0, -1., 1., 20.);
+	//	addBirdAtGridPosition (9, 0, 0., 1., 20.);
+	//	addBirdAtGridPosition (9, 19, 0., -1., 20.);
+	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+	//	addGoalAtPosition (16, 12, 0., 0., 20.);
 	
 	//For goal detection
-	addBirdAtGridPosition (0, 9, 1., 0., 20.);
-	addBirdAtGridPosition (19, 9, -1., 0., 20.);
-	addGoalAtPosition (9, 9, 0., 0., 20.);
+	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+	//	addGoalAtPosition (9, 9, 0., 0., 20.);
+	
+	//Test level
+	addBirdAtGridPosition (14, 0, 0., 1., 20.);
+	addBirdAtGridPosition (19, 5, -1., 1., 20.);
+	addBirdAtGridPosition (0, 12, 1., 0., 20.);
+	addBirdAtGridPosition (10, 19, 0., -1., 20.);
+	addGoalAtPosition (15, 9, 0., 0., 20.);
+}
+
+void GGJ15App::keyDown( KeyEvent event ) {
+	if( event.getChar() == ' ' ){
+		setup();
+	}
+//	else if( event.getChar() == 'h' ){
+//		mRenderParticles = ! mRenderParticles;
+//	}
 }
 
 void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
@@ -287,7 +315,7 @@ void GGJ15App::update()
 	{
 		for(int i=0; i< birds.size(); i++)
 		{
-			//win
+			setupLevel();
 		}
 	}
 
