@@ -9,9 +9,6 @@
 #ifndef __Stephane__Map__
 #define __Stephane__Map__
 
-#define BLOCKED 1
-#define UNBLOCKED 0
-
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
@@ -22,6 +19,13 @@
 
 using namespace ci;
 using namespace ci::app;
+
+enum cellState
+{
+	blocked = 1,
+	unblocked,
+	goal
+};
 
 class Map
 {
@@ -38,7 +42,7 @@ public:
 		{
 			for (int j = 0; j < m_height; j++)
 			{
-				m_grid[j*m_width + i] = UNBLOCKED;
+				m_grid[j*m_width + i] = cellState::unblocked;
 			}
 		}
     };
@@ -52,6 +56,11 @@ public:
     {
         return m_grid[y*m_width+x];
     }
+	
+	void addObstacle ()
+	{
+		
+	}
     
     void draw()
     {
@@ -64,7 +73,7 @@ public:
 		{
 			for (int j = 0; j < m_height; j++)
 			{
-				if (m_grid[j*m_width + i] == BLOCKED)
+				if (m_grid[j*m_width + i] == cellState::blocked)
 				{
 					gl::color( 0 , 0 , 1 );
 					gl::begin (GL_QUADS);
