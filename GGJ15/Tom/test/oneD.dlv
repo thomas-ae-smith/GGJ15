@@ -1,6 +1,6 @@
-#const width=20.
-#const height=8.
-#const numbirds = 4.
+#const width=12.
+#const height=12.
+#const numbirds = 7.
 
 %% Hide empty atoms from the output (doesn't seem to work)
 %#hide empty(X,Y).
