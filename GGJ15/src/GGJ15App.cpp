@@ -174,8 +174,14 @@ void GGJ15App::setup()
         
         
     }
-	float r = 20.;
-	birds.push_back(new Bird (Vec2f (r / 2., 11.5 * r ), Vec2f (1., 0.), 45., 20.));
+	float r = 40.;
+	birds.push_back(new Bird (Vec2f (r / 2., 10.5 * r ), Vec2f (1., 0.), 90., 20.));
+	birds.push_back(new Bird (Vec2f (19.5 * r, 8.5 * r ), Vec2f (-1., 0.), 270., 20.));
+	birds.push_back(new Bird (Vec2f (15.5 * r, 0.5 * r ), Vec2f (0., 1.), 0., 20.));
+	birds.push_back(new Bird (Vec2f (3.5 * r, 0.5 * r ), Vec2f (1., 1.), 45., 20.));
+	birds.push_back(new Bird (Vec2f (5.5 * r, 0.5 * r ), Vec2f (1.,	1.), 45., 20.));
+	birds.push_back(new Bird (Vec2f (19.5 * r, 12.5 * r ), Vec2f (-1., -1.), 315., 20.));
+	birds.push_back(new Bird (Vec2f (19.5 * r, 16.5 * r ), Vec2f (-1., -1.), 315., 20.));
 
 }
 

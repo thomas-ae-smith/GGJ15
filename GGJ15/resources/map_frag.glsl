@@ -22,7 +22,7 @@ void main( void )
 {
 	vec2 position = (gl_FragCoord.xy / resolution.xy) * 2. - 1.;
 	// write Total Color:
-	float r = clamp (1. - distance (position, normedGoalPosition) * (10. + abs(sin(time)) * 5.), 0., 1.);
+	float r = clamp (1. - distance (position, normedGoalPosition + vec2 (0., 0.1*sin(time))) * (10. + abs(sin(time)) * 5.), 0., 1.);
 	float g = clamp (1. - distance (position, normedGoalPosition) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
 	float b = clamp (1. - distance (position, normedGoalPosition) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
 
