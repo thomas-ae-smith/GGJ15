@@ -11,35 +11,36 @@
 
 #include <stdio.h>
 #include "Agent.h"
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
 
 using namespace ci;
 
 class Bird : Agent
 {
 public:
-	Bird(Vec2f pos, Vec2f vel)
+	Bird (Vec2f pos, Vec2f vel, float angle)
+	:orientation (angle)
 	{
         Agent(pos,vel,2.);
 	}
-    
+	
+	void update()
+	{
+		//position += velocity;
+	}
+	
 	void draw()
 	{
-		gl::pushMatrices();
-		gl::translate (getPosition() * -1.f);
-		gl::rotate (Vec3f (0., 0., orientation));
-		gl::color (1., 0., 0.);
-		gl::begin (GL_TRIANGLES);
-		gl::vertex (10., 3., 0.);
-		gl::vertex (10., 8., 0.);
-		gl::vertex (0., 0., 0.);
+		gl::translate (getPosition());
+		gl::rotate (orientation);
+		gl::begin (GL_TRIANGLE_STRIP);
+		gl::vertex (Vec3f (0., 0., 0.));
+		gl::vertex (Vec3f (5., 7., 0.));
+		gl::vertex (Vec3f (10., 0., 0.));
 		gl::end();
-		gl::begin (GL_TRIANGLES);
-		gl::vertex (20., 0., 0.);
-		gl::vertex (10., 8., 0.);
-		gl::vertex (10., 3., 0.);
-		gl::end();
-        gl::translate (getPosition());
-		gl::popMatrices();
+		gl::rotate (-orientation);
+		gl::translate (-getPosition());
 	}
 	
 private:
