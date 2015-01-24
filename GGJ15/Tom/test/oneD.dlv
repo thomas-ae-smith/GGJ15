@@ -1,5 +1,5 @@
 #const width=15.
-#const height=3.
+#const height=10.
 dimX(0..width).
 dimY(0..height).
 
@@ -11,18 +11,22 @@ dimY(0..height).
 
 :- bird(X, Y), goal(X, Y).
 
-dir(r,1;;l,-1).
+dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
 
-1{path(X, Y, N) : dir(N,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
 
 
-:- path(X, Y, N), dir(N, O), not path(X+O, Y, N), not goal(X+O, Y).
+:- path(X, Y, N), dir(N, OX, OY), not path(X+OX, Y+OY, N), not goal(X+OX, Y+OY).
 :- path(0, _, _).
+:- path(_, 0, _).
 :- path(width, _, _).
-:- empty(X,Y), path(X+O, Y, N), dir(N, O).
-:- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r).
+:- path(_, height, _).
+:- empty(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY).
+:- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
 
 charAt(b, X, Y) :- bird(X, Y).
 charAt("G", X, Y) :- goal(X,Y).
 charAt("p", X, Y) :- path(X, Y, r).
 charAt("q", X, Y) :- path(X, Y, l).
+charAt("u", X, Y) :- path(X, Y, u).
+charAt("d", X, Y) :- path(X, Y, d).
