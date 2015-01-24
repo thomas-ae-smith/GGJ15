@@ -29,25 +29,35 @@ public:
 	void update()
 	{
 		//position += velocity;
+		
 	}
 	
 	void draw()
 	{
-		console() << getPosition().x <<" "<<getPosition().y<<" "<<getRadius()<<std::endl;
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (-getRadius(), -getRadius(), 0.));
-		gl::vertex (Vec3f (0., getRadius(), 0.));
-		gl::vertex (Vec3f (getRadius(), -getRadius(), 0.));
+		gl::vertex (Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius() ));
+		gl::vertex (Vec3f (0., -getRadius(), 0.));
+		gl::vertex (Vec3f (0., getRadius() / 2., 0.));
+		gl::vertex (Vec3f (0., -getRadius(), 0.));
+		gl::vertex (Vec3f (-getRadius(), getRadius(), -sin(getElapsedSeconds() * 20.) * getRadius()));
 		gl::end();
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
 		gl::popMatrices();
 	}
 	
+	void setOrientation (float o)
+	{
+		orientation = o;
+	}
+	float getOrientation()
+	{
+		return orientation;
+	}
 private:
 	float orientation;
 };
