@@ -186,19 +186,19 @@ void GGJ15App::setup()
     }
   
     
-	addBirdAtGridPosition (0, 0, 1., 1., 40.);
-	addBirdAtGridPosition (19, 19, -1., -1., 40.);
-	addBirdAtGridPosition (0, 19, 1., -1., 40.);
-	addBirdAtGridPosition (19, 0, -1., 1., 40.);
-	addBirdAtGridPosition (9, 0, 0., 1., 40.);
-	addBirdAtGridPosition (9, 19, 0., -1., 40.);
-	addBirdAtGridPosition (0, 9, 1., 0., 40.);
-	addBirdAtGridPosition (19, 9, -1., 0., 40.);
+	addBirdAtGridPosition (0, 0, 1., 1., 20.);
+	addBirdAtGridPosition (19, 19, -1., -1., 20.);
+	addBirdAtGridPosition (0, 19, 1., -1., 20.);
+	addBirdAtGridPosition (19, 0, -1., 1., 20.);
+	addBirdAtGridPosition (9, 0, 0., 1., 20.);
+	addBirdAtGridPosition (9, 19, 0., -1., 20.);
+	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+	addBirdAtGridPosition (19, 9, -1., 0., 20.);
 }
 
 void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
 {
-	birds.push_back (new Bird (Vec2f ((x + 0.5) * r, ((y + 0.5) * r)), Vec2f (vX, vY), r));
+	birds.push_back (new Bird (Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
