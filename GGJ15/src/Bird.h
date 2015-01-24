@@ -13,7 +13,8 @@
 #include "Agent.h"
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-
+#include "cinder/gl/GlslProg.h"
+#include "Resources.h"
 using namespace ci;
 using namespace ci::app;
 
@@ -25,7 +26,8 @@ public:
 	  orientation (angle)
 	
 	{
-        Agent(pos, vel, radius);
+		shader = gl::GlslProg (loadResource (BIRD_VERT),
+							   loadResource (BIRD_FRAG));
 	}
 	
 	void update()
@@ -62,6 +64,7 @@ public:
 	}
 private:
 	float orientation;
+	gl::GlslProg shader;
 };
 
 #endif /* defined(__GGJ15__Bird__) */

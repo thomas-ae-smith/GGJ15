@@ -34,7 +34,6 @@ void GGJ15App::update()
 	for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->update();
-        console()<<birds[i]->getOrientation()<<endl;
 	}
 }
 
@@ -42,7 +41,10 @@ void GGJ15App::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	birds[0]->draw();
+	for (int i = 0; i < birds.size(); i++)
+	{
+		birds[i]->draw();
+	}
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
