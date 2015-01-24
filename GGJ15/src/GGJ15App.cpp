@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Bird.h"
+#include "Perch.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -15,6 +16,7 @@ class GGJ15App : public AppNative {
 	void update();
 	void draw();
 	
+	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
 };
 
@@ -22,10 +24,18 @@ void GGJ15App::setup()
 {
     // Parsing the file
 	birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
+	//Create perch points from the map
+	//birds.push_back(new Perch
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
 {
+	/* Test stuff at the moment, ignore */
+	int xPos = event.getX();
+	int yPos = event.getY();
+	if (xPos >= 0 && xPos <= 100) {
+		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0, 20));
+	}
 }
 
 void GGJ15App::update()

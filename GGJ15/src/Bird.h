@@ -26,8 +26,8 @@ public:
 	  orientation (angle)
 	
 	{
-		shader = gl::GlslProg (loadResource (BIRD_VERT),
-							   loadResource (BIRD_FRAG));
+		//shader = gl::GlslProg (loadResource (BIRD_VERT),
+							   //loadResource (BIRD_FRAG));
 	}
 	
 	void update()
