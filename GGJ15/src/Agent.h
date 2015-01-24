@@ -70,7 +70,7 @@ public:
     
     void updatePosition()
     {
-        m_position += m_velocity;
+        m_position += m_dir*m_velocity;
     }
     
     bool collision( Agent *otherAgent);
@@ -79,6 +79,7 @@ private:
     Vec2f m_position;
     Vec2f m_velocity;
     float m_radius;
+	Vec2f m_dir;
     
 };
 
