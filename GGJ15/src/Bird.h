@@ -33,13 +33,22 @@ public:
 		#elif defined _WIN32 || defined _WIN64
 			shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
 		#endif
+        m_r=1.;
+        m_g=1.;
+        m_b=1.;
 	}
 	
 	void update()
 	{
-		//position += velocity;
-		
+        setPosition(getPosition() + getVelocity());
 	}
+    
+    void setColor(float r, float g, float b)
+    {
+        m_r=r;
+        m_g=g;
+        m_b=b;
+    }
 	
 	void draw()
 	{
@@ -48,20 +57,19 @@ public:
 		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedPosition.y *= -1.f;
 		shader.uniform ("normedPosition", normedPosition);
-						
+        shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
+        
 		gl::pushMatrices();
-		gl::color (1.0, 0., 0.);
+		gl::color(m_r,m_g,m_b);
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius() ));
-		gl::vertex (Vec3f (0., -getRadius(), 0.));
-		gl::vertex (Vec3f (0., getRadius() / 2., 0.));
-		gl::vertex (Vec3f (0., -getRadius(), 0.));
-		gl::vertex (Vec3f (-getRadius(), getRadius(), -sin(getElapsedSeconds() * 20.) * getRadius()));
+        gl::vertex (Vec3f (getRadius(), getRadius(), 1.));
+		gl::vertex (Vec3f (0., -getRadius(), 1.));
+		gl::vertex (Vec3f (0., getRadius() / 2., 1.));
+//		gl::vertex (Vec3f (0., -getRadius(), 1.));
+		gl::vertex (Vec3f (-getRadius(), getRadius(), 1.));
 		gl::end();
-		gl::rotate (-orientation);
-		gl::translate (-getPosition());
 		gl::popMatrices();
 		shader.unbind();
 	}
@@ -75,6 +83,7 @@ public:
 		return orientation;
 	}
 private:
+    float m_r,m_g,m_b;
 	float orientation;
 	gl::GlslProg shader;
 };
