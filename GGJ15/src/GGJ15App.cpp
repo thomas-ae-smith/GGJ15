@@ -224,7 +224,7 @@ void GGJ15App::draw()
     
     // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    //map->draw();
+    map->draw();
 	
 	// Birds
 	birdShader.bind();
