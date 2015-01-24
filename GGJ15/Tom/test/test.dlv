@@ -1,0 +1,55 @@
+%#maxint=45.
+#const width=40.
+#const height=12.
+
+%% Columns and rows
+dimX(0..width).
+dimY(0..height).
+
+%% We need exactly four birds
+4{bird(X,Y,N):dimX(X),dimY(Y), dir(N, _, _)}4.
+
+%% We need exactly one goal
+1{goal(X,Y):dimX(X),dimY(Y)}1.
+
+reachable :- goal(X, Y), 2 #count{	path(X+1, Y+1, nw),
+									path(X, Y+1, n),
+									path(X-1, Y+1, ne),
+									path(X-1, Y, e),
+									path(X-1, Y-1, se),
+									path(X, Y-1, s),
+									path(X+1, Y-1, sw),
+									path(X+1, Y, w)
+									} 2.
+:- not reachable.
+
+%% No bird may start on the goal
+:- bird(X,Y, N), goal(X,Y).
+
+%% Eight cardinal directions
+dir(nw,-1,-1;;n,0,-1;;ne,1,-1;;e,1,0;;se,1,1;;s,0,1;;sw,-1,1;;w,-1,0).
+
+%% Every non-bird, non-goal square is empty or part of a path
+1 { empty(X,Y); path(X, Y, N) } 1 :- dimX(X), dimY(Y), dir(N, _, _), not bird(X, Y, N), not goal(X, Y).
+
+%% A path in a direction must not lead to a non-path in that direction or not the goal
+%:- singleHorizontal(X,Y), not singleHorizontal(X+1,Y), not isIsland(X+1,Y).
+%:- path(X, Y, N), dir(N, OX, OY), not path(X+OX, Y+OY, N), not goal(X+OX, Y+OY).
+
+
+%% Communicate directly with the debug renderer
+charAt(b, X, Y) :- bird(X, Y, N).
+charAt("G", X, Y) :- goal(X, Y).
+charAt("q", X, Y) :- path(X, Y, nw).
+charAt("w", X, Y) :- path(X, Y, n).
+charAt("e", X, Y) :- path(X, Y, ne).
+charAt("d", X, Y) :- path(X, Y, e).
+charAt("c", X, Y) :- path(X, Y, se).
+charAt("x", X, Y) :- path(X, Y, s).
+charAt("z", X, Y) :- path(X, Y, sw).
+charAt("a", X, Y) :- path(X, Y, w).
+
+
+%%qwe
+%%aOd
+%%zxc

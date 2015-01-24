@@ -1,0 +1,28 @@
+#const width=15.
+#const height=3.
+dimX(0..width).
+dimY(0..height).
+
+
+1{goal(X,Y):dimX(X),dimY(Y)}1.
+
+
+1{bird(X,Y):dimX(X),dimY(Y)}1.
+
+:- bird(X, Y), goal(X, Y).
+
+dir(1;;-1).
+
+1{path(X, Y, N) : dir(N); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+
+
+:- path(X, Y, N), not path(X+N, Y, N), not goal(X+N, Y).
+:- path(0, _, 1).
+:- path(width, _, -1).
+:- empty(X,Y), path(X+N, Y, N).
+:- goal(X,Y), not path(X-1, Y, 1), not path(X+1, Y, -1).
+
+charAt(b, X, Y) :- bird(X, Y).
+charAt("G", X, Y) :- goal(X,Y).
+charAt("p", X, Y) :- path(X, Y, 1).
+charAt("q", X, Y) :- path(X, Y, -1).

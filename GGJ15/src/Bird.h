@@ -15,6 +15,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
 #include "Resources.h"
+
 using namespace ci;
 using namespace ci::app;
 
@@ -26,8 +27,7 @@ public:
 	  orientation (angle)
 	
 	{
-		shader = gl::GlslProg (loadResource (BIRD_VERT),
-							   loadResource (BIRD_FRAG));
+		shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
 	}
 	
 	void update()

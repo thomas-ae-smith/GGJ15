@@ -15,6 +15,7 @@ using namespace ci::app;
 class TestMap
 {
 public:
+	Bird
 	TestMap(void) {
 
 	}
