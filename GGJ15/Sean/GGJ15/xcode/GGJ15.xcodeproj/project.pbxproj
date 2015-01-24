@@ -16,6 +16,7 @@
 		14A947871A7322C2000AD14B /* Agent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947851A7322C2000AD14B /* Agent.cpp */; };
 		14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947881A733828000AD14B /* bird_frag.glsl */; };
 		14A9478B1A733828000AD14B /* bird_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947891A733828000AD14B /* bird_vert.glsl */; };
+		14A9478E1A7391AE000AD14B /* london.ggj in Resources */ = {isa = PBXBuildFile; fileRef = 14A9478D1A7391AE000AD14B /* london.ggj */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -30,12 +31,15 @@
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		0D0BD521C3B84E8A83048CAB /* GGJ15_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = GGJ15_Prefix.pch; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		148719111A73C3070040AA61 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Map.h; path = ../../../src/Map.h; sourceTree = "<group>"; };
 		14A947811A73143F000AD14B /* Bird.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bird.h; path = ../../../src/Bird.h; sourceTree = "<group>"; };
 		14A947821A73143F000AD14B /* GGJ15App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GGJ15App.cpp; path = ../../../src/GGJ15App.cpp; sourceTree = "<group>"; };
 		14A947851A7322C2000AD14B /* Agent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Agent.cpp; path = ../../../src/Agent.cpp; sourceTree = "<group>"; };
 		14A947861A7322C2000AD14B /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Agent.h; path = ../../../src/Agent.h; sourceTree = "<group>"; };
 		14A947881A733828000AD14B /* bird_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_frag.glsl; path = ../../../resources/bird_frag.glsl; sourceTree = "<group>"; };
 		14A947891A733828000AD14B /* bird_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_vert.glsl; path = ../../../resources/bird_vert.glsl; sourceTree = "<group>"; };
+		14A9478C1A735752000AD14B /* Lighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lighting.h; path = ../../../src/Lighting.h; sourceTree = "<group>"; };
+		14A9478D1A7391AE000AD14B /* london.ggj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = london.ggj; path = ../../../resources/london.ggj; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
@@ -75,10 +79,12 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				148719111A73C3070040AA61 /* Map.h */,
 				14A947851A7322C2000AD14B /* Agent.cpp */,
 				14A947861A7322C2000AD14B /* Agent.h */,
 				14A947811A73143F000AD14B /* Bird.h */,
 				14A947821A73143F000AD14B /* GGJ15App.cpp */,
+				14A9478C1A735752000AD14B /* Lighting.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -140,6 +146,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14A9478D1A7391AE000AD14B /* london.ggj */,
 				14A947881A733828000AD14B /* bird_frag.glsl */,
 				14A947891A733828000AD14B /* bird_vert.glsl */,
 				77EF5269261F466B827CBCEA /* CinderApp.icns */,
@@ -211,6 +218,7 @@
 			files = (
 				14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */,
 				14A9478B1A733828000AD14B /* bird_vert.glsl in Resources */,
+				14A9478E1A7391AE000AD14B /* london.ggj in Resources */,
 				FD8C56DAAA7B40309DEB3260 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

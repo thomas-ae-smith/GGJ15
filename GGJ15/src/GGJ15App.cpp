@@ -1,6 +1,8 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
+#include "Resources.h"
+
 #include <vector>
 #include "Bird.h"
 #include "Map.h"
@@ -18,31 +20,76 @@ using namespace std;
 
 class GGJ15App : public AppNative {
   public:
+    ~GGJ15App();
+    
 	void setup();
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
-	
+	void setupShaders();
+
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
     
     Map *map;
+	gl::GlslProg birdShader;
 };
+
+GGJ15App::~GGJ15App()
+{
+    for(int i=0; i<perches.size() ; ++i)
+    {
+        delete perches[i];
+    }
+    
+    for(int i=0; i<birds.size() ; ++i)
+    {
+        delete birds[i];
+    }
+    
+    for(int i=0; i<flaps.size() ; ++i)
+    {
+        delete flaps[i];
+    }
+    
+    for(int i=0; i<goals.size() ; ++i)
+    {
+        delete goals[i];
+    }
+    
+    delete map;
+}
+
+void GGJ15App::setupShaders()
+{
+	#ifdef __APPLE__
+		birdShader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+	#elif defined _WIN32 || defined _WIN64
+		birdShader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
+	#endif
+
+}
 
 void GGJ15App::setup()
 {
+	setupShaders();
     // Parsing the file
-    std::ifstream setupFile;
-    setupFile.open("london.ggj");
-    
+    std::ifstream setupFile("../../../resources/london.ggj");
     std::string line;
+	
     bool initMap = true;
     bool initBirds, initFlaps, initGoal, initCard;
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
+    map = new Map(50,50);
+	
+	if (!setupFile.is_open())
+	{
+		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
+	}
     while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
@@ -128,23 +175,22 @@ void GGJ15App::setup()
     }
     
     
-	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90.));
-	birds[0]->setPosition (Vec2f (300., 300.));
-	birds[0]->setRadius (50.);
+    
+	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
 
-    birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
-	//Create perch points from the map
-	//birds.push_back(new Perch
+	birds.push_back(new Bird (Vec2f (getWindowSize().x - 20, getWindowSize().y/2. ), Vec2f (-1, 0.), -90, 20.));
+
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
 {
-	/* Test stuff at the moment, ignore */
-	int xPos = event.getX();
-	int yPos = event.getY();
-	if (xPos >= 0 && xPos <= 100) {
-		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0, 20));
-	}
+
+    Vec2f pos = event.getPos();
+    for(int i=0; i< birds.size(); i++)
+        if(birds[i]->contains(pos))
+        {
+            birds[i]->letsMove();
+        }
 }
 
 void GGJ15App::update()
@@ -153,19 +199,45 @@ void GGJ15App::update()
 	for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->update();
-		birds[i]->setPosition ((float) getMousePos().x, (float) getMousePos().y);
-		
 	}
+    
+    for (int i = 1; i < birds.size(); i++)
+    {
+        for(int j=0 ; j<i ; ++j)
+        {
+            if(birds[i]->collision(birds[j]))
+            {
+                birds.push_back(new Bird( (birds[i]->getPosition() + birds[j]->getPosition())/2.,
+                                           (birds[i]->getVelocity() + birds[j]->getVelocity())/2.,
+                                           0.,
+                                           20.));
+                birds[birds.size()-1]->setColor(1., 0., 0.);
+                birds.erase(birds.begin() + j);
+                birds.erase(birds.begin() + i-1);
+            }
+        }
+    }
 }
 
 void GGJ15App::draw()
 {
-	// clear out the window with black
+//    gl::enableAlphaBlending();
+//    gl::enableDepthRead( true );
+//    gl::enableDepthWrite( true );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	for (int i = 0; i < birds.size(); i++)
+    map->draw();
+	
+	// Birds
+	birdShader.bind();
+	birdShader.uniform ("time" , (float) getElapsedSeconds());
+    for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->draw();
 	}
+	birdShader.unbind();
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
