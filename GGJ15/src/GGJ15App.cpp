@@ -128,7 +128,7 @@ void GGJ15App::setup()
                 float velocityX, velocityY;
                 
                 std::sscanf(line.c_str(), "%d %d %f %f %d", positionX, positionY, velocityX, velocityY, angle);
-                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 1., angle);
+                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 20.);
             }
             initBirds = false;
             initFlaps = true;
@@ -186,9 +186,9 @@ void GGJ15App::setup()
   
     
 	//birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), -90, 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), -90, 25.));
+	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), 25.));
 
 }
 
@@ -223,15 +223,16 @@ void GGJ15App::update()
 		{
 			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i]) )
 			 {
-				 birds[i]->setColor(0.0,0.0,1.0);
+				 //birds[i]->setColor(0.0,0.0,1.0);
 				// if they collide, remove from list and set norules
 				 Vec2f newDirection = (_flap->getVelocity() + (*a)->getVelocity()).normalized();
+				 console()<<newDirection<<endl;
 				 _flap->setVelocity(newDirection);
 				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
 				 float ori = _flap->getOrientation() + (*a)->getOrientation();
 				 if( ori < 0.0)
 					 ori *=-1.0;
-				 _flap->setOrientation(ori / 2.0);
+				 _flap->updateOrientationForVelocity (newDirection);
 
 				 //a = clickedbirds.erase(a);// STL trick
 				 break;

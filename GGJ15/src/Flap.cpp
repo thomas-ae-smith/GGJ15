@@ -133,3 +133,39 @@ void Flap::update(std::vector<Bird*> &m_birds)
 	}
 }
 
+void Flap::updateOrientationForVelocity (Vec2f direction)
+{
+	if (direction.x == 0 && direction.y == 1)
+	{
+		m_orientation = 0.;
+	}
+	else if (direction.x == 1 && direction.y == 1)
+	{
+		m_orientation = 45.;
+	}
+	else if (direction.x == 1 && direction.y == 0)
+	{
+		m_orientation = 90.;
+	}
+	else if (direction.x == 1 && direction.y == -1)
+	{
+		m_orientation = 125.;
+	}
+	else if (direction.x == 0 && direction.y == -1)
+	{
+		m_orientation = 180.;
+	}
+	else if (direction.x == -1 && direction.y == 1)
+	{
+		m_orientation = 225.;
+	}
+	else if (direction.x == -1 && direction.y == 0)
+	{
+		m_orientation = 270.;
+	}
+	else if (direction.x == -1 && direction.y == -1)
+	{
+		m_orientation = 315.;
+	}
+}
+

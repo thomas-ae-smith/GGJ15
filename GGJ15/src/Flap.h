@@ -57,6 +57,8 @@ public:
 	{
 		m_attractorVelocity = _vel;
 	}
+	
+	void updateOrientationForVelocity(Vec2f direction);
 
 private:
 	//

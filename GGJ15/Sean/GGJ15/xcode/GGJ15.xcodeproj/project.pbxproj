@@ -13,6 +13,7 @@
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		148719151A7411CC0040AA61 /* map_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 148719141A7411CC0040AA61 /* map_frag.glsl */; };
+		148719181A743D060040AA61 /* Flap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148719161A743D060040AA61 /* Flap.cpp */; };
 		14A947841A73143F000AD14B /* GGJ15App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947821A73143F000AD14B /* GGJ15App.cpp */; };
 		14A947871A7322C2000AD14B /* Agent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947851A7322C2000AD14B /* Agent.cpp */; };
 		14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947881A733828000AD14B /* bird_frag.glsl */; };
@@ -34,6 +35,8 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		148719111A73C3070040AA61 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Map.h; path = ../../../src/Map.h; sourceTree = "<group>"; };
 		148719141A7411CC0040AA61 /* map_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = map_frag.glsl; path = ../../../resources/map_frag.glsl; sourceTree = "<group>"; };
+		148719161A743D060040AA61 /* Flap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Flap.cpp; path = ../../../src/Flap.cpp; sourceTree = "<group>"; };
+		148719171A743D060040AA61 /* Flap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flap.h; path = ../../../src/Flap.h; sourceTree = "<group>"; };
 		14A947811A73143F000AD14B /* Bird.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bird.h; path = ../../../src/Bird.h; sourceTree = "<group>"; };
 		14A947821A73143F000AD14B /* GGJ15App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GGJ15App.cpp; path = ../../../src/GGJ15App.cpp; sourceTree = "<group>"; };
 		14A947851A7322C2000AD14B /* Agent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Agent.cpp; path = ../../../src/Agent.cpp; sourceTree = "<group>"; };
@@ -81,6 +84,8 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				148719161A743D060040AA61 /* Flap.cpp */,
+				148719171A743D060040AA61 /* Flap.h */,
 				148719111A73C3070040AA61 /* Map.h */,
 				14A947851A7322C2000AD14B /* Agent.cpp */,
 				14A947861A7322C2000AD14B /* Agent.h */,
@@ -234,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				148719181A743D060040AA61 /* Flap.cpp in Sources */,
 				14A947841A73143F000AD14B /* GGJ15App.cpp in Sources */,
 				14A947871A7322C2000AD14B /* Agent.cpp in Sources */,
 			);
