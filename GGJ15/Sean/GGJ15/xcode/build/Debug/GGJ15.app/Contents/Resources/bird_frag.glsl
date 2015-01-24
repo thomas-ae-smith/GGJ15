@@ -22,6 +22,7 @@ void main( void )
 {
 	vec2 position = (gl_FragCoord.xy / resolution.xy) * 2. - 1.;
 	// write Total Color:
+	
 	gl_FragColor = vec4 (outputColor, 1.);
 	
 }
