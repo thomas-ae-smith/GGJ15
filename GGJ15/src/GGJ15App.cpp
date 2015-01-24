@@ -76,7 +76,7 @@ void GGJ15App::setup()
 {
 	setupShaders();
     // Parsing the file
-    std::ifstream setupFile("../../../resources/london.ggj");
+    std::ifstream setupFile("london.ggj");
     std::string line;
 	
     bool initMap = true;

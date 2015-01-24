@@ -71,6 +71,7 @@ public:
 		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedPosition.y *= -1.f;
 		shader.uniform ("normedBirdPosition", normedPosition);
+		shader.uniform ("time", float(getElapsedSeconds()));
 		printf ("%f, %f\n", normedPosition.x, normedPosition.y);
         shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
 		
