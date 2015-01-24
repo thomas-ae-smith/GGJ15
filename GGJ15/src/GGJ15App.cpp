@@ -187,6 +187,7 @@ void GGJ15App::setup()
 	for (int i=0; i < perches.size(); i++) {
 		birds.push_back(new Bird(perches[i]->getPos(), perches[i]->getAngle()));
 	}
+	
 
 	
 }
@@ -196,9 +197,18 @@ void GGJ15App::mouseDown( MouseEvent event )
 	/* Test stuff at the moment, ignore */
 	int xPos = event.getX();
 	int yPos = event.getY();
+	for (int i=0; i< birds.size(); i++) {
+		Vec2f pos = birds[i]->getPosition();
+		if (xPos >= pos.x - 10 && xPos <= pos.x + 10 && yPos >= pos.y -10 && yPos <= pos.y + 10) {
+			float rotation = birds[i]->getOrientation();
+			
+		}
+	}
+	/*
 	if (xPos >= 0 && xPos <= 100) {
 		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20.));
 	}
+	*/
 }
 
 void GGJ15App::update()
