@@ -37,10 +37,6 @@ class GGJ15App : public AppNative {
     
     Map *map;
 	
-	CameraPersp cam;
-	Vec3f eye;
-	
-	Lighting* lighting;
 	gl::GlslProg birdShader;
 };
 
@@ -185,7 +181,7 @@ void GGJ15App::setup()
 	int angle = 90;
 	perches.push_back(new Perch( Vec2f(xPos, yPos), angle));
 	for (int i=0; i < perches.size(); i++) {
-		birds.push_back(new Bird(perches[i]->getPos(), perches[i]->getAngle()));
+		birds.push_back( new Bird(perches[i]->getPos(), Vec2f(0.,0.), perches[i]->getAngle(),90.)); // HARD FIX
 	}
 	
 

@@ -32,10 +32,6 @@ public:
 	
 	void update()
 	{
-		//position += velocity;
-        left = Vec3f (-getRadius(), getRadius(), 1);//-sin(getElapsedSeconds() * 20.) * getRadius());
-        right = Vec3f (getRadius(), getRadius(), 1);//sin(getElapsedSeconds() * 20.) * getRadius());
-		calculateNormals();
 	}
 	
 	void draw()
@@ -52,11 +48,11 @@ public:
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius() ));
-		gl::vertex (Vec3f (0., -getRadius(), 0.));
-		gl::vertex (Vec3f (0., getRadius() / 2., 0.));
-		gl::vertex (Vec3f (0., -getRadius(), 0.));
-		gl::vertex (Vec3f (-getRadius(), getRadius(), -sin(getElapsedSeconds() * 20.) * getRadius()));
+        gl::vertex (Vec3f (getRadius(), getRadius(), 1.));
+		gl::vertex (Vec3f (0., -getRadius(), 1.));
+		gl::vertex (Vec3f (0., getRadius() / 2., 1.));
+		gl::vertex (Vec3f (0., -getRadius(), 1.));
+		gl::vertex (Vec3f (-getRadius(), getRadius(), 1.));
 		gl::end();
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
