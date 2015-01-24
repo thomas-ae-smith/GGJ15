@@ -1,5 +1,9 @@
-#const width=15.
-#const height=10.
+#const width=20.
+#const height=8.
+#const numbirds = 4.
+
+%% Hide empty atoms from the output (doesn't seem to work)
+%#hide empty(X,Y).
 
 %% Columns and rows
 dimX(0..width).
@@ -9,51 +13,106 @@ dimY(0..height).
 1{goal(X,Y):dimX(X),dimY(Y)}1.
 
 %% We must have a bird(s)
-1{bird(X,Y):dimX(X),dimY(Y)}1.
+numbirds {bird(X,Y,N):dimX(X),dimY(Y),dir(N,_,_)} numbirds.
 
 %% No bird may start on the goal
-:- bird(X, Y), goal(X, Y).
+:- bird(X, Y,_), goal(X, Y).
 
-%% Orthoganal directions
-dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
+%% Orthogonal directions
+dir(d,1,0;;a,-1,0;;w,0,-1;;x,0,1).
+%% Diagonal directions
+dir(e,1,-1;;c,1,1;;z,-1,1;;q,-1,-1).
 
 %% Every square that is not a bird or goal must be a path with a direction, or empty
-1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y,_), not goal(X, Y).
 
 %% A path must not lead to something that is not a path in the same direction, a goal or a changepoint
 :- path(X, Y, N), dir(N, OX, OY), not path(X+OX, Y+OY, N), not goal(X+OX, Y+OY), not change(X+OX, Y+OY).
 
 %% A path can't be at the edge of the board
 %% (TODO: would be better but more difficult to say that a path can't start at the edge of the board)
-:- path(0, _, _).
-:- path(_, 0, _).
-:- path(width, _, _).
-:- path(_, height, _).
+:- path(0, Y, _), not bird(0, Y, _).
+:- path(X, 0, _), not bird(X, 0, _).
+:- path(width, Y, _), not bird(width, Y, _).
+:- path(X, height, _), not bird(X, height, _).
 
-%% A path not have nothing behind it, unless it is a changepoint
+%% A path must not have nothing behind it, unless it is a changepoint
 %% (FIXME: that something must be going in the same direction)
 :- empty(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY), not change(X+OX, Y+OY).
 :- path(X,Y,M), path(X+OX, Y+OY, N), dir(N, OX, OY), M != N.
 
-%% A goal must have at least one path leading into it
-:- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
-:- change(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
+%% A path may not come from a goal
+:- goal(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY).
 
+%% A goal must have at least one path leading into it
+:- goal(X,Y), not path(X+1, Y, a), not path(X-1, Y, d), not path(X, Y-1, x), not path(X, Y+1, w), not path(X+1, Y+1, q), not path(X-1, Y+1, e), not path(X-1, Y-1, c), not path(X+1, Y-1, z).
+:- change(X,Y), not path(X+1, Y, a), not path(X-1, Y, d), not path(X, Y-1, x), not path(X, Y+1, w), not path(X+1, Y+1, q), not path(X-1, Y+1, e), not path(X-1, Y-1, c), not path(X+1, Y-1, z).
+
+path(X, Y, N) :- bird(X, Y, N).
 
 %% Some path points may be change points
-%% (FIXME: ensure all changepoints are reachable)
-0{change(X,Y):path(X,Y,_)}2.
+0{change(X,Y):path(X,Y,_)} numbirds - 1.
 
-%% A path must be empty in the direction behind it at a change point
-%% (TODO: this is not necessarily true once birds alter the direction)
-:- path(X+OX, Y+OY, N), dir(N, OX, OY), change(X+OX, Y+OY), dimX(X), dimY(Y), not empty(X, Y).
+%% A path must be empty in the direction behind it at a bird
+:- bird(X+OX, Y+OY, N), dir(N, OX, OY), dimX(X), dimY(Y), not empty(X, Y).
 
+%% Reachability - base case
+%reachable(X,Y,0) :- goal(X,Y).
+
+%% Reachability - inductive case
+%reachable(X,Y,0) :- reachable(X+OX,Y+OY,0), path(X,Y,N), dir(N, OX, OY).
+
+%% Ensure all change points are reachable, to eliminate self-supporting isolated pairs
+%:- change(X, Y), not reachable(X, Y, _).
+
+
+out(N, X, Y, OX, OY) :- change(X, Y), path(X, Y, N), dir(N, OX, OY).
+
+in(N, X+OX, Y+OY, OX, OY) :- change(X+OX, Y+OY), path(X, Y, N), dir(N, OX, OY).
+
+%satisfied(X,Y) :- 2 {in(N, X, Y, _, _):dir(N,_,_)} 3, change(X,Y).
+%:- not satisfied(X,Y), change(X,Y).
+:- {in(N, X, Y, _, _):dir(N,_,_)} 1, change(X,Y).
+
+%inSumX(S, X, Y) :- iSumXP(P,X,Y),inSumXN(N,X,Y), S= P-N.
+%inSumY(V, X, Y) :- V = #min{1,S}, inSumYP(P,X,Y),inSumYN(N,X,Y), S= P-N.
+
+iSumXP(I+O,X,Y) :- I = {in(N, X, Y, 1, _):dir(N,_,_)}, O = {out(N, X, Y, -1, _):dir(N,_,_)}, change(X,Y).
+iSumXN(I+O,X,Y) :- I = {in(N, X, Y, -1, _):dir(N,_,_)}, O = {out(N, X, Y, 1, _):dir(N,_,_)}, change(X,Y).
+iSumYP(I+O,X,Y) :- I = {in(N, X, Y, _, 1):dir(N,_,_)}, O = {out(N, X, Y, _, -1):dir(N,_,_)}, change(X,Y).
+iSumYN(I+O,X,Y) :- I = {in(N, X, Y, _, -1):dir(N,_,_)}, O = {out(N, X, Y, _, 1):dir(N,_,_)}, change(X,Y).
+
+:- iSumYP(P,X,Y), iSumYN(N,X,Y), P != N.
+:- iSumXP(P,X,Y), iSumXN(N,X,Y), P != N.
+
+%% DEBUG asserted facts for testing
+%goal(20,7).
+%change(12,7).
+%bird(9,10,e).
+%change(8,3).
+%bird(5,0,c).
+%bird(11,0,z).
+
+%bird(1,height,e).
+%bird(0,3,d).
+
+%% DEBUG rendercodes for checking
+%charAt("y", 0, 0) :- satisfied(12,7).
+%charAt("y", 0, 1) :- satisfied(8,3).
+%charAt(S, 0, 2) :- iSumXP(S,8,3).
+%charAt(S, 1, 2) :- iSumXN(S,8,3).
+%charAt(S, 0, 4) :- iSumYN(S,8,3).
+%charAt(S, 1, 4) :- iSumYP(S,8,3).
 
 %% Output codes for the renderer
-charAt(b, X, Y) :- bird(X, Y).
+charAt(b, X, Y) :- bird(X, Y, N).
 charAt("G", X, Y) :- goal(X,Y).
-charAt("p", X, Y) :- path(X, Y, r).
-charAt("q", X, Y) :- path(X, Y, l).
-charAt("u", X, Y) :- path(X, Y, u).
 charAt("d", X, Y) :- path(X, Y, d).
+charAt("a", X, Y) :- path(X, Y, a).
+charAt("w", X, Y) :- path(X, Y, w).
+charAt("x", X, Y) :- path(X, Y, x).
+charAt("e", X, Y) :- path(X, Y, e).
+charAt("c", X, Y) :- path(X, Y, c).
+charAt("z", X, Y) :- path(X, Y, z).
+charAt("q", X, Y) :- path(X, Y, q).
 charAt("o", X, Y) :- change(X, Y).
