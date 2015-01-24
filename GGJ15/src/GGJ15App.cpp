@@ -21,9 +21,7 @@ class GGJ15App : public AppNative {
 void GGJ15App::setup()
 {
     // Parsing the file
-	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90.));
-	birds[0]->setPosition (Vec2f (300., 300.));
-	birds[0]->setRadius (50.);
+	birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
