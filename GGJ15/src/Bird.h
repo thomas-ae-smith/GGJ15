@@ -10,6 +10,8 @@
 #define __GGJ15__Bird__
 
 #include <stdio.h>
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
 
 using namespace ci;
 
@@ -23,27 +25,20 @@ public:
 	
 	void update()
 	{
-		position += velocity;
+		//position += velocity;
 	}
 	
 	void draw()
 	{
-		gl::pushMatrices();
-		gl::translate (position * -1.f);
-		gl::rotate (Vec3f (0., 0., orientation));
 		gl::translate (position);
-		gl::color (1., 0., 0.);
-		gl::begin (GL_TRIANGLES);
-		gl::vertex (position.x + 10., position.y + 3., 0.);
-		gl::vertex (position.x + 10., position.y + 8., 0.);
-		gl::vertex (position.x + 0., position.y + 0., 0.);
+		gl::rotate (orientation);
+		gl::begin (GL_TRIANGLE_STRIP);
+		gl::vertex (Vec3f (0., 0., 0.));
+		gl::vertex (Vec3f (5., 7., 0.));
+		gl::vertex (Vec3f (10., 0., 0.));
 		gl::end();
-		gl::begin (GL_TRIANGLES);
-		gl::vertex (position.x + 20., position.y + 0., 0.);
-		gl::vertex (position.x + 10., position.y + 8., 0.);
-		gl::vertex (position.x + 10., position.y + 3., 0.);
-		gl::end();
-		gl::popMatrices();
+		gl::rotate (-orientation);
+		gl::translate (-position);
 	}
 	
 private:
