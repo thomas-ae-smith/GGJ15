@@ -35,12 +35,16 @@ public:
 	
 	void calculateNormals()
 	{
+<<<<<<< HEAD
 		Vec3f a = top - right;
 		Vec3f b = centre - right;
 		normalRight = cross (a, b);
 		a = left - top;
 		b = left - centre;
 		normalLeft = -cross (a, b);
+=======
+		//shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+>>>>>>> Commenting out some shader stuff that crashes VS
 	}
 	
 	void update()
@@ -92,6 +96,10 @@ public:
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
 		gl::popMatrices();
+<<<<<<< HEAD
+=======
+		//shader.unbind();
+>>>>>>> Commenting out some shader stuff that crashes VS
 	}
 	
 	void setOrientation (float o)
