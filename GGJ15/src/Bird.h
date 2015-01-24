@@ -13,6 +13,8 @@
 #include "Agent.h"
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/gl/GlslProg.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -33,7 +35,7 @@ public:
 	}
 	
 	void draw()
-	{
+    {
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
