@@ -18,7 +18,7 @@ class GGJ15App : public AppNative {
 
 void GGJ15App::setup()
 {
-	birds[0] = new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45.);
+	birds[0] = new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 0., 10.);
 }
 
 void GGJ15App::mouseDown( MouseEvent event )

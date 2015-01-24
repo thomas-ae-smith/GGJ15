@@ -18,8 +18,8 @@ using namespace ci;
 class Bird
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float angle)
-	: position (pos), velocity (vel), orientation (angle)
+	Bird (Vec2f pos, Vec2f vel, float angle, float r)
+	: position (pos), velocity (vel), orientation (angle), radius (r)
 	{
 	}
 	
@@ -33,9 +33,9 @@ public:
 		gl::translate (position);
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (0., 0., 0.));
-		gl::vertex (Vec3f (5., 7., 0.));
-		gl::vertex (Vec3f (10., 0., 0.));
+		gl::vertex (Vec3f (-radius, -radius, 0.));
+		gl::vertex (Vec3f (0., radius, 0.));
+		gl::vertex (Vec3f (radius, -radius, 0.));
 		gl::end();
 		gl::rotate (-orientation);
 		gl::translate (-position);
@@ -45,6 +45,7 @@ private:
 	Vec2f position;
 	Vec2f velocity;
 	float orientation;
+	float radius;
 };
 
 #endif /* defined(__GGJ15__Bird__) */
