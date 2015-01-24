@@ -1,6 +1,6 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-#include "cinder/Camera.h"
+
 #include "Resources.h"
 
 #include <vector>
@@ -23,9 +23,6 @@ class GGJ15App : public AppNative {
     ~GGJ15App();
     
 	void setup();
-	void setupCamera();
-	void setupLighting();
-	void setupShaders();
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
@@ -36,8 +33,6 @@ class GGJ15App : public AppNative {
     std::vector<Goal*> goals;
     
     Map *map;
-	
-	gl::GlslProg birdShader;
 };
 
 GGJ15App::~GGJ15App()
@@ -65,14 +60,8 @@ GGJ15App::~GGJ15App()
     delete map;
 }
 
-void GGJ15App::setupShaders()
-{
-	birdShader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
-}
-
 void GGJ15App::setup()
 {
-	setupShaders();
     // Parsing the file
     std::ifstream setupFile;
     setupFile.open("london.ggj");
@@ -171,21 +160,12 @@ void GGJ15App::setup()
     
     
 	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90.));
+	birds[0]->setPosition (Vec2f (300., 300.));
+	birds[0]->setRadius (50.);
 
     birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
 	//Create perch points from the map
 	//birds.push_back(new Perch
-	//For each perch parsed from map
-	int xPos = 10;
-	int yPos = 300;
-	int angle = 90;
-	perches.push_back(new Perch( Vec2f(xPos, yPos), angle));
-	for (int i=0; i < perches.size(); i++) {
-		birds.push_back( new Bird(perches[i]->getPos(), Vec2f(0.,0.), perches[i]->getAngle(),90.)); // HARD FIX
-	}
-	
-
-	
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -193,18 +173,9 @@ void GGJ15App::mouseDown( MouseEvent event )
 	/* Test stuff at the moment, ignore */
 	int xPos = event.getX();
 	int yPos = event.getY();
-	for (int i=0; i< birds.size(); i++) {
-		Vec2f pos = birds[i]->getPosition();
-		if (xPos >= pos.x - 10 && xPos <= pos.x + 10 && yPos >= pos.y -10 && yPos <= pos.y + 10) {
-			float rotation = birds[i]->getOrientation();
-			
-		}
-	}
-	/*
 	if (xPos >= 0 && xPos <= 100) {
-		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20.));
+		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0, 20));
 	}
-	*/
 }
 
 void GGJ15App::update()
@@ -219,25 +190,15 @@ void GGJ15App::update()
 
 void GGJ15App::draw()
 {
-    gl::enableAlphaBlending();
-    gl::enableDepthRead( true );
-    gl::enableDepthWrite( true );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-    // clear out the window with black
+	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
     map->draw();
-	
-	// Birds
-
-	birdShader.bind();
-	birdShader.uniform ("time" , (float) getElapsedSeconds());
+    
     for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->draw();
 	}
-	birdShader.unbind();
-    //
+    
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
