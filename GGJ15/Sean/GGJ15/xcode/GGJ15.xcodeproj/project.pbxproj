@@ -36,6 +36,7 @@
 		14A947861A7322C2000AD14B /* Agent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Agent.h; path = ../../../src/Agent.h; sourceTree = "<group>"; };
 		14A947881A733828000AD14B /* bird_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_frag.glsl; path = ../../../resources/bird_frag.glsl; sourceTree = "<group>"; };
 		14A947891A733828000AD14B /* bird_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_vert.glsl; path = ../../../resources/bird_vert.glsl; sourceTree = "<group>"; };
+		14A9478C1A735752000AD14B /* Lighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lighting.h; path = ../../../src/Lighting.h; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
@@ -79,6 +80,7 @@
 				14A947861A7322C2000AD14B /* Agent.h */,
 				14A947811A73143F000AD14B /* Bird.h */,
 				14A947821A73143F000AD14B /* GGJ15App.cpp */,
+				14A9478C1A735752000AD14B /* Lighting.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
