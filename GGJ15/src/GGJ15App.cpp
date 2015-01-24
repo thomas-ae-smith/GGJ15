@@ -244,8 +244,9 @@ void GGJ15App::update()
 				// if they collide, remove from list and set norules
 				 Vec2f f = _flap->getVelocity();
 				 Vec2f newComer = (*a)->getVelocity();
-				 Vec2f newDirection = Vec2f (clamp (f.x + newComer.x, -1, 1), clamp (f.y + newComer.y, -1., 1.));
-				 //clamp(_flap->getVelocity() + (*a)->getVelocity(), 0, 1);
+				 Vec2f newDirection = Vec2f ( (f.x + newComer.x),  (f.y + newComer.y));
+				 if (abs (newDirection.x) > 1.) newDirection.x /= 2.;
+				 if (abs (newDirection.y) > 1.) newDirection.y /= 2.;
 				 console()<<newDirection<<endl;
 				 _flap->setVelocity(newDirection);
 				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
