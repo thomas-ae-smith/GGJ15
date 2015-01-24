@@ -10,26 +10,22 @@
 #define __GGJ15__Bird__
 
 #include <stdio.h>
+#include "Agent.h"
 
 using namespace ci;
 
-class Bird
+class Bird : Agent
 {
 public:
 	Bird(Vec2f pos, Vec2f vel)
 	{
-		
+        Agent(pos,vel,2.);
 	}
-	
-	void update()
-	{
-		position += velocity;
-	}
-	
+    
 	void draw()
 	{
 		gl::pushMatrices();
-		gl::translate (position * -1.f);
+		gl::translate (getPosition() * -1.f);
 		gl::rotate (Vec3f (0., 0., orientation));
 		gl::color (1., 0., 0.);
 		gl::begin (GL_TRIANGLES);
@@ -42,13 +38,11 @@ public:
 		gl::vertex (10., 8., 0.);
 		gl::vertex (10., 3., 0.);
 		gl::end();
-		gl::translate (position);
+        gl::translate (getPosition());
 		gl::popMatrices();
 	}
 	
 private:
-	Vec2f position;
-	Vec2f velocity;
 	float orientation;
 };
 
