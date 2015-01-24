@@ -28,7 +28,8 @@ void main( void )
 		c += clamp (1. - distance (position, vec2 (normedBirdPosition.x + i, normedBirdPosition.y)) * 10., 0., 1.);
 	}
 	c *= 0.6;
-	float yDiff = 1. - clamp ((abs(position.y + sin((position.x + mod(time/100., 360.)) * 100.) * 0.01 - normedBirdPosition.y))*90., 0., 1.);
+//	vec2 targ = vec2(position.x, position.y + sin((position.x + mod(time/100., 360.)) * 100.) * 0.01);
+	float yDiff = 1. - clamp ((abs(position.y + sin((position.x + mod(time/10., 360.)) * 100.) * 0.01 - normedBirdPosition.y))*90., 0., 1.);
 	c += yDiff;
 	gl_FragColor = vec4 (outputColor * c, 1.);
 	
