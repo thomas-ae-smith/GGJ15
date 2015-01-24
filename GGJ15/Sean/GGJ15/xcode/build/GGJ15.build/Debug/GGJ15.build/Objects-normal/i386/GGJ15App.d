@@ -8,7 +8,6 @@ dependencies: \
   /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Agent.h \
   /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Map.h \
   ../../../../../../Cinder/include/cinder/gl/GlslProg.h \
-  /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Lighting.h \
   /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Flap.h \
   /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Goal.h \
   /Users/sean/Documents/Dev/GameDev/GGJ15/GGJ15/src/Perch.h
