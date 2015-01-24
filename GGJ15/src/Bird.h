@@ -10,17 +10,20 @@
 #define __GGJ15__Bird__
 
 #include <stdio.h>
+#include "Agent.h"
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
 using namespace ci;
+using namespace ci::app;
 
-class Bird
+class Bird : public Agent
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float angle, float r)
-	: position (pos), velocity (vel), orientation (angle), radius (r)
+	Bird (Vec2f pos, Vec2f vel, float angle, float radius)
+	:orientation (angle)
 	{
+        Agent(pos, vel, radius);
 	}
 	
 	void update()
@@ -30,22 +33,23 @@ public:
 	
 	void draw()
 	{
-		gl::translate (position);
+		console() << getPosition().x <<" "<<getPosition().y<<" "<<getRadius()<<std::endl;
+		gl::pushMatrices();
+		gl::color (1.0, 0., 0.);
+		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-		gl::vertex (Vec3f (-radius, -radius, 0.));
-		gl::vertex (Vec3f (0., radius, 0.));
-		gl::vertex (Vec3f (radius, -radius, 0.));
+		gl::vertex (Vec3f (-getRadius(), -getRadius(), 0.));
+		gl::vertex (Vec3f (0., getRadius(), 0.));
+		gl::vertex (Vec3f (getRadius(), -getRadius(), 0.));
 		gl::end();
 		gl::rotate (-orientation);
-		gl::translate (-position);
+		gl::translate (-getPosition());
+		gl::popMatrices();
 	}
 	
 private:
-	Vec2f position;
-	Vec2f velocity;
 	float orientation;
-	float radius;
 };
 
 #endif /* defined(__GGJ15__Bird__) */
