@@ -15,6 +15,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
 #include "Resources.h"
+
 using namespace ci;
 using namespace ci::app;
 
@@ -26,8 +27,7 @@ public:
 	  orientation (angle)
 	
 	{
-		//shader = gl::GlslProg (loadResource (BIRD_VERT),
-							   //loadResource (BIRD_FRAG));
+		shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
 	}
 	
 	void update()
@@ -40,6 +40,10 @@ public:
 	{
 		shader.bind();
 		shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
+		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPosition.y *= -1.f;
+		shader.uniform ("normedPosition", normedPosition);
+						
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
 		gl::translate (getPosition());
