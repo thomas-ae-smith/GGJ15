@@ -223,15 +223,17 @@ void GGJ15App::update()
 
 void GGJ15App::draw()
 {
-	// clear out the window with black
+    gl::enableAlphaBlending();
+    gl::enableDepthRead( true );
+    gl::enableDepthWrite( true );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    //map->draw();
+    map->draw();
 	
 	// Birds
-	gl::enableAlphaBlending();
-	gl::enableDepthRead( true );
-	gl::enableDepthWrite( true );
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
 	birdShader.bind();
 	birdShader.uniform ("time" , (float) getElapsedSeconds());
     for (int i = 0; i < birds.size(); i++)
