@@ -51,7 +51,7 @@ public:
         gl::vertex (Vec3f (getRadius(), getRadius(), 1.));
 		gl::vertex (Vec3f (0., -getRadius(), 1.));
 		gl::vertex (Vec3f (0., getRadius() / 2., 1.));
-		gl::vertex (Vec3f (0., -getRadius(), 1.));
+//		gl::vertex (Vec3f (0., -getRadius(), 1.));
 		gl::vertex (Vec3f (-getRadius(), getRadius(), 1.));
 		gl::end();
 		gl::rotate (-orientation);

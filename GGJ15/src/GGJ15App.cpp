@@ -170,19 +170,19 @@ void GGJ15App::setup()
     }
     
     
-	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90.));
+	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 0., 90.));
 
-    birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
-	//Create perch points from the map
-	//birds.push_back(new Perch
-	//For each perch parsed from map
-	int xPos = 10;
-	int yPos = 300;
-	int angle = 90;
-	perches.push_back(new Perch( Vec2f(xPos, yPos), angle));
-	for (int i=0; i < perches.size(); i++) {
-		birds.push_back( new Bird(perches[i]->getPos(), Vec2f(0.,0.), perches[i]->getAngle(),90.)); // HARD FIX
-	}
+//    birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
+//	//Create perch points from the map
+//	//birds.push_back(new Perch
+//	//For each perch parsed from map
+//	int xPos = 10;
+//	int yPos = 300;
+//	int angle = 90;
+//	perches.push_back(new Perch( Vec2f(xPos, yPos), angle));
+//	for (int i=0; i < perches.size(); i++) {
+//		birds.push_back( new Bird(perches[i]->getPos(), Vec2f(0.,0.), perches[i]->getAngle(),90.)); // HARD FIX
+//	}
 	
 
 	
@@ -219,9 +219,9 @@ void GGJ15App::update()
 
 void GGJ15App::draw()
 {
-    gl::enableAlphaBlending();
-    gl::enableDepthRead( true );
-    gl::enableDepthWrite( true );
+//    gl::enableAlphaBlending();
+//    gl::enableDepthRead( true );
+//    gl::enableDepthWrite( true );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     // clear out the window with black
@@ -229,7 +229,6 @@ void GGJ15App::draw()
     map->draw();
 	
 	// Birds
-
 	birdShader.bind();
 	birdShader.uniform ("time" , (float) getElapsedSeconds());
     for (int i = 0; i < birds.size(); i++)
@@ -237,7 +236,6 @@ void GGJ15App::draw()
 		birds[i]->draw();
 	}
 	birdShader.unbind();
-    //
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
