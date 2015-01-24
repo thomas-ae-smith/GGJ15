@@ -20,7 +20,7 @@ dir(r,1;;l,-1).
 :- path(0, _, _).
 :- path(width, _, _).
 :- empty(X,Y), path(X+O, Y, N), dir(N, O).
-:- goal(X,Y), not path(X+O, Y, N), dir(N, O).
+:- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r).
 
 charAt(b, X, Y) :- bird(X, Y).
 charAt("G", X, Y) :- goal(X,Y).
