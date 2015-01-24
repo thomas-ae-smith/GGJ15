@@ -12,6 +12,8 @@
 
 #include "Bird.h"
 #include "Map.h"
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
 
 class Game
 {

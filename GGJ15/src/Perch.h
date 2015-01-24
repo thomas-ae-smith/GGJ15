@@ -14,6 +14,9 @@ using namespace ci::app;
 
 class Perch {
 	public:
+		float xPos;
+		float yPos;
+		float radius;
 	void setup() {
 
 	}

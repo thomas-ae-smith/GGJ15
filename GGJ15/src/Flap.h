@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include "Agent.h"
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
 
 class Flap : public Agent
 {
