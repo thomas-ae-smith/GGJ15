@@ -91,7 +91,7 @@ void GGJ15App::setup()
 	{
 		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
 	}
-    while( !std::getline( setupFile, line ).eof() )
+    while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
             continue;

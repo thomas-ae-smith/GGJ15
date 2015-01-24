@@ -20,18 +20,8 @@ const float pi = 3.14159265359;
 
 void main( void )
 {
-	vec2 position = (gl_FragCoord.xy / resolution.xy) * 2. - 1.;
-	// write Total Color:
-	float c = clamp (1. - distance (position, vec2 (normedBirdPosition.x + 0.1, normedBirdPosition.y)) * 20., 0., 1.);
-	for (float i = 0.; i > -0.25; i-= 0.125)
-	{
-		float d = (abs (i) + 0.5) * 30.;
-		c += clamp (1. - distance (position, vec2 (normedBirdPosition.x + i, normedBirdPosition.y)) * d, 0., 1.);
-	}
-	c *= 0.6;
-//	vec2 targ = vec2(position.x, position.y + sin((position.x + mod(time/100., 360.)) * 100.) * 0.01);
-	float yDiff = 1. - clamp ((abs(position.y + sin((position.x + mod(time/10., 360.)) * 100.) * 0.015 - normedBirdPosition.y))*90., 0., 1.);
-	c += yDiff;
-	gl_FragColor = vec4 (outputColor * c, 1.);
-	
+    vec2 position = gl_TexCoord[0].ts ;
+    float c = abs(position.y - sin(position.x + 25. * time));
+    
+    gl_FragColor = vec4 (outputColor, 1.);
 }

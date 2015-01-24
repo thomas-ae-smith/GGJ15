@@ -74,14 +74,17 @@ public:
 		shader.uniform ("time", float(getElapsedSeconds()));
 		printf ("%f, %f\n", normedPosition.x, normedPosition.y);
         shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
-		
 		gl::pushMatrices();
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
+        gl::texCoord(m_rightVertex.x, m_rightVertex.y);
         gl::vertex (m_rightVertex);
-		gl::vertex (Vec3f (0., -getRadius(), 1.));
-		gl::vertex (Vec3f (0., getRadius() / 2., 1.));
+        gl::texCoord(0, -getRadius());
+        gl::vertex (Vec3f (0., -getRadius(), 1.));
+        gl::texCoord(0, getRadius() / 2.);
+        gl::vertex (Vec3f (0., getRadius() / 2., 1.));
+        gl::texCoord(m_leftVertex.x, m_leftVertex.y);
 		gl::vertex (m_leftVertex);
 		gl::end();
 		gl::popMatrices();
