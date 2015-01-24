@@ -42,7 +42,13 @@ public:
 	void update()
 	{
         if(m_move)
-            setPosition(getPosition() + getVelocity());
+		{
+			Agent::updatePosition();
+			if(!m_noRules)
+			{
+				orientation = m_oriAttr;
+			}
+		}
 	}
     
     void setColor(float r, float g, float b)

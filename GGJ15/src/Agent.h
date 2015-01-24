@@ -71,18 +71,74 @@ public:
     
     void updatePosition()
     {
-        m_position += m_dir*m_velocity;
+		if(m_noRules)
+		{
+			m_v1.x = m_v2.x = m_v3.x = 0.0f;
+			m_v1.y = m_v2.y = m_v3.y = 0.0f;
+			m_position += (m_velocity);
+
+		}
+		else
+		{
+			m_position += (m_v1 +m_v2);
+		}
     }
     
+	// for rule 1
+	void setCenterAttraction(const Vec2f &_c)
+	{
+		m_v1 = _c;
+	}
+
+	void setOrientationAttractor(float _o)
+	{
+		m_oriAttr = _o;
+	}
+
+	// for rule 2
+	void setSeparation(const Vec2f &_sep)
+	{
+		m_v2 = _sep;
+	}
+
+	Vec2f getSeparation()
+	{
+		return m_v2;
+	}
+
     bool collision( Agent *otherAgent);
     bool collision( Map *map);
-    bool contains(Vec2f mouse);
+    bool collisionOptimized( Agent *otherAgent);
+	bool contains(Vec2f mouse);
+
+	void setNoRules(bool _b)
+	{
+		m_noRules = _b;
+	}
+
+	void setTargetBias(Vec2f &_b)
+	{
+		m_v3 = _b;
+	}
+
+
 private:
     Vec2f m_position;
     Vec2f m_velocity;
     float m_radius;
 	Vec2f m_dir;
-    
+   	// offset for rule 1 : push to barycenter
+	Vec2f m_v1;
+	// offset for rule 2 : separation
+	Vec2f m_v2;
+	// offset for rule 3 : target bias after collision
+	Vec2f m_v3;
+	
+protected:
+	//
+	bool m_noRules;
+	//
+	float m_oriAttr;
 };
 
 
