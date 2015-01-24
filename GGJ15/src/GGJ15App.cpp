@@ -1,6 +1,6 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-#include "cinder/Camera.h"
+
 #include "Resources.h"
 
 #include <vector>
@@ -23,20 +23,17 @@ class GGJ15App : public AppNative {
     ~GGJ15App();
     
 	void setup();
-	void setupCamera();
-	void setupLighting();
-	void setupShaders();
 	void mouseDown( MouseEvent event );	
 	void update();
 	void draw();
-	
+	void setupShaders();
+
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
     
     Map *map;
-	
 	gl::GlslProg birdShader;
 };
 
@@ -67,7 +64,12 @@ GGJ15App::~GGJ15App()
 
 void GGJ15App::setupShaders()
 {
-	birdShader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+	#ifdef __APPLE__
+		birdShader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+	#elif defined _WIN32 || defined _WIN64
+		birdShader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
+	#endif
+
 }
 
 void GGJ15App::setup()
@@ -175,15 +177,14 @@ void GGJ15App::setup()
 
 	birds.push_back(new Bird (Vec2f (getWindowSize().x - 20, getWindowSize().y/2. ), Vec2f (-1, 0.), -90, 20.));
 
-	
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
 {
 	/* Test stuff at the moment, ignore */
-		/*
+	/*
 	if (xPos >= 0 && xPos <= 100) {
-		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20.));
+		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0, 20));
 	}
 	*/
 }
@@ -223,7 +224,7 @@ void GGJ15App::draw()
     
     // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    map->draw();
+    //map->draw();
 	
 	// Birds
 	birdShader.bind();

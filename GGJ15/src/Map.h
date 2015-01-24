@@ -33,7 +33,11 @@ public:
     Map(int width, int height):m_width(width),
                                m_height(height)
     {
-        m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+		#ifdef __APPLE__
+			m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+		#elif defined _WIN32 || defined _WIN64
+			m_shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
+		#endif
         m_grid = new int[width*height];
 		m_cellWidth = getWindowWidth() / (float) m_width;
 		m_cellHeight = getWindowHeight() / (float) m_height;
