@@ -1,6 +1,8 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
+#include "Resources.h"
+
 #include <vector>
 #include "Bird.h"
 #include "Map.h"
@@ -18,6 +20,8 @@ using namespace std;
 
 class GGJ15App : public AppNative {
   public:
+    ~GGJ15App();
+    
 	void setup();
 	void mouseDown( MouseEvent event );	
 	void update();
@@ -31,6 +35,31 @@ class GGJ15App : public AppNative {
     Map *map;
 };
 
+GGJ15App::~GGJ15App()
+{
+    for(int i=0; i<perches.size() ; ++i)
+    {
+        delete perches[i];
+    }
+    
+    for(int i=0; i<birds.size() ; ++i)
+    {
+        delete birds[i];
+    }
+    
+    for(int i=0; i<flaps.size() ; ++i)
+    {
+        delete flaps[i];
+    }
+    
+    for(int i=0; i<goals.size() ; ++i)
+    {
+        delete goals[i];
+    }
+    
+    delete map;
+}
+
 void GGJ15App::setup()
 {
     // Parsing the file
@@ -42,6 +71,8 @@ void GGJ15App::setup()
     bool initBirds, initFlaps, initGoal, initCard;
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
+    
+    map = new Map(50,50);
     
     while( std::getline( setupFile, line ) )
     {
@@ -154,7 +185,6 @@ void GGJ15App::update()
 	{
 		birds[i]->update();
 		birds[i]->setPosition ((float) getMousePos().x, (float) getMousePos().y);
-		
 	}
 }
 
@@ -162,10 +192,13 @@ void GGJ15App::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	for (int i = 0; i < birds.size(); i++)
+    map->draw();
+    
+    for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->draw();
 	}
+    
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
