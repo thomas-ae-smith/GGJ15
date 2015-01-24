@@ -221,6 +221,11 @@ void GGJ15App::setupLevel()
 	addBirdAtGridPosition (0, 12, 1., 0., 20.);
 	addBirdAtGridPosition (10, 19, 0., -1., 20.);
 	addGoalAtPosition (15, 9, 0., 0., 20.);
+	
+	for (int i=0; i<birds.size(); i++)
+	{
+		birds[i]->setNoRules (true);
+	}
 }
 
 void GGJ15App::keyDown( KeyEvent event ) {
