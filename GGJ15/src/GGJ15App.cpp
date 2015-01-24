@@ -21,7 +21,7 @@ class GGJ15App : public AppNative {
 void GGJ15App::setup()
 {
     // Parsing the file
-	birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
+	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45.));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -34,7 +34,6 @@ void GGJ15App::update()
 	for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->update();
-        console()<<birds[i]->getOrientation()<<endl;
 	}
 }
 
@@ -42,7 +41,10 @@ void GGJ15App::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	birds[0]->draw();
+	for (int i = 0; i < 1; i++)
+	{
+		birds[0]->draw();
+	}
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )

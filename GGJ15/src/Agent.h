@@ -8,8 +8,6 @@
 
 #ifndef __Stephane__Agent__
 #define __Stephane__Agent__
-#include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
 
 using namespace ci;
 
