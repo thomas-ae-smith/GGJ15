@@ -31,11 +31,13 @@ public:
         m_r=1.;
         m_g=1.;
         m_b=1.;
+        m_move = false;
 	}
 	
 	void update()
 	{
-        setPosition(getPosition() + getVelocity());
+        if(m_move)
+            setPosition(getPosition() + getVelocity());
 	}
     
     void setColor(float r, float g, float b)
@@ -43,6 +45,11 @@ public:
         m_r=r;
         m_g=g;
         m_b=b;
+    }
+    
+    void letsMove()
+    {
+        m_move = true;
     }
 	
 	void draw()
@@ -79,6 +86,7 @@ public:
 		return orientation;
 	}
 private:
+    bool  m_move;
     float m_r,m_g,m_b;
 	float orientation;
 	gl::GlslProg shader;

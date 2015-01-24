@@ -180,12 +180,13 @@ void GGJ15App::setup()
 
 void GGJ15App::mouseDown( MouseEvent event )
 {
-	/* Test stuff at the moment, ignore */
-		/*
-	if (xPos >= 0 && xPos <= 100) {
-		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20.));
-	}
-	*/
+
+    Vec2f pos = event.getPos();
+    for(int i=0; i< birds.size(); i++)
+        if(birds[i]->contains(pos))
+        {
+            birds[i]->letsMove();
+        }
 }
 
 void GGJ15App::update()
