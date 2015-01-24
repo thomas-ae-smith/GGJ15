@@ -31,6 +31,7 @@
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		0D0BD521C3B84E8A83048CAB /* GGJ15_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = GGJ15_Prefix.pch; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		148719111A73C3070040AA61 /* Map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Map.h; path = ../../../src/Map.h; sourceTree = "<group>"; };
 		14A947811A73143F000AD14B /* Bird.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bird.h; path = ../../../src/Bird.h; sourceTree = "<group>"; };
 		14A947821A73143F000AD14B /* GGJ15App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GGJ15App.cpp; path = ../../../src/GGJ15App.cpp; sourceTree = "<group>"; };
 		14A947851A7322C2000AD14B /* Agent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Agent.cpp; path = ../../../src/Agent.cpp; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				148719111A73C3070040AA61 /* Map.h */,
 				14A947851A7322C2000AD14B /* Agent.cpp */,
 				14A947861A7322C2000AD14B /* Agent.h */,
 				14A947811A73143F000AD14B /* Bird.h */,
