@@ -9,24 +9,24 @@ dimY(0..height).
 1{goal(X,Y):dimX(X),dimY(Y)}1.
 
 %% We must have a bird(s)
-1{bird(X,Y):dimX(X),dimY(Y)}1.
+1{bird(X,Y,N):dimX(X),dimY(Y),dir(N,_,_)}1.
 
 %% No bird may start on the goal
-:- bird(X, Y), goal(X, Y).
+:- bird(X, Y,_), goal(X, Y).
 
 %% Orthoganal directions
 dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
 
 %% Every square that is not a bird or goal must be a path with a direction, or empty
-1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y,_), not goal(X, Y).
 
 %% A path must not lead to something that is not a path in the same direction, a goal or a changepoint
 :- path(X, Y, N), dir(N, OX, OY), not path(X+OX, Y+OY, N), not goal(X+OX, Y+OY), not change(X+OX, Y+OY).
 
 %% A path can't be at the edge of the board
 %% (TODO: would be better but more difficult to say that a path can't start at the edge of the board)
-:- path(0, _, _).
-:- path(_, 0, _).
+:- path(0, Y, _), not bird(0, Y, _).
+:- path(X, 0, _), not bird(X, 0, _).
 :- path(width, _, _).
 :- path(_, height, _).
 
@@ -35,10 +35,14 @@ dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
 :- empty(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY), not change(X+OX, Y+OY).
 :- path(X,Y,M), path(X+OX, Y+OY, N), dir(N, OX, OY), M != N.
 
+%% A path may not come from a goal
+:- goal(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY).
+
 %% A goal must have at least one path leading into it
 :- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
 :- change(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
 
+path(X, Y, N) :- bird(X, Y, N).
 
 %% Some path points may be change points
 %% (FIXME: ensure all changepoints are reachable)
@@ -50,7 +54,7 @@ dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
 
 
 %% Output codes for the renderer
-charAt(b, X, Y) :- bird(X, Y).
+charAt(b, X, Y) :- bird(X, Y, N).
 charAt("G", X, Y) :- goal(X,Y).
 charAt("p", X, Y) :- path(X, Y, r).
 charAt("q", X, Y) :- path(X, Y, l).

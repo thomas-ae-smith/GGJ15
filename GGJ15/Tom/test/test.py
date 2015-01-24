@@ -21,7 +21,8 @@ def display_maze(facts):
         pos = (x,y)
         max_x, max_y = max(x, max_x), max(y, max_y)
         # print m.groups()
-        char[pos] = 'o' if (pos in char and char[pos] == 'o') else c
+        # char[pos] = 'o' if (pos in char and char[pos] == 'o') else c
+        char[pos] = c if not (pos in char) else (char[pos] if (char[pos] == 'b' or char[pos] == 'o') else c)
 
   def code(x,y):
     """decide how a maze cell should be tpyeset"""
