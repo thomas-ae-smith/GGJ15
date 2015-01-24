@@ -28,6 +28,7 @@ class GGJ15App : public AppNative {
 	void update();
 	void draw();
 	void setupShaders();
+	void addBirdAtGridPosition (int x, int y, float vX, float vY, float r);
 
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
@@ -185,11 +186,13 @@ void GGJ15App::setup()
     }
   
     
-	//birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), 25.));
+	addBirdAtGridPosition (10, 0, 0., 1., 20.);
+	addBirdAtGridPosition (0, 10, 1., 0., 20.);
+}
 
+void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
+{
+	birds.push_back (new Bird (Vec2f ((x + 0.5) * r, ((y + 0.5) * r)), Vec2f (vX, vY), r));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -226,7 +229,7 @@ void GGJ15App::update()
 				 //birds[i]->setColor(0.0,0.0,1.0);
 				// if they collide, remove from list and set norules
 				 Vec2f newDirection = (_flap->getVelocity() + (*a)->getVelocity()).normalized();
-				 console()<<newDirection<<endl;
+				 //console()<<newDirection<<endl;
 				 _flap->setVelocity(newDirection);
 				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
 				 float ori = _flap->getOrientation() + (*a)->getOrientation();
