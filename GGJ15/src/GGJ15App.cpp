@@ -34,7 +34,8 @@ void GGJ15App::update()
 	for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->update();
-		birds[i]->setPosition ((float) getMousePos().x, 200.);
+		birds[i]->setPosition ((float) getMousePos().x, (float) getMousePos().y);
+		
 	}
 }
 
