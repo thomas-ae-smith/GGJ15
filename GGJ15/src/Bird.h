@@ -49,7 +49,13 @@ public:
 		m_rightVertex.x = getRadius() - (t * 4.);
 		m_leftVertex.x = -getRadius() + (t * 4.);
         if(m_move)
-            setPosition(getPosition() + getVelocity());
+		{
+			Agent::updatePosition();
+			if(!m_noRules)
+			{
+				orientation = m_oriAttr;
+			}
+		}
 	}
     
     void setColor(float r, float g, float b)

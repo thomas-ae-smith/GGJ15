@@ -4,6 +4,7 @@
 #include "Resources.h"
 
 #include <vector>
+#include <list>
 #include "Bird.h"
 #include "Map.h"
 #include "Flap.h"
@@ -32,13 +33,18 @@ class GGJ15App : public AppNative {
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
-    
+    std::list<Bird*> clickedbirds;
+
+	Flap *_flap;
     Map *map;
 	gl::GlslProg birdShader;
+	bool m_firstClicked;
 };
 
 GGJ15App::~GGJ15App()
 {
+	delete _flap;
+
     for(int i=0; i<perches.size() ; ++i)
     {
         delete perches[i];
@@ -74,6 +80,9 @@ void GGJ15App::setupShaders()
 
 void GGJ15App::setup()
 {
+	m_firstClicked = true;
+	_flap = new Flap();
+
 	setWindowSize (800, 800);
 	setupShaders();
     // Parsing the file
@@ -91,7 +100,7 @@ void GGJ15App::setup()
 	{
 		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
 	}
-    while( !std::getline( setupFile, line ).eof() )
+    while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
             continue;
@@ -138,7 +147,7 @@ void GGJ15App::setup()
                 
                 int positionX, positionY;
                 std::sscanf(line.c_str(), "%d %d", positionX, positionY);
-                flaps[i] = new Flap( positionX, positionY);
+                //flaps[i] = new Flap( positionX, positionY);
             }
             initFlaps = false;
             initGoal = true;
@@ -174,52 +183,65 @@ void GGJ15App::setup()
         
         
     }
-	float r = 40.;
-	birds.push_back(new Bird (Vec2f (r / 2., 10.5 * r ), Vec2f (1., 0.), 90., 20.));
-	birds.push_back(new Bird (Vec2f (19.5 * r, 8.5 * r ), Vec2f (-1., 0.), 270., 20.));
-	birds.push_back(new Bird (Vec2f (15.5 * r, 0.5 * r ), Vec2f (0., 1.), 0., 20.));
-	birds.push_back(new Bird (Vec2f (3.5 * r, 0.5 * r ), Vec2f (1., 1.), 45., 20.));
-	birds.push_back(new Bird (Vec2f (5.5 * r, 0.5 * r ), Vec2f (1.,	1.), 45., 20.));
-	birds.push_back(new Bird (Vec2f (19.5 * r, 12.5 * r ), Vec2f (-1., -1.), 315., 20.));
-	birds.push_back(new Bird (Vec2f (19.5 * r, 16.5 * r ), Vec2f (-1., -1.), 315., 20.));
+  
+    
+	//birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
+	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), -90, 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), -90, 25.));
 
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
 {
-
     Vec2f pos = event.getPos();
     for(int i=0; i< birds.size(); i++)
         if(birds[i]->contains(pos))
         {
+			if(m_firstClicked)	// initialize lastDir of the flock
+			{
+				m_firstClicked = false;
+				_flap->setVelocity(birds[i]->getVelocity());
+				_flap->setPosition(birds[i]->getPosition());
+			}
             birds[i]->letsMove();
+			birds[i]->setNoRules(true);
+			if(!m_firstClicked)	// initialize lastDir of the flock
+			{
+				clickedbirds.push_back(birds[i]);
+			}
         }
 }
 
 void GGJ15App::update()
 {
-    // Collision
-	for (int i = 0; i < birds.size(); i++)
+    // once collision, remove from list of clicked and set rules back
+	// for every clicked bird, check if it is colliding with the any other bird of the flock
+	for( std::list<Bird*>::iterator a = clickedbirds.begin(); a != clickedbirds.end();a++)
 	{
-		birds[i]->update();
+	    for(int i=0; i< birds.size(); i++)
+		{
+			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i]) )
+			 {
+				 birds[i]->setColor(0.0,0.0,1.0);
+				// if they collide, remove from list and set norules
+				 Vec2f newDirection = (_flap->getVelocity() + (*a)->getVelocity()).normalized();
+				 _flap->setVelocity(newDirection);
+				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
+				 float ori = _flap->getOrientation() + (*a)->getOrientation();
+				 if( ori < 0.0)
+					 ori *=-1.0;
+				 _flap->setOrientation(ori / 2.0);
+
+				 //a = clickedbirds.erase(a);// STL trick
+				 break;
+			 }
+		}
 	}
-    
-    for (int i = 1; i < birds.size(); i++)
-    {
-        for(int j=0 ; j<i ; ++j)
-        {
-            if(birds[i]->collision(birds[j]))
-            {
-                birds.push_back(new Bird( (birds[i]->getPosition() + birds[j]->getPosition())/2.,
-                                           (birds[i]->getVelocity() + birds[j]->getVelocity())/2.,
-                                           0.,
-                                           20.));
-                birds[birds.size()-1]->setColor(1., 0., 0.);
-                birds.erase(birds.begin() + j);
-                birds.erase(birds.begin() + i-1);
-            }
-        }
-    }
+
+	// this applies the rules and updates attractor
+	_flap->update(birds);
+
 }
 
 void GGJ15App::draw()
