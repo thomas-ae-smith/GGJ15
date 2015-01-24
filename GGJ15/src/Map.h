@@ -76,14 +76,17 @@ public:
     
     void draw()
     {
-        gl::color( 1 , 0 , 1 );
+        //gl::color( 1 , 0 , 1 );
         gl::setViewport( getWindowBounds() );
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
-		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) getWindowWidth(), (float) getWindowHeight())) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) m_width, (float) m_height)) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedGoalPosition.y *= -1.f;
+		console()<<"goal: "<<normedGoalPosition<<std::endl;
 		m_shader.uniform ("normedGoalPosition", normedGoalPosition);
+		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
+		m_shader.uniform ("time", float(getElapsedSeconds()));
         gl::drawSolidRect( getWindowBounds() );
 		for (int i = 0; i < m_width; i++)
 		{
@@ -91,7 +94,7 @@ public:
 			{
 				if (m_grid[j*m_width + i] == cellState::blocked)
 				{
-					gl::color( 0 , 0 , 1 );
+					//gl::color( 0 , 0 , 1 );
 					gl::begin (GL_QUADS);
 					gl::vertex (Vec2f ((i + 1) * m_cellWidth, (j + 1) * m_cellHeight));
 					gl::vertex (Vec2f ((i + 1) * m_cellWidth, j * m_cellHeight));

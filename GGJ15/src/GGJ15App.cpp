@@ -174,17 +174,8 @@ void GGJ15App::setup()
         
         
     }
-    
-	for (int i = 0; i < 7; i++)
-	{
-		birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	}
-	birds[0]->setPosition (4 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
-	birds[0]->setPosition (6 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
-	birds[0]->setPosition (16 * 40 + birds[0]->getRadius() / 2., 0 * 40 + birds[0]->getRadius() / 2.);
-	birds[0]->setPosition (0 * 40 + birds[0]->getRadius() / 2., 11 * 40 + birds[0]->getRadius() / 2.);
-	birds[0]->setPosition (19 * 40 + birds[0]->getRadius() / 2., 13 * 40 + birds[0]->getRadius() / 2.);
-	birds[0]->setPosition (19 * 40 + birds[0]->getRadius() / 2., 19 * 40 + birds[0]->getRadius() / 2.);
+	float r = 20.;
+	birds.push_back(new Bird (Vec2f (r / 2., 11.5 * r ), Vec2f (1., 0.), 45., 20.));
 
 }
 
