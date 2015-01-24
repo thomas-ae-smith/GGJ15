@@ -61,9 +61,15 @@ public:
         return m_grid[y*m_width+x];
     }
 	
-	void addObstacle ()
+	void addObstacle (int x, int y, int radius)
 	{
-		
+		for (int i = x; i < x + radius*2; x++)
+		{
+			for (int j = y; j < y + radius * 2; j++)
+			{
+				m_grid[j * m_width + i] = cellState::blocked;
+			}
+		}
 	}
     
     void draw()

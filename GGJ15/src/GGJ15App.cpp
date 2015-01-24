@@ -76,17 +76,20 @@ void GGJ15App::setup()
 {
 	setupShaders();
     // Parsing the file
-    std::ifstream setupFile;
-    setupFile.open("london.ggj");
-    
+    std::ifstream setupFile("../../../resources/london.ggj");
     std::string line;
+	
     bool initMap = true;
     bool initBirds, initFlaps, initGoal, initCard;
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
     map = new Map(50,50);
-    
+	
+	if (!setupFile.is_open())
+	{
+		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
+	}
     while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
