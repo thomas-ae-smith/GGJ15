@@ -1,28 +1,59 @@
 #const width=15.
-#const height=3.
+#const height=10.
+
+%% Columns and rows
 dimX(0..width).
 dimY(0..height).
 
-
+%% We must have a goal
 1{goal(X,Y):dimX(X),dimY(Y)}1.
 
-
+%% We must have a bird(s)
 1{bird(X,Y):dimX(X),dimY(Y)}1.
 
+%% No bird may start on the goal
 :- bird(X, Y), goal(X, Y).
 
-dir(1;;-1).
+%% Orthoganal directions
+dir(r,1,0;;l,-1,0;;u,0,-1;;d,0,1).
 
-1{path(X, Y, N) : dir(N); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+%% Every square that is not a bird or goal must be a path with a direction, or empty
+1{path(X, Y, N) : dir(N,_,_); empty(X, Y)}1 :- dimX(X), dimY(Y), not bird(X,Y), not goal(X, Y).
+
+%% A path must not lead to something that is not a path in the same direction, a goal or a changepoint
+:- path(X, Y, N), dir(N, OX, OY), not path(X+OX, Y+OY, N), not goal(X+OX, Y+OY), not change(X+OX, Y+OY).
+
+%% A path can't be at the edge of the board
+%% (TODO: would be better but more difficult to say that a path can't start at the edge of the board)
+:- path(0, _, _).
+:- path(_, 0, _).
+:- path(width, _, _).
+:- path(_, height, _).
+
+%% A path not have nothing behind it, unless it is a changepoint
+%% (FIXME: that something must be going in the same direction)
+:- empty(X,Y), path(X+OX, Y+OY, N), dir(N, OX, OY), not change(X+OX, Y+OY).
+:- path(X,Y,M), path(X+OX, Y+OY, N), dir(N, OX, OY), M != N.
+
+%% A goal must have at least one path leading into it
+:- goal(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
+:- change(X,Y), not path(X+1, Y, l), not path(X-1, Y, r), not path(X, Y-1, d), not path(X, Y+1, u).
 
 
-:- path(X, Y, N), not path(X+N, Y, N), not goal(X+N, Y).
-:- path(0, _, 1).
-:- path(width, _, -1).
-:- empty(X,Y), path(X+N, Y, N).
-:- goal(X,Y), not path(X-1, Y, 1), not path(X+1, Y, -1).
+%% Some path points may be change points
+%% (FIXME: ensure all changepoints are reachable)
+0{change(X,Y):path(X,Y,_)}2.
 
+%% A path must be empty in the direction behind it at a change point
+%% (TODO: this is not necessarily true once birds alter the direction)
+:- path(X+OX, Y+OY, N), dir(N, OX, OY), change(X+OX, Y+OY), dimX(X), dimY(Y), not empty(X, Y).
+
+
+%% Output codes for the renderer
 charAt(b, X, Y) :- bird(X, Y).
 charAt("G", X, Y) :- goal(X,Y).
-charAt("p", X, Y) :- path(X, Y, 1).
-charAt("q", X, Y) :- path(X, Y, -1).
+charAt("p", X, Y) :- path(X, Y, r).
+charAt("q", X, Y) :- path(X, Y, l).
+charAt("u", X, Y) :- path(X, Y, u).
+charAt("d", X, Y) :- path(X, Y, d).
+charAt("o", X, Y) :- change(X, Y).

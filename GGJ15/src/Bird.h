@@ -22,10 +22,9 @@ using namespace ci::app;
 class Bird : public Agent
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float angle, float radius, Lighting& l)
+	Bird (Vec2f pos, Vec2f vel, float angle, float radius)
 	: Agent (pos, vel, radius),
-	  orientation (angle),
-	  light (l)
+	  orientation (angle)
 	{
 		
 		right = Vec3f (getRadius(), getRadius(), sin(getElapsedSeconds() * 20.) * getRadius());
@@ -52,28 +51,15 @@ public:
 		calculateNormals();
 	}
 	
-	void draw()
+	Vec2f getNormedPosition()
 	{
-		gl::enableAlphaBlending();
-		gl::enableDepthRead( true );
-		gl::enableDepthWrite( true );
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		shader.bind();
-		shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedPosition.y *= -1.f;
-		shader.uniform ("normedBirdPosition", normedPosition);
-		shader.uniform ("radius", Vec2f (getRadius() / getWindowWidth(), getRadius() / getWindowHeight()) * 2. - Vec2f (1.f, 1.f));
-		shader.uniform ("time" , (float) getElapsedSeconds());
-		shader.uniform ("eyePos", Vec3f (0., 0., 300.));
-		shader.uniform ("lPos", light.lPos);
-		shader.uniform ("shininess", light.shininess);
-		shader.uniform ("specular", light.specular);
-		shader.uniform ("diffuse", light.diffuse);
-		shader.uniform ("ambient", light.ambient);
-		shader.uniform ("diffuseIntensity", light.diffuseIntensity);
-		shader.uniform ("specularRadius", light.specularRadius);
-		shader.uniform ("specularIntensity", light.specularIntensity);
+		return normedPosition;
+	}
+	
+	void draw()
+	{
 
 		gl::pushMatrices();
 		gl::color (1.0, 0., 0.);
@@ -96,7 +82,6 @@ public:
 		gl::rotate (-orientation);
 		gl::translate (-getPosition());
 		gl::popMatrices();
-		shader.unbind();
 	}
 	
 	void setOrientation (float o)
@@ -109,9 +94,7 @@ public:
 	}
 private:
 	float orientation;
-	
-	Lighting& light;
-	
+		
 	Vec3f right;
 	Vec3f top;
 	Vec3f centre;

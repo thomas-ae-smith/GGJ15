@@ -1,6 +1,8 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
+#include "Resources.h"
+
 #include <vector>
 #include "Bird.h"
 #include "Map.h"
@@ -18,6 +20,8 @@ using namespace std;
 
 class GGJ15App : public AppNative {
   public:
+    ~GGJ15App();
+    
 	void setup();
 	void setupCamera();
 	void setupLighting();
@@ -39,6 +43,31 @@ class GGJ15App : public AppNative {
 	Lighting* lighting;
 	gl::GlslProg birdShader;
 };
+
+GGJ15App::~GGJ15App()
+{
+    for(int i=0; i<perches.size() ; ++i)
+    {
+        delete perches[i];
+    }
+    
+    for(int i=0; i<birds.size() ; ++i)
+    {
+        delete birds[i];
+    }
+    
+    for(int i=0; i<flaps.size() ; ++i)
+    {
+        delete flaps[i];
+    }
+    
+    for(int i=0; i<goals.size() ; ++i)
+    {
+        delete goals[i];
+    }
+    
+    delete map;
+}
 
 void GGJ15App::setupCamera()
 {
@@ -83,6 +112,8 @@ void GGJ15App::setup()
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
+    map = new Map(50,50);
+    
     while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
@@ -111,7 +142,7 @@ void GGJ15App::setup()
                 float velocityX, velocityY;
                 
                 std::sscanf(line.c_str(), "%d %d %f %f %d", positionX, positionY, velocityX, velocityY, angle);
-                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 1., angle, *lighting);
+                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 1., angle);
             }
             initBirds = false;
             initFlaps = true;
@@ -168,9 +199,9 @@ void GGJ15App::setup()
     }
     
     
-	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90., *lighting));
+	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45., 90.));
 
-    birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90., *lighting));
+    birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
 	//Create perch points from the map
 	//birds.push_back(new Perch
 }
@@ -181,7 +212,7 @@ void GGJ15App::mouseDown( MouseEvent event )
 	int xPos = event.getX();
 	int yPos = event.getY();
 	if (xPos >= 0 && xPos <= 100) {
-		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20., *lighting));
+		birds.push_back(new Bird (Vec2f (xPos, yPos), Vec2f (5., 0.), 0., 20.));
 	}
 }
 
@@ -192,7 +223,6 @@ void GGJ15App::update()
 	{
 		birds[i]->update();
 		birds[i]->setPosition ((float) getMousePos().x, (float) getMousePos().y);
-		
 	}
 }
 
@@ -200,10 +230,32 @@ void GGJ15App::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	for (int i = 0; i < birds.size(); i++)
+    map->draw();
+	
+	// Birds
+	gl::enableAlphaBlending();
+	gl::enableDepthRead( true );
+	gl::enableDepthWrite( true );
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	birdShader.bind();
+	birdShader.uniform ("time" , (float) getElapsedSeconds());
+	birdShader.uniform ("eyePos", Vec3f (0., 0., 300.));
+	birdShader.uniform ("lPos", lighting->lPos);
+	birdShader.uniform ("shininess", lighting->shininess);
+	birdShader.uniform ("specular", lighting->specular);
+	birdShader.uniform ("diffuse", lighting->diffuse);
+	birdShader.uniform ("ambient", lighting->ambient);
+	birdShader.uniform ("diffuseIntensity", lighting->diffuseIntensity);
+	birdShader.uniform ("specularRadius", lighting->specularRadius);
+	birdShader.uniform ("specularIntensity", lighting->specularIntensity);
+    for (int i = 0; i < birds.size(); i++)
 	{
 		birds[i]->draw();
+		birdShader.uniform ("normedBirdPosition", birds[i]->getNormedPosition());
+		birdShader.uniform ("radius", Vec2f (birds[i]->getRadius() / getWindowWidth(), birds[i]->getRadius() / getWindowHeight()) * 2. - Vec2f (1.f, 1.f));
 	}
+	birdShader.unbind();
+    //
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )

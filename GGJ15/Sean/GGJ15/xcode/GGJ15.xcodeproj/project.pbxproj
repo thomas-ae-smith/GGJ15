@@ -16,6 +16,7 @@
 		14A947871A7322C2000AD14B /* Agent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947851A7322C2000AD14B /* Agent.cpp */; };
 		14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947881A733828000AD14B /* bird_frag.glsl */; };
 		14A9478B1A733828000AD14B /* bird_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947891A733828000AD14B /* bird_vert.glsl */; };
+		14A9478E1A7391AE000AD14B /* london.ggj in Resources */ = {isa = PBXBuildFile; fileRef = 14A9478D1A7391AE000AD14B /* london.ggj */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -37,6 +38,7 @@
 		14A947881A733828000AD14B /* bird_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_frag.glsl; path = ../../../resources/bird_frag.glsl; sourceTree = "<group>"; };
 		14A947891A733828000AD14B /* bird_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bird_vert.glsl; path = ../../../resources/bird_vert.glsl; sourceTree = "<group>"; };
 		14A9478C1A735752000AD14B /* Lighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Lighting.h; path = ../../../src/Lighting.h; sourceTree = "<group>"; };
+		14A9478D1A7391AE000AD14B /* london.ggj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = london.ggj; path = ../../../resources/london.ggj; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
@@ -142,6 +144,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14A9478D1A7391AE000AD14B /* london.ggj */,
 				14A947881A733828000AD14B /* bird_frag.glsl */,
 				14A947891A733828000AD14B /* bird_vert.glsl */,
 				77EF5269261F466B827CBCEA /* CinderApp.icns */,
@@ -213,6 +216,7 @@
 			files = (
 				14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */,
 				14A9478B1A733828000AD14B /* bird_vert.glsl in Resources */,
+				14A9478E1A7391AE000AD14B /* london.ggj in Resources */,
 				FD8C56DAAA7B40309DEB3260 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

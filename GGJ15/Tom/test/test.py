@@ -8,8 +8,8 @@ trinary_term = re.compile("(\w+)\(\"?([\d\w]+)\"?,([\d\w]+),([\d\w]+)\)")
 
 def display_maze(facts):
   """turn a list of ansprolog facts into a nice ascii-art maze diagram"""
-  max_x = 1
-  max_y = 1
+  max_x = 15
+  max_y = 10
   char = {}
   
   for fact in facts:
@@ -20,8 +20,8 @@ def display_maze(facts):
         x, y = int(x), int(y)
         pos = (x,y)
         max_x, max_y = max(x, max_x), max(y, max_y)
-        print m.groups()
-        char[pos] = c
+        # print m.groups()
+        char[pos] = 'o' if (pos in char and char[pos] == 'o') else c
 
   def code(x,y):
     """decide how a maze cell should be tpyeset"""

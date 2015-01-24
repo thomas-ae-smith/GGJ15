@@ -2,4 +2,4 @@
 
 echo "working"
 # echo $1
-clingo -n 20 $1 | /usr/bin/python $2
+/opt/local/bin/clingo -n 20 $1 | /usr/bin/python $2
