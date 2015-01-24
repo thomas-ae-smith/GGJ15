@@ -1,23 +1,93 @@
-//
-//  Flap.h
-//  Stephane
-//
-//  Created by Stephan LB on 24/01/2015.
-//
-//
+#pragma once
 
-#ifndef __Stephane__Flap__
-#define __Stephane__Flap__
+#ifndef __Flap__
+#define __Flap__
 
-#include <stdio.h>
-#include "Agent.h"
+#include "Bird.h"
 
-class Flap : public Agent
+#include <vector>
+
+using namespace ci;
+
+class Flap
 {
 public:
-    Flap(int posX, int posY):m_posX(posX), m_posY(posY){};
+	//
+	explicit Flap();
+	//
+	~Flap();
+	//
+	void update(std::vector<Bird*> &m_birds);
+	//
+	void removeAgents(int _num);
+	//
+	void rule1(std::vector<Bird*> &m_birds);
+	//
+	void rule2(std::vector<Bird*> &m_birds);
+	// target following
+	void rule3(std::vector<Bird*> &m_birds);
+	//
+	void setPosition(Vec2f _pos)
+	{
+		m_attractorPosition = _pos;
+	}
+
+	Vec2f getPosition()
+	{
+		return m_attractorPosition;
+	}
+	void setOrientation(float _o)
+	{
+		m_orientation = _o;
+	}
+
+	float getOrientation()
+	{
+		return m_orientation;
+	}
+
+	void orientation(std::vector<Bird*> &m_birds);
+
+	Vec2f getVelocity()
+	{
+		return m_attractorVelocity;
+	}
+
+	void setVelocity(Vec2f _vel)
+	{
+		m_attractorVelocity = _vel;
+	}
+	
+	void setVelocity(Vec2f _vel, std::vector<Bird*> &m_birds)
+	{
+		m_attractorVelocity = _vel;
+		for( std::vector<Bird*>::iterator a = m_birds.begin(); a != m_birds.end(); ++a )
+		{
+			if ((*a)->hasRules())
+			{
+				(*a)->setVelocity (_vel);
+			}
+		}
+	}
+	
+	void updateOrientationForVelocity(Vec2f direction);
+
 private:
-    int m_posX, m_posY;
+	//
+	float m_k_rule1;
+	//
+	float m_k_rule2;
+	//
+	float m_k_rule3;
+	//
+	Vec2f m_attractorPosition;
+	//
+	Vec2f m_attractorVelocity;
+	//
+	float m_orientation;
+
+
+
 };
 
-#endif /* defined(__Stephane__Flap__) */
+#endif

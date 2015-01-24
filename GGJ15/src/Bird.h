@@ -25,11 +25,11 @@ using namespace ci::app;
 class Bird : public Agent
 {
 public:
-	Bird (Vec2f pos, Vec2f vel, float angle, float radius)
-	: Agent (pos, vel, radius),
-	  orientation (angle)
+	Bird (Vec2f pos, Vec2f vel, float radius)
+	: Agent (pos, vel, radius)
 	
 	{
+		updateOrientationForVelocity (vel);
 		#ifdef __APPLE__
 			shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
 		#elif defined _WIN32 || defined _WIN64
@@ -49,7 +49,13 @@ public:
 		m_rightVertex.x = getRadius() - (t * 4.);
 		m_leftVertex.x = -getRadius() + (t * 4.);
         if(m_move)
-            setPosition(getPosition() + getVelocity());
+		{
+			Agent::updatePosition();
+			if(!m_noRules)
+			{
+				m_orientation = m_oriAttr;
+			}
+		}
 	}
     
     void setColor(float r, float g, float b)
@@ -72,11 +78,10 @@ public:
 		normedPosition.y *= -1.f;
 		shader.uniform ("normedBirdPosition", normedPosition);
 		shader.uniform ("time", float(getElapsedSeconds()));
-		printf ("%f, %f\n", normedPosition.x, normedPosition.y);
         shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
 		gl::pushMatrices();
 		gl::translate (getPosition());
-		gl::rotate (orientation);
+		gl::rotate (m_orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
         gl::texCoord(m_rightVertex.x, m_rightVertex.y);
         gl::vertex (m_rightVertex);
@@ -93,16 +98,52 @@ public:
 	
 	void setOrientation (float o)
 	{
-		orientation = o;
+		m_orientation = o;
 	}
 	float getOrientation()
 	{
-		return orientation;
+		return m_orientation;
+	}
+	
+	void updateOrientationForVelocity (Vec2f direction)
+	{
+		if (direction.x == 0.f && direction.y == -1.f)
+		{
+			m_orientation = 0.f;
+		}
+		else if (direction.x == 1.f && direction.y == -1.f)
+		{
+			m_orientation = 45.f;
+		}
+		else if (direction.x == 1.f && direction.y == 0.f)
+		{
+			m_orientation = 90.f;
+		}
+		else if (direction.x == 1.f && direction.y == 1.f)
+		{
+			m_orientation = 125.f;
+		}
+		else if (direction.x == 0.f && direction.y == 1.f)
+		{
+			m_orientation = 180.f;
+		}
+		else if (direction.x == -1.f && direction.y == 1.f)
+		{
+			m_orientation = 225.f;
+		}
+		else if (direction.x == -1.f && direction.y == 0.f)
+		{
+			m_orientation = 270.f;
+		}
+		else if (direction.x == -1.f && direction.y == -1.f)
+		{
+			m_orientation = 315.f;
+		}
 	}
 private:
     bool  m_move;
     float m_r,m_g,m_b;
-	float orientation;
+	float m_orientation;
 	Vec3f m_rightVertex;
 	Vec3f m_leftVertex;
 	gl::GlslProg shader;

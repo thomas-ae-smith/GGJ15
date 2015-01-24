@@ -41,7 +41,6 @@ public:
         m_grid = new int[width*height];
 		m_cellWidth = getWindowWidth() / (float) m_width;
 		m_cellHeight = getWindowHeight() / (float) m_height;
-		console()<<m_cellWidth<<" "<<m_width<<" "<<getWindowWidth();
 		for (int i = 0; i < m_width; i++)
 		{
 			for (int j = 0; j < m_height; j++)
@@ -83,7 +82,6 @@ public:
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
 		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) m_width, (float) m_height)) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedGoalPosition.y *= -1.f;
-		console()<<"goal: "<<normedGoalPosition<<std::endl;
 		m_shader.uniform ("normedGoalPosition", normedGoalPosition);
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
