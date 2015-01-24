@@ -6,23 +6,35 @@ import sys
 binary_term = re.compile("(\w+)\(([\d\w]+),([\d\w]+)\)")
 trinary_term = re.compile("(\w+)\(\"?([\d\w]+)\"?,([\d\w]+),([\d\w]+)\)")
 
+vectors = { 'q': (-1,-1),
+            'w': (0,-1),
+            'e': (1,-1),
+            'd': (1,0),
+            'c': (1,1),
+            'x': (0,1),
+            'z': (-1,1),
+            'a': (-1,0)
+            }
+
 def display_maze(facts):
   """turn a list of ansprolog facts into a nice ascii-art maze diagram"""
   max_x = 15
-  max_y = 10
+  max_y = 8
   char = {}
   
   for fact in facts:
     m = trinary_term.match(fact)
     if m:
-      functor, c, x, y = m.groups()
+      functor, a, b, c = m.groups()
       if functor == "charAt":
-        x, y = int(x), int(y)
+        x, y = int(b), int(c)
         pos = (x,y)
         max_x, max_y = max(x, max_x), max(y, max_y)
         # print m.groups()
         # char[pos] = 'o' if (pos in char and char[pos] == 'o') else c
-        char[pos] = c if not (pos in char) else (char[pos] if (char[pos] == 'b' or char[pos] == 'o') else c)
+        char[pos] = a if not (pos in char) else (char[pos] if (char[pos] == 'b' or char[pos] == 'o') else a)
+      elif functor == "bird":
+        print 'bird', a, b, vectors[c]
 
   def code(x,y):
     """decide how a maze cell should be tpyeset"""
