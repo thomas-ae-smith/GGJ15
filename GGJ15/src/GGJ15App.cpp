@@ -179,6 +179,16 @@ void GGJ15App::setup()
     birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
 	//Create perch points from the map
 	//birds.push_back(new Perch
+	//For each perch parsed from map
+	int xPos = 10;
+	int yPos = 300;
+	int angle = 90;
+	perches.push_back(new Perch( Vec2f(xPos, yPos), angle));
+	for (int i=0; i < perches.size(); i++) {
+		birds.push_back(new Bird(perches[i]->getPos(), perches[i]->getAngle()));
+	}
+
+	
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
