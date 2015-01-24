@@ -1,5 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+
+#include <vector>
 #include "Bird.h"
 
 using namespace ci;
@@ -13,12 +15,13 @@ class GGJ15App : public AppNative {
 	void update();
 	void draw();
 	
-	Bird* birds[1];
+    std::vector<Bird*> birds;
 };
 
 void GGJ15App::setup()
 {
-	birds[0] = new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45.);
+    // Parsing the file
+	birds.push_back(new Bird (Vec2f (100., 100.), Vec2f (5., 0.), 45.));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -27,9 +30,10 @@ void GGJ15App::mouseDown( MouseEvent event )
 
 void GGJ15App::update()
 {
-	for (int i = 0; i < 1; i++)
+    // Collision
+	for (int i = 0; i < birds.size(); i++)
 	{
-		birds[0]->update();
+		birds[i]->update();
 	}
 }
 

@@ -11,6 +11,8 @@
 
 using namespace ci;
 
+#include "Map.h"
+
 class Agent
 {
 public:
@@ -72,6 +74,7 @@ public:
     }
     
     bool collision( Agent *otherAgent);
+    bool collision( Map *map);
 private:
     Vec2f m_position;
     Vec2f m_velocity;
