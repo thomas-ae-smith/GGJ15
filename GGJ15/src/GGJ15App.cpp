@@ -248,8 +248,9 @@ void GGJ15App::update()
 				 if (abs (newDirection.x) > 1.) newDirection.x /= 2.;
 				 if (abs (newDirection.y) > 1.) newDirection.y /= 2.;
 				 console()<<newDirection<<endl;
-				 _flap->setVelocity(newDirection);
-				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
+				 (*a)->setNoRules(false);
+				 _flap->setVelocity(newDirection, birds);
+				 	// respond to rules as being now part of the flock
 				 float ori = _flap->getOrientation() + (*a)->getOrientation();
 				 if( ori < 0.0)
 					 ori *=-1.0;
