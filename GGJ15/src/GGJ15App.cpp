@@ -1,5 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+
+#include <vector>
 #include "Bird.h"
 
 using namespace ci;
@@ -13,14 +15,13 @@ class GGJ15App : public AppNative {
 	void update();
 	void draw();
 	
-	Bird* birds[1];
+    std::vector<Bird*> birds;
 };
 
 void GGJ15App::setup()
 {
-	birds[0] = new Bird (Vec2f (300., 300.), Vec2f (0., 5.), 0., 5.);
-	birds[0]->setPosition (Vec2f (300., 300.));
-	birds[0]->setRadius (10.);
+    // Parsing the file
+	birds.push_back(new Bird (Vec2f (300., 300.), Vec2f (5., 0.), 45., 90.));
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -29,23 +30,21 @@ void GGJ15App::mouseDown( MouseEvent event )
 
 void GGJ15App::update()
 {
-	for (int i = 0; i < 1; i++)
+    // Collision
+	for (int i = 0; i < birds.size(); i++)
 	{
-		birds[0]->update();
+		birds[i]->update();
 	}
 }
 
 void GGJ15App::draw()
 {
-	
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < birds.size(); i++)
 	{
-		birds[0]->draw();
+		birds[i]->draw();
 	}
-	gl::color(Color(0,255,0));
-	gl::drawSolidCircle( Vec2f( 50, 50 ) + getWindowSize() / 2, 20.0f );
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )
