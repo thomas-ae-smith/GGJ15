@@ -29,13 +29,14 @@ class GGJ15App : public AppNative {
 	void draw();
 	void setupShaders();
 	void addBirdAtGridPosition (int x, int y, float vX, float vY, float r);
+	void addGoalAtPosition (int x, int y, float vX, float vY, float r);
 
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
     std::list<Bird*> clickedbirds;
-
+	Goal* m_goal;
 	Flap *_flap;
     Map *map;
 	gl::GlslProg birdShader;
@@ -67,6 +68,7 @@ GGJ15App::~GGJ15App()
     }
     
     delete map;
+	delete m_goal;
 }
 
 void GGJ15App::setupShaders()
@@ -167,7 +169,7 @@ void GGJ15App::setup()
                 
                 int positionX, positionY;
                 std::sscanf(line.c_str(), "%d %d", positionX, positionY);
-                goals[i] = new Goal( positionX, positionY);
+//                goals[i] = new Goal( positionX, positionY);
             }
             initGoal = false;
             initCard = true;
@@ -185,20 +187,31 @@ void GGJ15App::setup()
         
     }
   
-    
-	addBirdAtGridPosition (0, 0, 1., 1., 20.);
-	addBirdAtGridPosition (19, 19, -1., -1., 20.);
-	addBirdAtGridPosition (0, 19, 1., -1., 20.);
-	addBirdAtGridPosition (19, 0, -1., 1., 20.);
-	addBirdAtGridPosition (9, 0, 0., 1., 20.);
-	addBirdAtGridPosition (9, 19, 0., -1., 20.);
+    //For inner-facing circle (good for testing collision detection / velocities)
+//	addBirdAtGridPosition (0, 0, 1., 1., 20.);
+//	addBirdAtGridPosition (19, 19, -1., -1., 20.);
+//	addBirdAtGridPosition (0, 19, 1., -1., 20.);
+//	addBirdAtGridPosition (19, 0, -1., 1., 20.);
+//	addBirdAtGridPosition (9, 0, 0., 1., 20.);
+//	addBirdAtGridPosition (9, 19, 0., -1., 20.);
+//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+//	addGoalAtPosition (16, 12, 0., 0., 20.);
+	
+	//For goal detection
 	addBirdAtGridPosition (0, 9, 1., 0., 20.);
 	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+	addGoalAtPosition (9, 9, 0., 0., 20.);
 }
 
 void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
 {
 	birds.push_back (new Bird (Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r));
+}
+
+void GGJ15App::addGoalAtPosition (int x, int y, float vX, float vY, float r)
+{
+	m_goal = new Goal(Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r);
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -234,6 +247,7 @@ void GGJ15App::update()
 {
     // once collision, remove from list of clicked and set rules back
 	// for every clicked bird, check if it is colliding with the any other bird of the flock
+	bool win = true;
 	for( std::list<Bird*>::iterator a = clickedbirds.begin(); a != clickedbirds.end();a++)
 	{
 	    for(int i=0; i< birds.size(); i++)
@@ -261,6 +275,21 @@ void GGJ15App::update()
 			 }
 		}
 	}
+	for (int i = 0; i < birds.size(); i++)
+	{
+		if(!m_goal->collisionOptimized (birds[i]))
+		{
+			win = false;
+			break;
+		}
+	}
+	if (win)
+	{
+		for(int i=0; i< birds.size(); i++)
+		{
+			//win
+		}
+	}
 
 	// this applies the rules and updates attractor
 	_flap->update(birds);
@@ -286,6 +315,7 @@ void GGJ15App::draw()
 		birds[i]->draw();
 	}
 	birdShader.unbind();
+	m_goal->draw();
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )

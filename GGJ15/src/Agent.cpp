@@ -35,7 +35,6 @@ bool Agent::collisionOptimized( Agent *otherAgent){
     return dist <= 0;
 }
 
-
 bool Agent::collision( Map *map){
     return true;
 }

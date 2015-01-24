@@ -146,4 +146,20 @@ private:
 	gl::GlslProg shader;
 };
 
+class Goal : public Agent
+{
+public:
+	Goal (Vec2f pos, Vec2f vel, float radius)
+	: Agent (pos, vel, radius)
+	{
+		
+	}
+	
+	void draw()
+	{
+		gl::color (0., 1., 0.);
+		gl::drawSolidCircle (getPosition(), getRadius());
+	}
+};
+
 #endif /* defined(__GGJ15__Bird__) */
