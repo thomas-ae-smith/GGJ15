@@ -9,6 +9,9 @@
 #ifndef __Stephane__Map__
 #define __Stephane__Map__
 
+#define BLOCKED 1
+#define UNBLOCKED 0
+
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
@@ -28,13 +31,14 @@ public:
     {
         m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
         m_grid = new int[width*height];
-		m_cellWidth = getWindowWidth() / m_width;
-		m_cellHeight = getWindowHeight() / m_height;
+		m_cellWidth = getWindowWidth() / (float) m_width;
+		m_cellHeight = getWindowHeight() / (float) m_height;
+		console()<<m_cellWidth<<" "<<m_width<<" "<<getWindowWidth();
 		for (int i = 0; i < m_width; i++)
 		{
 			for (int j = 0; j < m_height; j++)
 			{
-				m_grid[j+m_width + i] = 0;
+				m_grid[j*m_width + i] = UNBLOCKED;
 			}
 		}
     };
@@ -56,25 +60,26 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 
         gl::drawSolidRect( getWindowBounds() );
-//		for (int i = 0; i < m_width; i++)
-//		{
-//			for (int j = 0; j < m_height; j++)
-//			{
-//				if (m_grid[j*m_width + i] == 0)
-//				{
-//					gl::color( 1 , 0 , 0 );
-//					gl::begin (GL_QUADS);
-//					gl::vertex (Vec2f ((i + 1) * m_cellWidth, (j + 1) * m_cellHeight));
-//					gl::vertex (Vec2f ((i + 1) * m_cellWidth, j * m_cellHeight));
-//					gl::vertex (Vec2f (i * m_cellWidth, j * m_cellHeight));
-//					gl::vertex (Vec2f (i * m_cellWidth, (j + 1) * m_cellHeight));
-//					gl::end();
-//				}
-//			}
-//		}
+		for (int i = 0; i < m_width; i++)
+		{
+			for (int j = 0; j < m_height; j++)
+			{
+				if (m_grid[j*m_width + i] == BLOCKED)
+				{
+					gl::color( 0 , 0 , 1 );
+					gl::begin (GL_QUADS);
+					gl::vertex (Vec2f ((i + 1) * m_cellWidth, (j + 1) * m_cellHeight));
+					gl::vertex (Vec2f ((i + 1) * m_cellWidth, j * m_cellHeight));
+					gl::vertex (Vec2f (i * m_cellWidth, j * m_cellHeight));
+					gl::vertex (Vec2f (i * m_cellWidth, (j + 1) * m_cellHeight));
+					gl::end();
+				}
+			}
+		}
     }
 private:
-    int m_width, m_height, m_cellWidth, m_cellHeight;
+	int m_width, m_height;
+	float m_cellWidth, m_cellHeight;
     int *m_grid;
     gl::GlslProg m_shader;
 };
