@@ -10,12 +10,14 @@
 #define __GGJ15__Bird__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "Agent.h"
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
 #include "Resources.h"
 #include "cinder/CinderResources.h"
+#include "Math.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -37,10 +39,15 @@ public:
         m_g=1.;
         m_b=1.;
         m_move = false;
+		m_rightVertex = Vec3f (getRadius(), getRadius(), 1.);
+		m_leftVertex = Vec3f (-getRadius(), getRadius(), 1.);
 	}
 	
 	void update()
 	{
+		float t = sin(float(getElapsedSeconds()) * 10.);
+		m_rightVertex.x = getRadius() - (t * 4.);
+		m_leftVertex.x = -getRadius() + (t * 4.);
         if(m_move)
 		{
 			Agent::updatePosition();
@@ -69,19 +76,19 @@ public:
 		shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedPosition.y *= -1.f;
-		shader.uniform ("normedPosition", normedPosition);
+		shader.uniform ("normedBirdPosition", normedPosition);
+		shader.uniform ("time", float(getElapsedSeconds()));
+		printf ("%f, %f\n", normedPosition.x, normedPosition.y);
         shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
-        
+		
 		gl::pushMatrices();
-		gl::color(m_r,m_g,m_b);
 		gl::translate (getPosition());
 		gl::rotate (orientation);
 		gl::begin (GL_TRIANGLE_STRIP);
-        gl::vertex (Vec3f (getRadius(), getRadius(), 1.));
+        gl::vertex (m_rightVertex);
 		gl::vertex (Vec3f (0., -getRadius(), 1.));
 		gl::vertex (Vec3f (0., getRadius() / 2., 1.));
-//		gl::vertex (Vec3f (0., -getRadius(), 1.));
-		gl::vertex (Vec3f (-getRadius(), getRadius(), 1.));
+		gl::vertex (m_leftVertex);
 		gl::end();
 		gl::popMatrices();
 		shader.unbind();
@@ -99,6 +106,8 @@ private:
     bool  m_move;
     float m_r,m_g,m_b;
 	float orientation;
+	Vec3f m_rightVertex;
+	Vec3f m_leftVertex;
 	gl::GlslProg shader;
 };
 

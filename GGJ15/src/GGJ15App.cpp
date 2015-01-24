@@ -83,19 +83,23 @@ void GGJ15App::setup()
 	m_firstClicked = true;
 	_flap = new Flap();
 
+	setWindowSize (800, 800);
 	setupShaders();
     // Parsing the file
-    std::ifstream setupFile;
-    setupFile.open("london.ggj");
-    
+    std::ifstream setupFile("../../../resources/london.ggj");
     std::string line;
+	
     bool initMap = true;
     bool initBirds, initFlaps, initGoal, initCard;
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
-    map = new Map(50,50);
-    
+    map = new Map(20,20);
+	
+	if (!setupFile.is_open())
+	{
+		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
+	}
     while( std::getline( setupFile, line ) )
     {
         if(line.size() == 0 || line.at(0) == '#')
@@ -179,13 +183,12 @@ void GGJ15App::setup()
         
         
     }
-    
-    
+  
     
 	//birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), -90, 20.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), -90, 20.));
+	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), -90, 25.));
+	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), -90, 25.));
 
 }
 

@@ -34,7 +34,7 @@ public:
                                m_height(height)
     {
 		#ifdef __APPLE__
-			m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (BIRD_FRAG));
+			m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (MAP_FRAG));
 		#elif defined _WIN32 || defined _WIN64
 			m_shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
 		#endif
@@ -49,6 +49,8 @@ public:
 				m_grid[j*m_width + i] = cellState::unblocked;
 			}
 		}
+		m_grid[9 * m_width + 13] = cellState::goal;
+		goalPosition = Vec2f(13., 9.);
     };
     
     void setState(int x, int y, int state)
@@ -61,17 +63,30 @@ public:
         return m_grid[y*m_width+x];
     }
 	
-	void addObstacle ()
+	void addObstacle (int x, int y, int radius)
 	{
-		
+		for (int i = x; i < x + radius*2; x++)
+		{
+			for (int j = y; j < y + radius * 2; j++)
+			{
+				m_grid[j * m_width + i] = cellState::blocked;
+			}
+		}
 	}
     
     void draw()
     {
-        gl::color( 1 , 0 , 1 );
+        //gl::color( 1 , 0 , 1 );
         gl::setViewport( getWindowBounds() );
         gl::setMatricesWindow( getWindowSize() );
-
+		m_shader.bind();
+		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
+		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) m_width, (float) m_height)) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedGoalPosition.y *= -1.f;
+		console()<<"goal: "<<normedGoalPosition<<std::endl;
+		m_shader.uniform ("normedGoalPosition", normedGoalPosition);
+		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
+		m_shader.uniform ("time", float(getElapsedSeconds()));
         gl::drawSolidRect( getWindowBounds() );
 		for (int i = 0; i < m_width; i++)
 		{
@@ -79,7 +94,7 @@ public:
 			{
 				if (m_grid[j*m_width + i] == cellState::blocked)
 				{
-					gl::color( 0 , 0 , 1 );
+					//gl::color( 0 , 0 , 1 );
 					gl::begin (GL_QUADS);
 					gl::vertex (Vec2f ((i + 1) * m_cellWidth, (j + 1) * m_cellHeight));
 					gl::vertex (Vec2f ((i + 1) * m_cellWidth, j * m_cellHeight));
@@ -89,12 +104,14 @@ public:
 				}
 			}
 		}
+		m_shader.unbind();
     }
 private:
 	int m_width, m_height;
 	float m_cellWidth, m_cellHeight;
     int *m_grid;
     gl::GlslProg m_shader;
+	Vec2f goalPosition;
 };
 
 #endif /* defined(__Stephane__Map__) */
