@@ -23,7 +23,7 @@ public:
     Agent(Vec2f position, float radius):m_position(position),
                                         m_velocity(Vec2f(0.,0.)),
                                         m_radius(radius){}
-    
+	
     Agent(Vec2f position, Vec2f velocity, float radius):m_position(position),
                                         m_velocity(velocity),
                                         m_radius(radius){}

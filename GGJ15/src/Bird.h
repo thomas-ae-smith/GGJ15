@@ -21,7 +21,9 @@ class Bird : public Agent
 {
 public:
 	Bird (Vec2f pos, Vec2f vel, float angle, float radius)
-	:orientation (angle)
+	: Agent (pos, vel, radius),
+	  orientation (angle)
+	
 	{
         Agent(pos, vel, radius);
 	}
