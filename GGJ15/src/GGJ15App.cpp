@@ -106,6 +106,7 @@ void GGJ15App::setupLevel (int l)
 		{
 			addBirdAtGridPosition (0, 9, 1., 0., 20.);
 			map->setState (9, 9, cellState::goal);
+//			addBirdAtGridPosition (0, 0, 0., 1., 20.);
 			setSpeed (2.3f);
 			break;
 		}
