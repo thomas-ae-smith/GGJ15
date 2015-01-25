@@ -36,7 +36,6 @@ class GGJ15App : public AppNative {
 	void keyDown( KeyEvent event );
 	void setSpeed(float speed);
 	
-	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
@@ -52,11 +51,6 @@ class GGJ15App : public AppNative {
 GGJ15App::~GGJ15App()
 {
 	delete _flap;
-
-    for(int i=0; i<perches.size() ; ++i)
-    {
-        delete perches[i];
-    }
     
     for(int i=0; i<birds.size() ; ++i)
     {
@@ -103,6 +97,7 @@ void GGJ15App::setupLevel (int l)
 	map = new Map(20,20);
 	m_firstClicked = true;
 	_flap = new Flap();
+	clickedbirds.clear();
 	birds.clear();
 	
 	switch (l)
@@ -140,8 +135,8 @@ void GGJ15App::setupLevel (int l)
 			addBirdAtGridPosition (0, 10, 1., 0., 20.);
 			map->setState (3, 10, cellState::target);
 			addBirdAtGridPosition (19, 5, -1., 1., 20.);
-			map->setState (8, 17, cellState::target);
-			map->setState (9, 14, cellState::goal);
+			map->setState (8, 16, cellState::target);
+			map->setState (8, 17, cellState::goal);
 			setSpeed (2.3f);
 			break;
 		}
@@ -285,7 +280,6 @@ void GGJ15App::update()
 				 //newDirection.safeNormalize();
 				 if (abs (newDirection.x) > 1.) newDirection.x /= 2.;
 				 if (abs (newDirection.y) > 1.) newDirection.y /= 2.;
-				 console()<<newDirection<<endl;
 				 (*a)->setNoRules(false);	// now this bird becomes susbject to rules
 				 _flap->setVelocity(newDirection, birds);
 				 _flap->updateOrientationForVelocity (newDirection);

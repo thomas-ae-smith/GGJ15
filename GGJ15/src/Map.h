@@ -17,6 +17,8 @@
 
 #include <stdio.h>
 
+#define MAX_TARGETS 6
+
 using namespace ci;
 using namespace ci::app;
 
@@ -28,6 +30,7 @@ enum cellState
 	goal
 };
 
+const int maxTargetCoords = MAX_TARGETS * 2;
 class Map
 {
 public:
@@ -54,6 +57,10 @@ public:
 		targetIndex = 0;
 		numTargets = 0;
 		goalRadius = 40.;
+		for (int i = 0; i < maxTargetCoords; i++)
+		{
+			m_normedTargetCoords[i] = 0.;
+		}
     };
     
     void setState(int x, int y, int state)
@@ -67,15 +74,20 @@ public:
 			m_targetPositions.push_back (windowPos);
 			
 			m_normedTargetPositions.push_back (normedPos);
-
+			m_normedTargetCoords[numTargets * 2] = normedPos.x;
+			m_normedTargetCoords[numTargets * 2 + 1] = normedPos.y;
+			numTargets ++;
 		}
 		else if (state == cellState::goal)
 		{
 			goalPosition = windowPos;
 			m_normedGoalPos = normedPos;
-			m_targetPositions.push_back (windowPos);
+//			m_targetPositions.push_back (windowPos);
 			
-			m_normedTargetPositions.push_back (normedPos);
+//			m_normedTargetPositions.push_back (normedPos);
+//			m_normedTargetCoords[numTargets * 2] = normedPos.x;
+//			m_normedTargetCoords[numTargets * 2 + 1] = normedPos.y;
+//			numTargets ++;
 		}
     }
     
@@ -102,7 +114,9 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
-		m_shader.uniform ("numTargets", (int)m_normedTargetPositions.size());
+		m_shader.uniform ("numTargets", numTargets);
+		m_shader.uniform ("normedTargetCoords", m_normedTargetCoords, maxTargetCoords);
+		
 		if (m_normedTargetPositions.size() > 0)
 		{
 			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
@@ -165,6 +179,7 @@ private:
 	Vec2f m_normedGoalPos;
 	std::vector<Vec2f> m_normedTargetPositions;
 	std::vector<Vec2f> m_targetPositions;
+	float m_normedTargetCoords [maxTargetCoords];
 	int numTargets;
 	float goalRadius;
 };
