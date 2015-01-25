@@ -119,9 +119,9 @@ void Flap::update(std::vector<Bird*> &m_birds)
 	m_attractorPosition += m_attractorVelocity;
 
 	// apply barycenter rule (rule1)
-	//rule1(m_birds);
+	rule1(m_birds);
 	// apply separation rule (rule2)
-	//rule2(m_birds);
+	rule2(m_birds);
 	orientation(m_birds);
 	// make follow he target direction after collision
 	//rule3(m_birds);

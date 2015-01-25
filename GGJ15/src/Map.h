@@ -52,6 +52,7 @@ public:
 		//m_grid[9 * m_width + 13] = cellState::goal;
 //		goalPosition = Vec2f(13., 9.);
 		targetIndex = 0;
+		numTargets = 0;
     };
     
     void setState(int x, int y, int state)
