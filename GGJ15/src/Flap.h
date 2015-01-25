@@ -71,7 +71,6 @@ public:
 	}
 	
 	bool contains( Vec2f p, float r){
-		console()<<getPosition()<<" "<<p<<" "<<r<<std::endl;
 		Vec2f posA = this->getPosition();
 		Vec2f AB = posA - p;
 		float lAB = AB.lengthSquared();

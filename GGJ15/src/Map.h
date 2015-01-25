@@ -73,6 +73,9 @@ public:
 		{
 			goalPosition = windowPos;
 			m_normedGoalPos = normedPos;
+			m_targetPositions.push_back (windowPos);
+			
+			m_normedTargetPositions.push_back (normedPos);
 		}
     }
     
@@ -136,12 +139,12 @@ public:
 		targetIndex ++;
 		if (targetIndex > m_targetPositions.size())
 		{
-			targetIndex = 0;
+			targetIndex = m_targetPositions.size();
 		}
 	}
 	int getNumTargets()
 	{
-		return numTargets;
+		return m_targetPositions.size();
 	}
 
 	Vec2f getGoalPosition()
