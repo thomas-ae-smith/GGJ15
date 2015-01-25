@@ -45,21 +45,26 @@ void main() {
     gl_FragColor = mix(.4, 1., v) * vec4(1.8 * t * t * t, 1.2 * t * t, t, 1.0);
     
 //    targets
-//    vec3 targetsC = vec3 (0.);
-//    for (int i=0; i < numTargets; i+= 2)
-//    {
-//        vec2 targetPos = vec2(normedTargetPositions[i], normedTargetPositions[i+1]);
-//        float r = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
-//        float g = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
-//        float b = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
-//        targetsC += vec3 (.0, .5, .1);
-//    }
+	vec3 targetsC = vec3(0.);
+	if (numTargets > 0)
+	{
+		for (int i = 0; i < numTargets; i++)
+		{
+			vec2 targetPos = vec2 (normedTargetCoords[i * 2], normedTargetCoords[(i * 2) + 1]);
+			float r = clamp (1. - distance (uv, targetPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+			float g = clamp (1. - distance (uv, targetPos) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
+			float b = clamp (1. - distance (uv, targetPos) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
+			
+			targetsC += vec3(r, g, b);
+		}
+	}
 
-    
+	
    	//goal
    	float dG = clamp (1. - distance (uv, normedGoalPosition) * 10. + cos(time)/10., 0., 1.) ;
     
-//    vec3 targetOrbs = targetsC * 0.7;
+    vec3 targetOrbs = targetsC * 0.7;
    	vec3 goalOrb = vec3(.7, .2, .6) * vec3 (dG) * (1. + .25 *cos(10. * time));
-    gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb; // + targetOrbs;
+    gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb + targetOrbs;
 }
+
