@@ -137,9 +137,9 @@ public:
 	void incrementTargetPos()
 	{
 		targetIndex ++;
-		if (targetIndex > m_targetPositions.size())
+		if (targetIndex >= m_targetPositions.size())
 		{
-			targetIndex = m_targetPositions.size();
+			targetIndex = m_targetPositions.size()-1;
 		}
 	}
 	int getNumTargets()
