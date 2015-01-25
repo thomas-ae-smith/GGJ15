@@ -19,15 +19,18 @@ class Agent
 public:
     Agent():m_position(Vec2f(0.,0.)),
             m_velocity(Vec2f(0.,0.)),
-            m_radius(0.){}
+            m_radius(0.),
+			velMult (1.){}
     
     Agent(Vec2f position, float radius):m_position(position),
                                         m_velocity(Vec2f(0.,0.)),
-                                        m_radius(radius){}
+										m_radius(radius),
+										velMult (1.){}
 	
     Agent(Vec2f position, Vec2f velocity, float radius):m_position(position),
                                         m_velocity(velocity),
-                                        m_radius(radius){}
+										m_radius(radius),
+										velMult (1.){}
     
     void setPosition(Vec2f position)
     {
@@ -53,7 +56,12 @@ public:
     {
         m_velocity = Vec2f(x,y);
     }
-    
+	
+	void setSpeedMultiplier(float s)
+	{
+		velMult = s;
+	}
+	
     Vec2f getVelocity()
     {
         return m_velocity;
@@ -75,7 +83,7 @@ public:
 //		{
 			m_v1.x = m_v2.x = m_v3.x = 0.0f;
 			m_v1.y = m_v2.y = m_v3.y = 0.0f;
-			m_position += (m_velocity);
+			m_position += (m_velocity) * velMult;
 			if (!m_noRules && m_velocity.x == 0. && m_velocity.y == 0)
 			{
 				//rest animation
@@ -140,7 +148,7 @@ private:
 	Vec2f m_v2;
 	// offset for rule 3 : target bias after collision
 	Vec2f m_v3;
-	
+	float velMult;
 protected:
 	//
 	bool m_noRules;

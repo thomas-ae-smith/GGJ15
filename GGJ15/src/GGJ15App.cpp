@@ -32,6 +32,7 @@ class GGJ15App : public AppNative {
 	void addGoalAtPosition (int x, int y, float vX, float vY, float r);
 	void setupLevel();
 	void keyDown( KeyEvent event );
+	void setSpeed(float speed);
 	
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
@@ -221,10 +222,18 @@ void GGJ15App::setupLevel()
 	addBirdAtGridPosition (0, 12, 1., 0., 20.);
 	addBirdAtGridPosition (10, 19, 0., -1., 20.);
 	addGoalAtPosition (15, 9, 0., 0., 20.);
-	
+	setSpeed (3.f);
 	for (int i=0; i<birds.size(); i++)
 	{
 		birds[i]->setNoRules (true);
+	}
+}
+
+void GGJ15App::setSpeed(float speed)
+{
+	for (int i = 0; i < birds.size(); i++)
+	{
+		birds[i]->setSpeedMultiplier (speed);
 	}
 }
 
