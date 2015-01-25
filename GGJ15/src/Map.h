@@ -41,7 +41,7 @@ public:
 		#ifdef __APPLE__
 			m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (MAP_FRAG));
 		#elif defined _WIN32 || defined _WIN64
-			m_shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
+			m_shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (MAP_FRAG,"GLSL"));
 		#endif
         m_grid = new int[width*height];
 		m_cellWidth = getWindowWidth() / (float) m_width;
