@@ -617,7 +617,7 @@ void GGJ15App::update()
 		}
 		for (int i = 0; i < birds.size(); i++)
 		{
-			map->setBirdPositionOrientation (birds[i]->getPosition(), birds[i]->getOrientation(), i);
+			map->setBirdPositionOrientation (birds[i]->getPosition(), birds[i]->getOrientation(), i, !birds[i]->hasRules());
 		}
 		if ( _flap->contains (map->getGoalPosition(), map->getGoalRadius()) )
 		{

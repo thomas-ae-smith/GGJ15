@@ -12,6 +12,7 @@ uniform float normedTargetCoords [22];
 uniform int numBirds;
 uniform float normedBirdCoords [24];
 uniform float birdOrientations [12];
+uniform float birdRules[12];
 uniform vec2 radius;
 
 uniform vec3 outputColor;
@@ -59,36 +60,39 @@ void main() {
 	{
 		for (int i = 0; i < numBirds; i++)
 		{
-			vec2 birdPos = vec2(normedBirdCoords[i*2], normedBirdCoords[i*2+1]);
+			if (birdRules[i] == 1.)
+			{
+				vec2 birdPos = vec2(normedBirdCoords[i*2], normedBirdCoords[i*2+1]);
 
-			float ang = 0.;
-			float offset = float(mod (birdOrientations[i], 90.) == 0.) * 90.;
-			ang = ( (mod (birdOrientations[i] + offset, 360.)) / 360.) * 2. * pi;
-			float r = 0.1;
-			float x = birdPos.x + r * cos (ang);
-			float y = birdPos.y + r * sin (ang);
-			vec2 point = vec2 (x, y);
-			vec2 v = birdPos - point;
-			float lineD = clamp (1. - unnormedPointLineDistance (birdPos, point, uv) * 200., 0., 1.);
-			//			if (birdOrientations[i], 90. == 0
-			float offsetPolarity = float(mod (birdOrientations[i], 180.) < 91.) * 2. - 1.;
-			if (birdOrientations[i] == 90.)
-			{
-				offsetPolarity = -1.;
+				float ang = 0.;
+				float offset = float(mod (birdOrientations[i], 90.) == 0.) * 90.;
+				ang = ( (mod (birdOrientations[i] + offset, 360.)) / 360.) * 2. * pi;
+				float r = 0.1;
+				float x = birdPos.x + r * cos (ang);
+				float y = birdPos.y + r * sin (ang);
+				vec2 point = vec2 (x, y);
+				vec2 v = birdPos - point;
+				float lineD = clamp (1. - unnormedPointLineDistance (birdPos, point, uv) * 200., 0., 1.);
+				//			if (birdOrientations[i], 90. == 0
+				float offsetPolarity = float(mod (birdOrientations[i], 180.) < 91.) * 2. - 1.;
+				if (birdOrientations[i] == 90.)
+				{
+					offsetPolarity = -1.;
+				}
+				if (birdOrientations[i] != 270.)
+				{
+					lineD *= clamp (1. - abs(distance (uv, birdPos + v * 10. * offsetPolarity)),0.,1.);
+				}
+				else
+				{
+					lineD = 0.;
+				}
+				
+				
+				
+				//float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+				birdsC += vec3  ( lineD);
 			}
-			if (birdOrientations[i] != 270.)
-			{
-				lineD *= clamp (1. - abs(distance (uv, birdPos + v * 10. * offsetPolarity)),0.,1.);
-			}
-			else
-			{
-				lineD = 0.;
-			}
-			
-			
-			
-			//float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
-			birdsC += vec3  ( lineD);
 
 		}
 	}

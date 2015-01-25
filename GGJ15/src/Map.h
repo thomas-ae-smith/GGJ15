@@ -68,6 +68,7 @@ public:
 			m_birdPositions[i*2] = 0.;
 			m_birdPositions[i*2+1] = 0.;
 			m_birdOrientatons[i] = 0.;
+			m_birdRules[i] = 0.;
 		}
     };
     
@@ -113,13 +114,14 @@ public:
 		m_birdOrientatons[numBirds] = orientation;
 		numBirds ++;
 	}
-	void setBirdPositionOrientation (Vec2f position, float orientation, int index)
+	void setBirdPositionOrientation (Vec2f position, float orientation, int index, float rules)
 	{
 		Vec2f normedPos = position / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
 		normedPos.y *= -1.f;
 		m_birdPositions[index * 2] = normedPos.x;
 		m_birdPositions[index * 2 + 1] = normedPos.y;
 		m_birdOrientatons[index] = orientation;
+		m_birdRules[index] = rules;
 	}
 	
 	void addObstacle (int x, int y, int radius)
@@ -150,6 +152,7 @@ public:
 		m_shader.uniform ("numBirds", numBirds);
 		m_shader.uniform ("normedBirdCoords", m_birdPositions, maxBirdCoords);
 		m_shader.uniform ("birdOrientations", m_birdOrientatons, MAX_BIRDS);
+		m_shader.uniform ("birdRules", m_birdRules, MAX_BIRDS);
 		m_shader.uniform ("normedGoalPosition", m_normedGoalPos);
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
@@ -211,6 +214,7 @@ private:
 	float m_normedTargetCoords [maxTargetCoords];
 	float m_birdPositions [maxBirdCoords];
 	float m_birdOrientatons [MAX_BIRDS];
+	float m_birdRules[MAX_BIRDS];
 	int numBirds;
 	int numTargets;
 	float goalRadius;
