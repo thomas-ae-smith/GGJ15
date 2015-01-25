@@ -26,13 +26,13 @@ void main( void )
 	
 	vec2 scrPos = (gl_FragCoord.xy / resolution.xy) * 2. - 1.;
 	
-	float ang = (mod(time * 20., 100.)/100.) * 2. * pi;
+	float ang = (mod(time * 200., 100.)/100.) * 2. * pi;
 	float r = 0.04;
 	float x = normedGoalPosition.x + r * cos (ang);
 	float y = normedGoalPosition.y + r * sin (ang);
 	float d = 1. - distance (scrPos, vec2(x, y)) * 10. * (abs(sin(time*3.))*0.3 + 0.7);
 	
-	float ang2 = (mod(time * 20., 100.)/100.) * 2. * pi;
+	float ang2 = (mod(time * 200., 100.)/100.) * 2. * pi;
 	float r2 = 0.04;
 	float x2 = normedGoalPosition.x + r2 * cos (ang2);
 	float y2 = normedGoalPosition.y + r2 * sin (ang2);

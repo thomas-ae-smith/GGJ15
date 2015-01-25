@@ -78,7 +78,6 @@ public:
 		normedPosition.y *= -1.f;
 		shader.uniform ("normedBirdPosition", normedPosition);
 		shader.uniform ("time", float(getElapsedSeconds()));
-        shader.uniform ("outputColor",Vec3f(m_r, m_g, m_b));
 		gl::pushMatrices();
 		gl::translate (getPosition());
 		gl::rotate (m_orientation);
@@ -170,7 +169,6 @@ public:
 		normedPosition.y *= -1.f;
 		m_shader.uniform ("normedGoalPosition", normedPosition);
 		m_shader.uniform ("time", float(getElapsedSeconds()));
-		m_shader.uniform ("outputColor",Vec3f(0., 1., 0.));
 		gl::drawSolidCircle (getPosition(), getRadius() * 2.);
 		m_shader.unbind();
 	}

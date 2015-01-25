@@ -57,13 +57,19 @@ public:
     void setState(int x, int y, int state)
     {
         m_grid[y*m_width+x] = state;
+		Vec2f windowPos = Vec2f ((x + 1.) * m_cellWidth, (y + 1.) * m_cellHeight);
+		Vec2f normedPos = windowPos / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPos.y *= -1.f;
 		if (state == cellState::target)
 		{
-			Vec2f windowPos = Vec2f ((x + 1.) * m_cellWidth, (y + 1.) * m_cellHeight);
 			m_targetPositions.push_back (windowPos);
-			Vec2f normedTargetPos = windowPos / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
-			normedTargetPos.y *= -1.f;
-			m_normedTargetPositions.push_back (normedTargetPos);
+			
+			m_normedTargetPositions.push_back (normedPos);
+		}
+		else if (state == cellState::goal)
+		{
+			goalPosition = windowPos;
+			m_normedGoalPos = normedPos;
 		}
     }
     
@@ -94,6 +100,7 @@ public:
 		{
 			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
 		}
+		m_shader.uniform ("normedGoalPosition", m_normedGoalPos);
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
         gl::drawSolidRect( getWindowBounds() );
@@ -128,7 +135,10 @@ public:
 			targetIndex = 0;
 		}
 	}
-	
+	Vec2f getGoalPosition()
+	{
+		return goalPosition;
+	}
 private:
 	int targetIndex;
 	int m_width, m_height;
@@ -136,6 +146,7 @@ private:
     int *m_grid;
     gl::GlslProg m_shader;
 	Vec2f goalPosition;
+	Vec2f m_normedGoalPos;
 	std::vector<Vec2f> m_normedTargetPositions;
 	std::vector<Vec2f> m_targetPositions;
 };
