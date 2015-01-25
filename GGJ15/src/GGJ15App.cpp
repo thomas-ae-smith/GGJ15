@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include "Perch.h"
 
+#define NUM_LEVELS 2
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -30,7 +32,7 @@ class GGJ15App : public AppNative {
 	void setupShaders();
 	void addBirdAtGridPosition (int x, int y, float vX, float vY, float r);
 	void addGoalAtPosition (int x, int y, float vX, float vY, float r);
-	void setupLevel();
+	void setupLevel(int l);
 	void keyDown( KeyEvent event );
 	void setSpeed(float speed);
 	
@@ -43,6 +45,8 @@ class GGJ15App : public AppNative {
     Map *map;
 	gl::GlslProg birdShader;
 	bool m_firstClicked;
+	int currentLevel;
+	bool complete;
 };
 
 GGJ15App::~GGJ15App()
@@ -85,7 +89,8 @@ void GGJ15App::setupShaders()
 void GGJ15App::setup()
 {
 	
-
+	currentLevel = 0;
+	complete = false;
 	setWindowSize (800, 800);
 	setupShaders();
     // Parsing the file
@@ -186,12 +191,12 @@ void GGJ15App::setup()
         
         
     }
-	setupLevel();
+	setupLevel(currentLevel);
 	
 
 }
 
-void GGJ15App::setupLevel()
+void GGJ15App::setupLevel (int l)
 {
 	map = new Map(20,20);
 	m_firstClicked = true;
@@ -215,15 +220,64 @@ void GGJ15App::setupLevel()
 	//	addGoalAtPosition (9, 9, 0., 0., 20.);
 	
 	//Test level
-	addBirdAtGridPosition (14, 0, 0., 1., 20.);
-	addBirdAtGridPosition (19, 5, -1., 1., 20.);
-	addBirdAtGridPosition (0, 12, 1., 0., 20.);
-	addBirdAtGridPosition (10, 19, 0., -1., 20.);
-	map->setState (15, 10, cellState::goal);
-	map->setState (10, 12, cellState::target);
-	map->setState (14, 9, cellState::target);
-	map->setState (15, 9, cellState::target);
-	setSpeed (3.f);
+//	addBirdAtGridPosition (14, 0, 0., 1., 20.);
+//	addBirdAtGridPosition (19, 5, -1., 1., 20.);
+//	addBirdAtGridPosition (0, 12, 1., 0., 20.);
+//	addBirdAtGridPosition (10, 19, 0., -1., 20.);
+//	map->setState (15, 10, cellState::goal);
+//	map->setState (10, 12, cellState::target);
+//	map->setState (14, 9, cellState::target);
+//	map->setState (15, 9, cellState::target);
+//	setSpeed (3.f);
+	
+	
+	switch (l)
+	{
+		case 0:
+		{
+			addBirdAtGridPosition (0, 9, 1., 0., 20.);
+			map->setState (9, 9, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 1:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 14, 1., 0., 20.);
+			map->setState (3, 14, cellState::target);
+			map->setState (6, 17, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 2:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 10, 1., 0., 20.);
+			map->setState (3, 10, cellState::target);
+			addBirdAtGridPosition (8, 19, 0., -1., 20.);
+			map->setState (8, 16, cellState::target);
+			map->setState (16, 16, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 3:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 10, 1., 0., 20.);
+			map->setState (3, 10, cellState::target);
+			addBirdAtGridPosition (19, 5, -1., 1., 20.);
+			map->setState (8, 17, cellState::target);
+			
+			setSpeed (2.3f);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+	
+	
 	for (int i=0; i<birds.size(); i++)
 	{
 		birds[i]->setNoRules (true);
@@ -240,7 +294,12 @@ void GGJ15App::setSpeed(float speed)
 
 void GGJ15App::keyDown( KeyEvent event ) {
 	if( event.getChar() == ' ' ){
-		setup();
+		setupLevel(currentLevel);
+	}
+	else if ( event.getChar() == 's')
+	{
+		currentLevel++;
+		setupLevel(currentLevel);
 	}
 //	else if( event.getChar() == 'h' ){
 //		mRenderParticles = ! mRenderParticles;
@@ -318,27 +377,35 @@ void GGJ15App::update()
 			 }
 		}
 	}
-	for (int b = 0; b < birds.size(); b++)
-	{
-		if (birds[b]->contains (map->getCurrentTargetPos()))
-		{
-			map->incrementTargetPos();
-		}
-	}
 	if (birds[0]->contains (map->getGoalPosition()))
 	{
-		for (int i = 1; i < birds.size(); i++)
+		if (birds.size() > 1)
 		{
-			if (!birds[i]->hasRules())
+			for (int i = 1; i < birds.size(); i++)
 			{
-				break;
+				if (!birds[i]->hasRules())
+				{
+					break;
+				}
+				win = true;
 			}
+		}
+		else
+		{
 			win = true;
 		}
 	}
 	if (win)
 	{
-		setupLevel();
+		currentLevel ++;
+		if (currentLevel >= NUM_LEVELS)
+		{
+			complete = true;
+		}
+		else
+		{
+			setupLevel (currentLevel);
+		}
 	}
 	else
 	{
@@ -357,16 +424,23 @@ void GGJ15App::draw()
     
     // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    map->draw();
-	
-	// Birds
-	birdShader.bind();
-	birdShader.uniform ("time" , (float) getElapsedSeconds());
-    for (int i = 0; i < birds.size(); i++)
+	if(!complete)
 	{
-		birds[i]->draw();
+		map->draw();
+		
+		// Birds
+		//birdShader.bind();
+		//birdShader.uniform ("time" , (float) getElapsedSeconds());
+		for (int i = 0; i < birds.size(); i++)
+		{
+			birds[i]->draw();
+		}
+		//birdShader.unbind();
 	}
-	birdShader.unbind();
+	else
+	{
+		//completion screen
+	}
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )

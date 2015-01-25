@@ -5,7 +5,8 @@ precision mediump float;
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
-uniform vec2 normedTargetPosition;
+uniform vec2 normedTargetPositions[7];
+uniform int numTargets;
 uniform vec2 normedGoalPosition;
 uniform vec2 radius;
 
@@ -41,18 +42,24 @@ void main( void )
 	float xDiff3 = clamp(1. - abs(position.x - x3) * pulse,0.,1.);
 	
 	//targets
-	float r = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time)) * 5.), 0., 1.);
-	float g = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
-	float b = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
+	vec3 targetsC = vec3 (0.);
+	for (int i=0; i < numTargets; i++)
+	{
+		float r = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time)) * 5.), 0., 1.);
+		float g = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
+		float b = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
+		targetsC += vec3 (r, g, b);
+	}
+	
 	
 	
 	//goal
 	float dG = clamp (1. - distance (position, normedGoalPosition) * 10., 0., 1.);
 	
 	vec3 goalOrb = vec3 (dG);
-	vec3 targetOrb = vec3(r, g, b) * 0.7;
+	vec3 targetOrbs = targetsC * 0.7;
 	vec3 line = vec3 (0.3, 0.6, 0.8) * (yDiff + xDiff + yDiff2 + xDiff2 + xDiff3 + yDiff3) * 0.5;
 	
-	gl_FragColor = vec4 (line + targetOrb + goalOrb, 1.);
+	gl_FragColor = vec4 (line + targetOrbs + goalOrb, 1.);
 	
 }
