@@ -86,7 +86,7 @@ void main() {
 
 			
 			
-			//float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+			float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
 			birdsC += vec3 (0.7, 0.6, 0.5) * lineD;
 		}
 	}

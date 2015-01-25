@@ -327,20 +327,16 @@ void GGJ15App::update()
 
 		if ( _flap->contains (map->getGoalPosition(), map->getGoalRadius()) )
 		{
+			win = true;
 			if (birds.size() > 1)
 			{
 				for (int i = 1; i < birds.size(); i++)
 				{
 					if (!birds[i]->hasRules())
 					{
-						break;
+						win = false;
 					}
 				}
-				win = true;
-			}
-			else
-			{
-				win = true;
 			}
 		}
 		if (win)
