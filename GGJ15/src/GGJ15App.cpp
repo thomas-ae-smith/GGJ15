@@ -221,7 +221,10 @@ void GGJ15App::setupLevel()
 	addBirdAtGridPosition (19, 5, -1., 1., 20.);
 	addBirdAtGridPosition (0, 12, 1., 0., 20.);
 	addBirdAtGridPosition (10, 19, 0., -1., 20.);
-	addGoalAtPosition (15, 9, 0., 0., 20.);
+	addGoalAtPosition (15, 10, 0., 0., 20.);
+	map->setState (10, 12, cellState::target);
+	map->setState (14, 9, cellState::target);
+	map->setState (15, 9, cellState::target);
 	setSpeed (3.f);
 	for (int i=0; i<birds.size(); i++)
 	{
@@ -315,6 +318,13 @@ void GGJ15App::update()
 				 //a = clickedbirds.erase(a);// STL trick
 				 break;
 			 }
+		}
+	}
+	for (int b = 0; b < birds.size(); b++)
+	{
+		if (birds[b]->contains (map->getCurrentTargetPos()))
+		{
+			map->incrementTargetPos();
 		}
 	}
 	if (birds[0]->collisionOptimized (m_goal))

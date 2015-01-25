@@ -14,6 +14,7 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		148719151A7411CC0040AA61 /* map_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 148719141A7411CC0040AA61 /* map_frag.glsl */; };
 		148719181A743D060040AA61 /* Flap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148719161A743D060040AA61 /* Flap.cpp */; };
+		1487191A1A74775F0040AA61 /* goal_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 148719191A74775F0040AA61 /* goal_frag.glsl */; };
 		14A947841A73143F000AD14B /* GGJ15App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947821A73143F000AD14B /* GGJ15App.cpp */; };
 		14A947871A7322C2000AD14B /* Agent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A947851A7322C2000AD14B /* Agent.cpp */; };
 		14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 14A947881A733828000AD14B /* bird_frag.glsl */; };
@@ -37,6 +38,7 @@
 		148719141A7411CC0040AA61 /* map_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = map_frag.glsl; path = ../../../resources/map_frag.glsl; sourceTree = "<group>"; };
 		148719161A743D060040AA61 /* Flap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Flap.cpp; path = ../../../src/Flap.cpp; sourceTree = "<group>"; };
 		148719171A743D060040AA61 /* Flap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flap.h; path = ../../../src/Flap.h; sourceTree = "<group>"; };
+		148719191A74775F0040AA61 /* goal_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = goal_frag.glsl; path = ../../../resources/goal_frag.glsl; sourceTree = "<group>"; };
 		14A947811A73143F000AD14B /* Bird.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bird.h; path = ../../../src/Bird.h; sourceTree = "<group>"; };
 		14A947821A73143F000AD14B /* GGJ15App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GGJ15App.cpp; path = ../../../src/GGJ15App.cpp; sourceTree = "<group>"; };
 		14A947851A7322C2000AD14B /* Agent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Agent.cpp; path = ../../../src/Agent.cpp; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				148719191A74775F0040AA61 /* goal_frag.glsl */,
 				148719141A7411CC0040AA61 /* map_frag.glsl */,
 				14A9478D1A7391AE000AD14B /* london.ggj */,
 				14A947881A733828000AD14B /* bird_frag.glsl */,
@@ -226,6 +229,7 @@
 			files = (
 				14A9478A1A733828000AD14B /* bird_frag.glsl in Resources */,
 				14A9478B1A733828000AD14B /* bird_vert.glsl in Resources */,
+				1487191A1A74775F0040AA61 /* goal_frag.glsl in Resources */,
 				148719151A7411CC0040AA61 /* map_frag.glsl in Resources */,
 				14A9478E1A7391AE000AD14B /* london.ggj in Resources */,
 				FD8C56DAAA7B40309DEB3260 /* CinderApp.icns in Resources */,

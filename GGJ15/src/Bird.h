@@ -35,9 +35,9 @@ public:
 		#elif defined _WIN32 || defined _WIN64
 			shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (BIRD_FRAG,"GLSL"));
 		#endif
-        m_r=1.;
-        m_g=1.;
-        m_b=1.;
+        m_r=0.6;
+        m_g=0.9;
+        m_b=0.6;
         m_move = false;
 		m_rightVertex = Vec3f (getRadius(), getRadius(), 1.);
 		m_leftVertex = Vec3f (-getRadius(), getRadius(), 1.);
@@ -155,14 +155,27 @@ public:
 	Goal (Vec2f pos, Vec2f vel, float radius)
 	: Agent (pos, vel, radius)
 	{
-		
+		#ifdef __APPLE__
+				m_shader = gl::GlslProg (loadResource (BIRD_VERT), loadResource (GOAL_FRAG));
+		#elif defined _WIN32 || defined _WIN64
+				m_shader = gl::GlslProg (loadResource (BIRD_VERT,"GLSL"), loadResource (GOAL_FRAG,"GLSL"));
+		#endif
 	}
 	
 	void draw()
 	{
-		gl::color (0., 1., 0.);
-		gl::drawSolidCircle (getPosition(), getRadius());
+		m_shader.bind();
+		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
+		Vec2f normedPosition = getPosition() / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPosition.y *= -1.f;
+		m_shader.uniform ("normedGoalPosition", normedPosition);
+		m_shader.uniform ("time", float(getElapsedSeconds()));
+		m_shader.uniform ("outputColor",Vec3f(0., 1., 0.));
+		gl::drawSolidCircle (getPosition(), getRadius() * 2.);
+		m_shader.unbind();
 	}
+	
+	gl::GlslProg m_shader;
 };
 
 #endif /* defined(__GGJ15__Bird__) */

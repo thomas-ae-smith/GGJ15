@@ -20,8 +20,15 @@ const float pi = 3.14159265359;
 
 void main( void )
 {
+	//mod(orientation / 45, 8);
     vec2 position = gl_TexCoord[0].ts ;
     float c = abs(position.y - sin(position.x + 25. * time));
-    
-    gl_FragColor = vec4 (outputColor, 1.);
+	
+	vec2 scrPos = (gl_FragCoord.xy / resolution.xy) * 2. - 1.;
+	float d = distance (scrPos, normedBirdPosition) * 20.;
+	
+	float y = normedBirdPosition.y + sin(time * 3.) * 0.02;
+	float yDiff1 = clamp (1. - abs(scrPos.y - y) * 100., 0., 1.);
+	
+    gl_FragColor = vec4 (vec3 (3., 1., 3.)*yDiff1 + outputColor , 1.);
 }

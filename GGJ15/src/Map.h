@@ -24,6 +24,7 @@ enum cellState
 {
 	blocked = 1,
 	unblocked,
+	target,
 	goal
 };
 
@@ -48,13 +49,22 @@ public:
 				m_grid[j*m_width + i] = cellState::unblocked;
 			}
 		}
-		m_grid[9 * m_width + 13] = cellState::goal;
-		goalPosition = Vec2f(13., 9.);
+		//m_grid[9 * m_width + 13] = cellState::goal;
+//		goalPosition = Vec2f(13., 9.);
+		targetIndex = 0;
     };
     
     void setState(int x, int y, int state)
     {
         m_grid[y*m_width+x] = state;
+		if (state == cellState::target)
+		{
+			Vec2f windowPos = Vec2f ((x + 1.) * m_cellWidth, (y + 1.) * m_cellHeight);
+			m_targetPositions.push_back (windowPos);
+			Vec2f normedTargetPos = windowPos / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+			normedTargetPos.y *= -1.f;
+			m_normedTargetPositions.push_back (normedTargetPos);
+		}
     }
     
     int getState(int x, int y)
@@ -80,9 +90,10 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
-		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) m_width, (float) m_height)) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
-		normedGoalPosition.y *= -1.f;
-		m_shader.uniform ("normedGoalPosition", normedGoalPosition);
+		if (m_normedTargetPositions.size() > 0)
+		{
+			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
+		}
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
         gl::drawSolidRect( getWindowBounds() );
@@ -104,12 +115,29 @@ public:
 		}
 		m_shader.unbind();
     }
+	
+	Vec2f getCurrentTargetPos()
+	{
+		return m_targetPositions[targetIndex];
+	}
+	void incrementTargetPos()
+	{
+		targetIndex ++;
+		if (targetIndex > m_targetPositions.size())
+		{
+			targetIndex = 0;
+		}
+	}
+	
 private:
+	int targetIndex;
 	int m_width, m_height;
 	float m_cellWidth, m_cellHeight;
     int *m_grid;
     gl::GlslProg m_shader;
 	Vec2f goalPosition;
+	std::vector<Vec2f> m_normedTargetPositions;
+	std::vector<Vec2f> m_targetPositions;
 };
 
 #endif /* defined(__Stephane__Map__) */
