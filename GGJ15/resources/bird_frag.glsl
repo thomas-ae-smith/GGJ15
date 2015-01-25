@@ -20,6 +20,18 @@ const float pi = 3.14159265359;
 
 void main( void )
 {
-    vec2 position = gl_TexCoord[0].ts ;
-    gl_FragColor = vec4 (1., 0., 0., 1.);
+    vec2 position = gl_TexCoord[0].ts /20.;
+    
+    vec3 color = vec3(0.,0.,1.);
+    
+    if(position.x < -.5)
+        color  = vec3(1.,1.,0.);
+    
+    if( distance(position,vec2(-.2,0.2)) <.2 || distance(position,vec2(-.2,-.2)) <.2)
+       color = vec3(1.);
+    
+    if( distance(position,vec2(-.2,0.2)) <.05 || distance(position,vec2(-.2,-.2)) <.05)
+        color = vec3(0.);
+    
+    gl_FragColor = vec4 (color, 1.);
 }
