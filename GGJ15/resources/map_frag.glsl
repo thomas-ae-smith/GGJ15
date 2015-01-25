@@ -8,6 +8,7 @@ uniform vec2 resolution;
 uniform vec2 normedTargetPosition;
 uniform int numTargets;
 uniform vec2 normedGoalPosition;
+uniform float normedTargetCoords [12];
 uniform vec2 radius;
 
 uniform vec3 outputColor;
@@ -62,4 +63,3 @@ void main() {
    	vec3 goalOrb = vec3(.7, .2, .6) * vec3 (dG) * (1. + .25 *cos(10. * time));
     gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb; // + targetOrbs;
 
-}

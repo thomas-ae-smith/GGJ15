@@ -8,6 +8,7 @@ uniform vec2 resolution;
 uniform vec2 normedTargetPosition;
 uniform int numTargets;
 uniform vec2 normedGoalPosition;
+uniform float normedTargetCoords [12];
 uniform vec2 radius;
 
 uniform vec3 outputColor;
@@ -45,10 +46,15 @@ void main( void )
 	vec3 targetsC = vec3(0.);
 	if (numTargets > 0)
 	{
-		float r = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time)) * 5.), 0., 1.);
-		float g = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
-		float b = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
-		targetsC += vec3(r, g, b);
+		for (int i = 0; i < numTargets; i++)
+		{
+			vec2 targetPos = vec2 (normedTargetCoords[i * 2], normedTargetCoords[(i * 2) + 1]);
+			float r = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+			float g = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
+			float b = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
+			
+			targetsC += vec3(r, g, b);
+		}
 	}
 	
 	

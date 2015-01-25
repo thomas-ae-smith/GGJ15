@@ -21,5 +21,5 @@ const float pi = 3.14159265359;
 void main( void )
 {
     vec2 position = gl_TexCoord[0].ts ;
-    gl_FragColor = vec4 (ycol * yDiff1 + xcol * xDiff1 + orb, 1.);
+    gl_FragColor = vec4 (1., 0., 0., 1.);
 }
