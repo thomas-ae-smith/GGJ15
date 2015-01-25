@@ -142,7 +142,7 @@ void GGJ15App::setupLevel (int l)
 		}
         case 4:
         {
-            std::string level = "20 21 5 11 19 0 -1 8 0 0 1 0 19 1 -1 14 0 -1 1 19 0 -1 1 1 1 11";
+            std::string level = "20 20 4 19 2 -1 0 0 18 1 -1 6 0 1 1 18 19 -1 -1 3 8 2 8 10 9 10 1 9 3";
             std::stringstream sexStream(level);
             
             
@@ -168,6 +168,19 @@ void GGJ15App::setupLevel (int l)
             }
             
             
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+    
+            
             int cardGoals;
             sexStream >> cardGoals;
             
@@ -180,7 +193,6 @@ void GGJ15App::setupLevel (int l)
                 sexStream >> posY;
                 
                 map->setState(posX, posY, cellState::goal);
-                // TODO
             }
 
 
