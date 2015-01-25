@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "Perch.h"
 
-#define NUM_LEVELS 2
+#define NUM_LEVELS 3
 
 using namespace ci;
 using namespace ci::app;
@@ -377,6 +377,17 @@ void GGJ15App::update()
 			 }
 		}
 	}
+	for (int b = 0; b < birds.size(); b++)
+	{
+		if (map->getNumTargets() > 0)
+		{
+			if (birds[b]->contains (map->getCurrentTargetPos()))
+			{
+				map->incrementTargetPos();
+			}
+		}
+	}
+
 	if (birds[0]->contains (map->getGoalPosition()))
 	{
 		if (birds.size() > 1)

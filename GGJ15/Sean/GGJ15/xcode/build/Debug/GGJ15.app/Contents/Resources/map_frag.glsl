@@ -5,7 +5,7 @@ precision mediump float;
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
-uniform vec2 normedTargetPositions[7];
+uniform float normedTargetPositions[14];
 uniform int numTargets;
 uniform vec2 normedGoalPosition;
 uniform vec2 radius;
@@ -43,11 +43,12 @@ void main( void )
 	
 	//targets
 	vec3 targetsC = vec3 (0.);
-	for (int i=0; i < numTargets; i++)
+	for (int i=0; i < numTargets; i+= 2)
 	{
-		float r = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time)) * 5.), 0., 1.);
-		float g = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
-		float b = clamp (1. - distance (position, normedTargetPositions[i]) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
+		vec2 targetPos = vec2(normedTargetPositions[i], normedTargetPositions[i+1]);
+		float r = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+		float g = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
+		float b = clamp (1. - distance (position, targetPos) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
 		targetsC += vec3 (r, g, b);
 	}
 	
