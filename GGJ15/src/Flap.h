@@ -70,6 +70,19 @@ public:
 		}
 	}
 	
+	bool contains( Vec2f p, float r){
+		console()<<getPosition()<<" "<<p<<" "<<r<<std::endl;
+		Vec2f posA = this->getPosition();
+		Vec2f AB = posA - p;
+		float lAB = AB.lengthSquared();
+		
+		return lAB < pow(r, 2.);
+	}
+	
+	void setSpeed(float v)
+	{
+		velMult = v;
+	}
 	void updateOrientationForVelocity(Vec2f direction);
 
 private:
@@ -87,7 +100,7 @@ private:
 	float m_orientation;
 	//
 	float m_k_attractor_strength;
-
+	float velMult;
 
 
 };
