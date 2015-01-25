@@ -88,7 +88,7 @@ public:
 		}
 		else
 		{
-			//m_v1.safeNormalize(); m_v2.safeNormalize(); m_velocity.safeNormalize();
+			//m_v1.safeNormalize();  m_velocity.safeNormalize();
 			m_position += (velMult*m_velocity + m_v2);
 		}
     }
@@ -117,7 +117,7 @@ public:
 
     bool collision( Agent *otherAgent);
     bool collision( Map *map);
-    bool collisionOptimized( Agent *otherAgent);
+    bool collisionOptimized( Agent *otherAgent, float _offset);
 	bool contains(Vec2f mouse);
 
 	void setNoRules(bool _b)

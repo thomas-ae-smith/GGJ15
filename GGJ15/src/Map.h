@@ -53,6 +53,7 @@ public:
 //		goalPosition = Vec2f(13., 9.);
 		targetIndex = 0;
 		numTargets = 0;
+		goalRadius = 40.;
     };
     
     void setState(int x, int y, int state)
@@ -98,6 +99,7 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
+		m_shader.uniform ("numTargets", (int)m_normedTargetPositions.size());
 		if (m_normedTargetPositions.size() > 0)
 		{
 			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
@@ -146,6 +148,10 @@ public:
 	{
 		return goalPosition;
 	}
+	float getGoalRadius()
+	{
+		return goalRadius;
+	}
 private:
 	int targetIndex;
 	int m_width, m_height;
@@ -157,6 +163,7 @@ private:
 	std::vector<Vec2f> m_normedTargetPositions;
 	std::vector<Vec2f> m_targetPositions;
 	int numTargets;
+	float goalRadius;
 };
 
 #endif /* defined(__Stephane__Map__) */

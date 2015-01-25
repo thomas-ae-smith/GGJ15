@@ -25,12 +25,12 @@ bool Agent::contains( Vec2f mouse){
     return lAB < pow(this->getRadius() * 2.,2.);
 }
 
-bool Agent::collisionOptimized( Agent *otherAgent){
+bool Agent::collisionOptimized( Agent *otherAgent, float _offset){
     Vec2f posA = this->getPosition();
     Vec2f posB = otherAgent->getPosition();
     Vec2f AB = posA - posB;
     float lAB = AB.lengthSquared();	// no need for expensive square root
-	float zoneRadius = (this->getRadius() + otherAgent->getRadius());
+	float zoneRadius = (this->getRadius() + otherAgent->getRadius() - _offset);
     float dist = lAB - (zoneRadius*zoneRadius);
     return dist <= 0;
 }

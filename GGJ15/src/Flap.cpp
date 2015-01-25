@@ -5,7 +5,8 @@ Flap::Flap()
 	: m_k_rule1(1)
 	, m_k_rule2(40)
 	, m_k_rule3(1.0)
-	, m_k_attractor_strength(0.005)
+	, m_k_attractor_strength(0.003)
+	, velMult (1.)
 {
 }
 
@@ -77,10 +78,10 @@ void Flap::orientation(std::vector<Bird*> &m_birds)
 // NOTE : dir has to be NORMALIZED (.normalized())
 void Flap::update(std::vector<Bird*> &m_birds)
 {
-	m_attractorPosition += m_attractorVelocity;
+	m_attractorPosition += m_attractorVelocity * velMult;
 
 	// apply attraction rule (rule1)
-	rule1(m_birds);
+	//rule1(m_birds);
 	// apply separation rule (rule2)
 	rule2(m_birds);
 	// orient boids

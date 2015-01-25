@@ -93,50 +93,6 @@ void GGJ15App::setup()
 	complete = false;
 	setWindowSize (800, 800);
 	setupShaders();
-    
-    std::string level = "20 21 5 11 19 0 -1 8 0 0 1 0 19 1 -1 14 0 -1 1 20 0 -1 1 1 1 11";
-    std::stringstream sexStream(level);
-    
-    
-    int w, h;
-    sexStream >> w;
-    sexStream >> h;
-    this->map = new Map(w,h);
-    
-    int cardBirds;
-    sexStream >> cardBirds;
-    
-    this->birds.resize(0);
-    
-    for( int i = 0 ; i< cardBirds ; ++i)
-    {
-        int posX, posY, velX, velY;
-        sexStream >> posX;
-        sexStream >> posY;
-        sexStream >> velX;
-        sexStream >> velY;
-        
-        this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
-    }
-    
-    
-    int cardGoals;
-    sexStream >> cardGoals;
-    
-    this->goals.resize(0);
-    
-    for( int i = 0 ; i< cardGoals ; ++i)
-    {
-        int posX, posY;
-        sexStream >> posX;
-        sexStream >> posY;
-       
-        map->setState(posX, posY, cellState::goal);
-        // TODO
-    }
-
-    
-    
 	setupLevel(currentLevel);
 	
 
@@ -185,7 +141,7 @@ void GGJ15App::setupLevel (int l)
 			map->setState (3, 10, cellState::target);
 			addBirdAtGridPosition (19, 5, -1., 1., 20.);
 			map->setState (8, 17, cellState::target);
-			
+			map->setState (9, 14, cellState::goal);
 			setSpeed (2.3f);
 			break;
 		}
@@ -254,6 +210,7 @@ void GGJ15App::setSpeed(float speed)
 	{
 		birds[i]->setSpeedMultiplier (speed);
 	}
+	_flap->setSpeed (speed);
 }
 
 void GGJ15App::keyDown( KeyEvent event ) {
@@ -319,7 +276,7 @@ void GGJ15App::update()
 	{
 	    for(int i=0; i< birds.size(); i++)
 		{
-			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i]) )
+			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i],10) )
 			 {
 				// if they collide, remove from list and set norules
 				 Vec2f flap_vel = _flap->getVelocity();
@@ -352,23 +309,23 @@ void GGJ15App::update()
 		}
 	}
 
-	if (birds[0]->contains (map->getGoalPosition()))
+	if ( _flap->contains (map->getGoalPosition(), map->getGoalRadius()) )
 	{
-		if (birds.size() > 1)
-		{
-			for (int i = 1; i < birds.size(); i++)
-			{
-				if (!birds[i]->hasRules())
-				{
-					break;
-				}
-				win = true;
-			}
-		}
-		else
-		{
+//		if (birds.size() > 1)
+//		{
+//			for (int i = 1; i < birds.size(); i++)
+//			{
+//				if (!birds[i]->hasRules())
+//				{
+//					break;
+//				}
+//				win = true;
+//			}
+//		}
+//		else
+//		{
 			win = true;
-		}
+//		}
 	}
 	if (win)
 	{
