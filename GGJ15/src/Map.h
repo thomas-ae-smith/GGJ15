@@ -98,6 +98,7 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
+		m_shader.uniform ("numTargets", (int)m_normedTargetPositions.size());
 		if (m_normedTargetPositions.size() > 0)
 		{
 			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);

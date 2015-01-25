@@ -42,11 +42,14 @@ void main( void )
 	float xDiff3 = clamp(1. - abs(position.x - x3) * pulse,0.,1.);
 	
 	//targets
-
+	vec3 targetsC = vec3(0.);
+	if (numTargets > 0)
+	{
 		float r = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time)) * 5.), 0., 1.);
 		float g = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*1.5)) * 6.), 0., 1.);
 		float b = clamp (1. - distance (position, normedTargetPosition) * (10. + abs(sin(time*2.)) * 7.), 0., 1.);
-		vec3 targetsC = vec3 (r, g, b);
+		targetsC += vec3(r, g, b);
+	}
 	
 	
 	
