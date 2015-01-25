@@ -5,7 +5,7 @@ Flap::Flap()
 	: m_k_rule1(1)
 	, m_k_rule2(40)
 	, m_k_rule3(1.0)
-	, m_k_attractor_strength(0.005)
+	, m_k_attractor_strength(0.003)
 {
 }
 
@@ -40,7 +40,7 @@ void Flap::rule2(std::vector<Bird*> &m_birds)
 				Vec2f dir = ((*a)->getPosition() -(*b)->getPosition());
 				float dist = dir.length();
 
-				if(dist < m_k_rule2)
+				if(dist > m_k_rule2)
 				{
 		            float F = (m_k_rule2/dist - 1.0f ) * m_k_attractor_strength;
 					dir = dir.normalized() * F;

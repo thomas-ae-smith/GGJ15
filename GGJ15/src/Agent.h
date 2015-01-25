@@ -88,7 +88,7 @@ public:
 		}
 		else
 		{
-			//m_v1.safeNormalize(); m_v2.safeNormalize(); m_velocity.safeNormalize();
+			//m_v1.safeNormalize();  m_velocity.safeNormalize();
 			m_position += (velMult*m_velocity + m_v2);
 		}
     }
