@@ -18,6 +18,7 @@ bool Agent::collision( Agent *otherAgent){
 }
 
 bool Agent::contains( Vec2f mouse){
+	console()<<mouse<<" "<<getPosition()<<std::endl;
     Vec2f posA = this->getPosition();
     Vec2f AB = posA - mouse;
     float lAB = AB.lengthSquared();
