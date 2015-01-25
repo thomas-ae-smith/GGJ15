@@ -210,6 +210,7 @@ void GGJ15App::setSpeed(float speed)
 	{
 		birds[i]->setSpeedMultiplier (speed);
 	}
+	_flap->setSpeed (speed);
 }
 
 void GGJ15App::keyDown( KeyEvent event ) {
@@ -308,23 +309,23 @@ void GGJ15App::update()
 		}
 	}
 
-	if (birds[0]->contains (map->getGoalPosition()))
+	if ( _flap->contains (map->getGoalPosition(), map->getGoalRadius()) )
 	{
-		if (birds.size() > 1)
-		{
-			for (int i = 1; i < birds.size(); i++)
-			{
-				if (!birds[i]->hasRules())
-				{
-					break;
-				}
-				win = true;
-			}
-		}
-		else
-		{
+//		if (birds.size() > 1)
+//		{
+//			for (int i = 1; i < birds.size(); i++)
+//			{
+//				if (!birds[i]->hasRules())
+//				{
+//					break;
+//				}
+//				win = true;
+//			}
+//		}
+//		else
+//		{
 			win = true;
-		}
+//		}
 	}
 	if (win)
 	{

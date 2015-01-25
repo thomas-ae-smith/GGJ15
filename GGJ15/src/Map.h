@@ -53,6 +53,7 @@ public:
 //		goalPosition = Vec2f(13., 9.);
 		targetIndex = 0;
 		numTargets = 0;
+		goalRadius = 40.;
     };
     
     void setState(int x, int y, int state)
@@ -147,6 +148,10 @@ public:
 	{
 		return goalPosition;
 	}
+	float getGoalRadius()
+	{
+		return goalRadius;
+	}
 private:
 	int targetIndex;
 	int m_width, m_height;
@@ -158,6 +163,7 @@ private:
 	std::vector<Vec2f> m_normedTargetPositions;
 	std::vector<Vec2f> m_targetPositions;
 	int numTargets;
+	float goalRadius;
 };
 
 #endif /* defined(__Stephane__Map__) */
