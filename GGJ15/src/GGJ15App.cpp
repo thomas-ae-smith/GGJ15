@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "Perch.h"
 
-#define NUM_LEVELS 9
+#define NUM_LEVELS 10
 
 using namespace ci;
 using namespace ci::app;
@@ -377,6 +377,64 @@ void GGJ15App::setupLevel (int l)
         case 8:
         {
             std::string level = "20 20 8 19 7 -1 0 1 0 1 1 5 0 1 1 9 0 1 1 11 0 1 1 19 9 -1 -1 19 11 -1 -1 19 16 -1 -1 7 18 7 17 8 18 8 14 9 17 9 12 11 14 11 1 12 18";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+            }
+            setSpeed (2.5f);
+            break;
+            
+        }
+        case 9:
+        {
+            std::string level = "20 20 9 17 0 0 1 2 0 1 1 5 0 1 1 8 0 1 1 10 0 1 1 19 5 -1 -1 19 11 -1 -1 19 13 -1 -1 19 15 -1 -1 7 13 3 17 3 13 5 12 7 13 7 10 8 12 8 1 10 14";
             std::stringstream sexStream(level);
             
             
