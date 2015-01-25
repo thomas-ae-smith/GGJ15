@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-#define MAX_TARGETS 6
+#define MAX_TARGETS 11
 
 using namespace ci;
 using namespace ci::app;
