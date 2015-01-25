@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "Perch.h"
 
-#define NUM_LEVELS 3
+#define NUM_LEVELS 4
 
 using namespace ci;
 using namespace ci::app;
@@ -93,104 +93,50 @@ void GGJ15App::setup()
 	complete = false;
 	setWindowSize (800, 800);
 	setupShaders();
-    // Parsing the file
-    std::ifstream setupFile("../../../resources/london.ggj");
-    std::string line;
-	
-    bool initMap = true;
-    bool initBirds, initFlaps, initGoal, initCard;
-    initBirds = initFlaps = initGoal = initCard = false;
-    int w,h;
     
-	
-	
-	if (!setupFile.is_open())
-	{
-		console()<<"Couldn't open ../../../resources/london.ggj"<<endl;
-	}
-    while( std::getline( setupFile, line ) )
+    std::string level = "20 21 5 11 19 0 -1 8 0 0 1 0 19 1 -1 14 0 -1 1 20 0 -1 1 1 1 11";
+    std::stringstream sexStream(level);
+    
+    
+    int w, h;
+    sexStream >> w;
+    sexStream >> h;
+    this->map = new Map(w,h);
+    
+    int cardBirds;
+    sexStream >> cardBirds;
+    
+    this->birds.resize(0);
+    
+    for( int i = 0 ; i< cardBirds ; ++i)
     {
-        if(line.size() == 0 || line.at(0) == '#')
-            continue;
+        int posX, posY, velX, velY;
+        sexStream >> posX;
+        sexStream >> posY;
+        sexStream >> velX;
+        sexStream >> velY;
         
-        if(initMap)
-        {
-            std::sscanf(line.c_str(), "%d %d", w, h);
-            map = new Map(w,h);
-            initMap = false;
-            initBirds =true;
-            continue;
-        }
-        if(initBirds)
-        {
-            int n;
-            std::sscanf(line.c_str(), "%d", n);
-            birds.resize(n);
-            for(int i = 0; i<n; i++)
-            {
-                std::getline( setupFile, line );
-                if(line.size() == 0 || line.at(0) == '#')
-                    continue;
-                
-                int positionX, positionY, angle;
-                float velocityX, velocityY;
-                
-                std::sscanf(line.c_str(), "%d %d %f %f %d", positionX, positionY, velocityX, velocityY, angle);
-                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 20.);
-            }
-            initBirds = false;
-            initFlaps = true;
-            continue;
-        }
-        if(initFlaps)
-        {
-            int n;
-            std::sscanf(line.c_str(), "%d", n);
-            flaps.resize(n);
-            for(int i = 0; i<n; i++)
-            {
-                std::getline( setupFile, line );
-                if(line.size() == 0 || line.at(0) == '#')
-                    continue;
-                
-                int positionX, positionY;
-                std::sscanf(line.c_str(), "%d %d", positionX, positionY);
-                //flaps[i] = new Flap( positionX, positionY);
-            }
-            initFlaps = false;
-            initGoal = true;
-            continue;
-        }
-        if(initGoal)
-        {
-            int n;
-            std::sscanf(line.c_str(), "%d", n);
-            goals.resize(n);
-            for(int i = 0; i<n; i++)
-            {
-                std::getline( setupFile, line );
-                if(line.size() == 0 || line.at(0) == '#')
-                    continue;
-                
-                int positionX, positionY;
-                std::sscanf(line.c_str(), "%d %d", positionX, positionY);
-//                goals[i] = new Goal( positionX, positionY);
-            }
-            initGoal = false;
-            initCard = true;
-            continue;
-        }
-        if(initCard)
-        {
-            for(int i=0; i < h; i++, std::getline( setupFile, line ))
-                for(int j=0; j < w; j++)
-                {
-                        map->setState(i, j, std::atoi(&(line.c_str()[j])));
-                }
-        }
-        
-        
+        this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
     }
+    
+    
+    int cardGoals;
+    sexStream >> cardGoals;
+    
+    this->goals.resize(0);
+    
+    for( int i = 0 ; i< cardGoals ; ++i)
+    {
+        int posX, posY;
+        sexStream >> posX;
+        sexStream >> posY;
+       
+        map->setState(posX, posY, cellState::goal);
+        // TODO
+    }
+
+    
+    
 	setupLevel(currentLevel);
 	
 
@@ -202,34 +148,6 @@ void GGJ15App::setupLevel (int l)
 	m_firstClicked = true;
 	_flap = new Flap();
 	birds.clear();
-	
-	//For inner-facing circle (good for testing collision detection / velocities)
-	//	addBirdAtGridPosition (0, 0, 1., 1., 20.);
-	//	addBirdAtGridPosition (19, 19, -1., -1., 20.);
-	//	addBirdAtGridPosition (0, 19, 1., -1., 20.);
-	//	addBirdAtGridPosition (19, 0, -1., 1., 20.);
-	//	addBirdAtGridPosition (9, 0, 0., 1., 20.);
-	//	addBirdAtGridPosition (9, 19, 0., -1., 20.);
-	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
-	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
-	//	addGoalAtPosition (16, 12, 0., 0., 20.);
-	
-	//For goal detection
-	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
-	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
-	//	addGoalAtPosition (9, 9, 0., 0., 20.);
-	
-	//Test level
-//	addBirdAtGridPosition (14, 0, 0., 1., 20.);
-//	addBirdAtGridPosition (19, 5, -1., 1., 20.);
-//	addBirdAtGridPosition (0, 12, 1., 0., 20.);
-//	addBirdAtGridPosition (10, 19, 0., -1., 20.);
-//	map->setState (15, 10, cellState::goal);
-//	map->setState (10, 12, cellState::target);
-//	map->setState (14, 9, cellState::target);
-//	map->setState (15, 9, cellState::target);
-//	setSpeed (3.f);
-	
 	
 	switch (l)
 	{
@@ -271,6 +189,52 @@ void GGJ15App::setupLevel (int l)
 			setSpeed (2.3f);
 			break;
 		}
+        case 4:
+        {
+            std::string level = "20 21 5 11 19 0 -1 8 0 0 1 0 19 1 -1 14 0 -1 1 19 0 -1 1 1 1 11";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+                // TODO
+            }
+
+
+            
+        }
 		default:
 		{
 			break;
