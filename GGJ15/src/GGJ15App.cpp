@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "Perch.h"
 
-#define NUM_LEVELS 5
+#define NUM_LEVELS 9
 
 using namespace ci;
 using namespace ci::app;
@@ -197,10 +197,243 @@ void GGJ15App::setupLevel (int l)
                 map->setState(posX, posY, cellState::goal);
             }
 			setSpeed (2.5f);
-
+            break;
             
         }
-		default:
+        case 5:
+        {
+            std::string level = "20 20 5 0 11 1 0 5 19 1 -1 8 19 1 -1 19 3 -1 1 19 7 -1 1 4 11 11 11 13 13 13 13 14 1 15 14";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+            }
+            setSpeed (2.5f);
+            break;
+            
+        }
+        case 6:
+        {
+            std::string level = "20 20 6 19 2 -1 0 5 19 0 -1 4 0 0 1 6 0 0 1 7 0 1 1 19 14 -1 -1 5 9 2 6 4 9 4 4 5 5 5 1 3 6";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+            }
+            setSpeed (2.5f);
+            break;
+            
+        }
+        case 7:
+        {
+            std::string level = "20 20 7 1 0 0 1 10 0 0 1 5 0 1 1 8 0 1 1 19 11 -1 -1 19 13 -1 -1 19 16 -1 -1 6 9 1 10 1 7 2 9 2 1 3 7 3 1 0 4";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+            }
+            setSpeed (2.5f);
+            break;
+            
+        }
+        case 8:
+        {
+            std::string level = "20 20 8 19 7 -1 0 1 0 1 1 5 0 1 1 9 0 1 1 11 0 1 1 19 9 -1 -1 19 11 -1 -1 19 16 -1 -1 7 18 7 17 8 18 8 14 9 17 9 12 11 14 11 1 12 18";
+            std::stringstream sexStream(level);
+            
+            
+            int w, h;
+            sexStream >> w;
+            sexStream >> h;
+            this->map = new Map(w,h);
+            
+            int cardBirds;
+            sexStream >> cardBirds;
+            
+            this->birds.resize(0);
+            
+            for( int i = 0 ; i< cardBirds ; ++i)
+            {
+                int posX, posY, velX, velY;
+                sexStream >> posX;
+                sexStream >> posY;
+                sexStream >> velX;
+                sexStream >> velY;
+                
+                this->addBirdAtGridPosition(posX, posY, velX, velY, 20);
+            }
+            
+            
+            int cardTargets;
+            sexStream >> cardTargets;
+            
+            for( int i = 0 ; i< cardTargets ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::target);
+            }
+            
+            
+            int cardGoals;
+            sexStream >> cardGoals;
+            
+            this->goals.resize(0);
+            
+            for( int i = 0 ; i< cardGoals ; ++i)
+            {
+                int posX, posY;
+                sexStream >> posX;
+                sexStream >> posY;
+                
+                map->setState(posX, posY, cellState::goal);
+            }
+            setSpeed (2.5f);
+            break;
+            
+        }
+
+        default:
 		{
 			break;
 		}
