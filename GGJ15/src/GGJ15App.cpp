@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include "Perch.h"
 
+#define NUM_LEVELS 3
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -28,17 +30,23 @@ class GGJ15App : public AppNative {
 	void update();
 	void draw();
 	void setupShaders();
-
+	void addBirdAtGridPosition (int x, int y, float vX, float vY, float r);
+	void addGoalAtPosition (int x, int y, float vX, float vY, float r);
+	void setupLevel(int l);
+	void keyDown( KeyEvent event );
+	void setSpeed(float speed);
+	
 	std::vector<Perch*> perches;
     std::vector<Bird*> birds;
     std::vector<Flap*> flaps;
     std::vector<Goal*> goals;
     std::list<Bird*> clickedbirds;
-
 	Flap *_flap;
     Map *map;
 	gl::GlslProg birdShader;
 	bool m_firstClicked;
+	int currentLevel;
+	bool complete;
 };
 
 GGJ15App::~GGJ15App()
@@ -80,9 +88,9 @@ void GGJ15App::setupShaders()
 
 void GGJ15App::setup()
 {
-	m_firstClicked = true;
-	_flap = new Flap();
-
+	
+	currentLevel = 0;
+	complete = false;
 	setWindowSize (800, 800);
 	setupShaders();
     // Parsing the file
@@ -94,7 +102,7 @@ void GGJ15App::setup()
     initBirds = initFlaps = initGoal = initCard = false;
     int w,h;
     
-    map = new Map(20,20);
+	
 	
 	if (!setupFile.is_open())
 	{
@@ -128,7 +136,7 @@ void GGJ15App::setup()
                 float velocityX, velocityY;
                 
                 std::sscanf(line.c_str(), "%d %d %f %f %d", positionX, positionY, velocityX, velocityY, angle);
-                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 1., angle);
+                birds[i] = new Bird( Vec2f(positionX, positionY), Vec2f(velocityX, velocityY), 20.);
             }
             initBirds = false;
             initFlaps = true;
@@ -166,7 +174,7 @@ void GGJ15App::setup()
                 
                 int positionX, positionY;
                 std::sscanf(line.c_str(), "%d %d", positionX, positionY);
-                goals[i] = new Goal( positionX, positionY);
+//                goals[i] = new Goal( positionX, positionY);
             }
             initGoal = false;
             initCard = true;
@@ -183,13 +191,129 @@ void GGJ15App::setup()
         
         
     }
-  
-    
-	//birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 20.));
-	birds.push_back(new Bird (Vec2f (20, getWindowSize().y/2. ), Vec2f (1., 0.), 90, 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x / 2.0, 0.0 ), Vec2f (0., 1.0), -90, 25.));
-	birds.push_back(new Bird (Vec2f (getWindowSize().x -20, getWindowSize().y -120 ), Vec2f (-1., 0.0), -90, 25.));
+	setupLevel(currentLevel);
+	
 
+}
+
+void GGJ15App::setupLevel (int l)
+{
+	map = new Map(20,20);
+	m_firstClicked = true;
+	_flap = new Flap();
+	birds.clear();
+	
+	//For inner-facing circle (good for testing collision detection / velocities)
+	//	addBirdAtGridPosition (0, 0, 1., 1., 20.);
+	//	addBirdAtGridPosition (19, 19, -1., -1., 20.);
+	//	addBirdAtGridPosition (0, 19, 1., -1., 20.);
+	//	addBirdAtGridPosition (19, 0, -1., 1., 20.);
+	//	addBirdAtGridPosition (9, 0, 0., 1., 20.);
+	//	addBirdAtGridPosition (9, 19, 0., -1., 20.);
+	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+	//	addGoalAtPosition (16, 12, 0., 0., 20.);
+	
+	//For goal detection
+	//	addBirdAtGridPosition (0, 9, 1., 0., 20.);
+	//	addBirdAtGridPosition (19, 9, -1., 0., 20.);
+	//	addGoalAtPosition (9, 9, 0., 0., 20.);
+	
+	//Test level
+//	addBirdAtGridPosition (14, 0, 0., 1., 20.);
+//	addBirdAtGridPosition (19, 5, -1., 1., 20.);
+//	addBirdAtGridPosition (0, 12, 1., 0., 20.);
+//	addBirdAtGridPosition (10, 19, 0., -1., 20.);
+//	map->setState (15, 10, cellState::goal);
+//	map->setState (10, 12, cellState::target);
+//	map->setState (14, 9, cellState::target);
+//	map->setState (15, 9, cellState::target);
+//	setSpeed (3.f);
+	
+	
+	switch (l)
+	{
+		case 0:
+		{
+			addBirdAtGridPosition (0, 9, 1., 0., 20.);
+			map->setState (9, 9, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 1:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 14, 1., 0., 20.);
+			map->setState (3, 14, cellState::target);
+			map->setState (6, 17, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 2:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 10, 1., 0., 20.);
+			map->setState (3, 10, cellState::target);
+			addBirdAtGridPosition (8, 19, 0., -1., 20.);
+			map->setState (8, 16, cellState::target);
+			map->setState (16, 16, cellState::goal);
+			setSpeed (2.3f);
+			break;
+		}
+		case 3:
+		{
+			addBirdAtGridPosition (3, 0, 0., 1., 20.);
+			addBirdAtGridPosition (0, 10, 1., 0., 20.);
+			map->setState (3, 10, cellState::target);
+			addBirdAtGridPosition (19, 5, -1., 1., 20.);
+			map->setState (8, 17, cellState::target);
+			
+			setSpeed (2.3f);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+	
+	
+	for (int i=0; i<birds.size(); i++)
+	{
+		birds[i]->setNoRules (true);
+	}
+}
+
+void GGJ15App::setSpeed(float speed)
+{
+	for (int i = 0; i < birds.size(); i++)
+	{
+		birds[i]->setSpeedMultiplier (speed);
+	}
+}
+
+void GGJ15App::keyDown( KeyEvent event ) {
+	if( event.getChar() == ' ' ){
+		setupLevel(currentLevel);
+	}
+	else if ( event.getChar() == 's')
+	{
+		currentLevel++;
+		setupLevel(currentLevel);
+	}
+//	else if( event.getChar() == 'h' ){
+//		mRenderParticles = ! mRenderParticles;
+//	}
+}
+
+void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
+{
+	birds.push_back (new Bird (Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r));
+}
+
+void GGJ15App::addGoalAtPosition (int x, int y, float vX, float vY, float r)
+{
+	//m_goal = new Goal(Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r);
 }
 
 void GGJ15App::mouseDown( MouseEvent event )
@@ -213,27 +337,38 @@ void GGJ15App::mouseDown( MouseEvent event )
         }
 }
 
+float clamp (float term, float lower, float higher)
+{
+	float ans = term;
+	if (ans < lower) ans = lower;
+	if (ans > higher) ans = higher;
+	return ans;
+}
+
 void GGJ15App::update()
 {
     // once collision, remove from list of clicked and set rules back
 	// for every clicked bird, check if it is colliding with the any other bird of the flock
 	bool collision = false;
+	bool win = false;
 	for( std::list<Bird*>::iterator a = clickedbirds.begin(); a != clickedbirds.end();a++)
 	{
 	    for(int i=0; i< birds.size(); i++)
 		{
 			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i]) )
 			 {
-				 birds[i]->setColor(0.0,0.0,1.0);
 				// if they collide, remove from list and set norules
-				 Vec2f newDirection = (_flap->getVelocity() + (*a)->getVelocity()).normalized();
-				 _flap->setVelocity(newDirection);
-				 (*a)->setNoRules(false);	// respond to rules as being now part of the flock
-				 float ori = _flap->getOrientation() + (*a)->getOrientation();
-				 if( ori < 0.0)
-					 ori *=-1.0;
-				 _flap->setOrientation(ori / 2.0);
-
+				 Vec2f flap_vel = _flap->getVelocity();
+				 Vec2f newComer = (*a)->getVelocity();
+				 Vec2f newDirection = (flap_vel + newComer); // normalize !
+				 //newDirection.safeNormalize();
+				 if (abs (newDirection.x) > 1.) newDirection.x /= 2.;
+				 if (abs (newDirection.y) > 1.) newDirection.y /= 2.;
+				 console()<<newDirection<<endl;
+				 (*a)->setNoRules(false);	// now this bird becomes susbject to rules
+				 _flap->setVelocity(newDirection, birds);
+				 _flap->updateOrientationForVelocity (newDirection);
+				 //_flap->setOrientation(ori);
 				 a = clickedbirds.erase(a);
 				 collision = true;
 				 break;
@@ -242,9 +377,52 @@ void GGJ15App::update()
 		if(collision)
 			break;
 	}
+	for (int b = 0; b < birds.size(); b++)
+	{
+		if (map->getNumTargets() > 0)
+		{
+			if (birds[b]->contains (map->getCurrentTargetPos()))
+			{
+				map->incrementTargetPos();
+			}
+		}
+	}
 
-	// this applies the rules and updates attractor
-	_flap->update(birds);
+	if (birds[0]->contains (map->getGoalPosition()))
+	{
+		if (birds.size() > 1)
+		{
+			for (int i = 1; i < birds.size(); i++)
+			{
+				if (!birds[i]->hasRules())
+				{
+					break;
+				}
+				win = true;
+			}
+		}
+		else
+		{
+			win = true;
+		}
+	}
+	if (win)
+	{
+		currentLevel ++;
+		if (currentLevel >= NUM_LEVELS)
+		{
+			complete = true;
+		}
+		else
+		{
+			setupLevel (currentLevel);
+		}
+	}
+	else
+	{
+		// this applies the rules and updates attractor
+		_flap->update(birds);
+	}
 
 }
 
@@ -257,16 +435,23 @@ void GGJ15App::draw()
     
     // clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    map->draw();
-	
-	// Birds
-	birdShader.bind();
-	birdShader.uniform ("time" , (float) getElapsedSeconds());
-    for (int i = 0; i < birds.size(); i++)
+	if(!complete)
 	{
-		birds[i]->draw();
+		map->draw();
+		
+		// Birds
+		//birdShader.bind();
+		//birdShader.uniform ("time" , (float) getElapsedSeconds());
+		for (int i = 0; i < birds.size(); i++)
+		{
+			birds[i]->draw();
+		}
+		//birdShader.unbind();
 	}
-	birdShader.unbind();
+	else
+	{
+		//completion screen
+	}
 }
 
 CINDER_APP_NATIVE( GGJ15App, RendererGl )

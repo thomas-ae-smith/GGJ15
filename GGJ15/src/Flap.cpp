@@ -2,9 +2,10 @@
 #include "Flap.h"
 
 Flap::Flap()
-	: m_k_rule1(5)
+	: m_k_rule1(15)
 	, m_k_rule2(40)
 	, m_k_rule3(1.0)
+	, m_k_attractor_strength(0.05)
 {
 }
 
@@ -40,7 +41,7 @@ void Flap::rule2(std::vector<Bird*> &m_birds)
 
 				if(dist < m_k_rule2)
 				{
-		            float F = (m_k_rule2/dist - 1.0f ) * 0.01f;
+		            float F = (m_k_rule2/dist - 1.0f ) * m_k_attractor_strength;
 					dir = dir.normalized() * F;
 
 					(*a)->setSeparation((*a)->getSeparation() + dir);	// increase existing
@@ -48,7 +49,7 @@ void Flap::rule2(std::vector<Bird*> &m_birds)
 				}
 			}
 		}
-			}
+	}
 }
 
 // RULE 3 : target following
@@ -77,16 +78,53 @@ void Flap::update(std::vector<Bird*> &m_birds)
 {
 	m_attractorPosition += m_attractorVelocity;
 
-	// apply barycenter rule (rule1)
+	// apply attraction rule (rule1)
 	rule1(m_birds);
 	// apply separation rule (rule2)
 	rule2(m_birds);
+	// orient boids
 	orientation(m_birds);
 
 	// update positions
 	for( std::vector<Bird*>::iterator a = m_birds.begin(); a != m_birds.end(); ++a )
 	{
 		(*a)->update();
+	}
+}
+
+void Flap::updateOrientationForVelocity (Vec2f direction)
+{
+	if (direction.x == 0.f && direction.y == -1.f)
+	{
+		m_orientation = 0.f;
+	}
+	else if (direction.x == 1.f && direction.y == -1.f)
+	{
+		m_orientation = 45.f;
+	}
+	else if (direction.x == 1.f && direction.y == 0.f)
+	{
+		m_orientation = 90.f;
+	}
+	else if (direction.x == 1.f && direction.y == 1.f)
+	{
+		m_orientation = 125.f;
+	}
+	else if (direction.x == 0.f && direction.y == 1.f)
+	{
+		m_orientation = 180.f;
+	}
+	else if (direction.x == -1.f && direction.y == 1.f)
+	{
+		m_orientation = 225.f;
+	}
+	else if (direction.x == -1.f && direction.y == 0.f)
+	{
+		m_orientation = 270.f;
+	}
+	else if (direction.x == -1.f && direction.y == -1.f)
+	{
+		m_orientation = 315.f;
 	}
 }
 

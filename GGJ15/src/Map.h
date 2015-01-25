@@ -24,6 +24,7 @@ enum cellState
 {
 	blocked = 1,
 	unblocked,
+	target,
 	goal
 };
 
@@ -41,7 +42,6 @@ public:
         m_grid = new int[width*height];
 		m_cellWidth = getWindowWidth() / (float) m_width;
 		m_cellHeight = getWindowHeight() / (float) m_height;
-		console()<<m_cellWidth<<" "<<m_width<<" "<<getWindowWidth();
 		for (int i = 0; i < m_width; i++)
 		{
 			for (int j = 0; j < m_height; j++)
@@ -49,13 +49,30 @@ public:
 				m_grid[j*m_width + i] = cellState::unblocked;
 			}
 		}
-		m_grid[9 * m_width + 13] = cellState::goal;
-		goalPosition = Vec2f(13., 9.);
+		//m_grid[9 * m_width + 13] = cellState::goal;
+//		goalPosition = Vec2f(13., 9.);
+		targetIndex = 0;
+		numTargets = 0;
     };
     
     void setState(int x, int y, int state)
     {
         m_grid[y*m_width+x] = state;
+		Vec2f windowPos = Vec2f ((x + 0.5) * m_cellWidth, (y + 0.5) * m_cellHeight);
+		Vec2f normedPos = windowPos / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPos.y *= -1.f;
+		if (state == cellState::target)
+		{
+			m_targetPositions.push_back (windowPos);
+			
+			m_normedTargetPositions.push_back (normedPos);
+
+		}
+		else if (state == cellState::goal)
+		{
+			goalPosition = windowPos;
+			m_normedGoalPos = normedPos;
+		}
     }
     
     int getState(int x, int y)
@@ -81,10 +98,11 @@ public:
         gl::setMatricesWindow( getWindowSize() );
 		m_shader.bind();
 		m_shader.uniform ("outputColor",Vec3f(1.0, 1.0, 0.0));
-		Vec2f normedGoalPosition = (goalPosition * Vec2f((float) m_width, (float) m_height)) / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
-		normedGoalPosition.y *= -1.f;
-		console()<<"goal: "<<normedGoalPosition<<std::endl;
-		m_shader.uniform ("normedGoalPosition", normedGoalPosition);
+		if (m_normedTargetPositions.size() > 0)
+		{
+			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
+		}
+		m_shader.uniform ("normedGoalPosition", m_normedGoalPos);
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
         gl::drawSolidRect( getWindowBounds() );
@@ -106,12 +124,39 @@ public:
 		}
 		m_shader.unbind();
     }
+	
+	Vec2f getCurrentTargetPos()
+	{
+		return m_targetPositions[targetIndex];
+	}
+	void incrementTargetPos()
+	{
+		targetIndex ++;
+		if (targetIndex > m_targetPositions.size())
+		{
+			targetIndex = 0;
+		}
+	}
+	int getNumTargets()
+	{
+		return numTargets;
+	}
+
+	Vec2f getGoalPosition()
+	{
+		return goalPosition;
+	}
 private:
+	int targetIndex;
 	int m_width, m_height;
 	float m_cellWidth, m_cellHeight;
     int *m_grid;
     gl::GlslProg m_shader;
 	Vec2f goalPosition;
+	Vec2f m_normedGoalPos;
+	std::vector<Vec2f> m_normedTargetPositions;
+	std::vector<Vec2f> m_targetPositions;
+	int numTargets;
 };
 
 #endif /* defined(__Stephane__Map__) */

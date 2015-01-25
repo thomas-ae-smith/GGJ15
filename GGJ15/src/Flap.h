@@ -57,6 +57,20 @@ public:
 	{
 		m_attractorVelocity = _vel;
 	}
+	
+	void setVelocity(Vec2f _vel, std::vector<Bird*> &m_birds)
+	{
+		m_attractorVelocity = _vel;
+		for( std::vector<Bird*>::iterator a = m_birds.begin(); a != m_birds.end(); ++a )
+		{
+			if ((*a)->hasRules())
+			{
+				(*a)->setVelocity (_vel);
+			}
+		}
+	}
+	
+	void updateOrientationForVelocity(Vec2f direction);
 
 private:
 	//
@@ -71,6 +85,8 @@ private:
 	Vec2f m_attractorVelocity;
 	//
 	float m_orientation;
+	//
+	float m_k_attractor_strength;
 
 
 
