@@ -40,7 +40,7 @@ void Flap::rule2(std::vector<Bird*> &m_birds)
 				Vec2f dir = ((*a)->getPosition() -(*b)->getPosition());
 				float dist = dir.length();
 
-				if(dist > m_k_rule2)
+				if(dist < m_k_rule2)
 				{
 		            float F = (m_k_rule2/dist - 1.0f ) * m_k_attractor_strength;
 					dir = dir.normalized() * F;
@@ -80,7 +80,7 @@ void Flap::update(std::vector<Bird*> &m_birds)
 	m_attractorPosition += m_attractorVelocity;
 
 	// apply attraction rule (rule1)
-	rule1(m_birds);
+	//rule1(m_birds);
 	// apply separation rule (rule2)
 	rule2(m_birds);
 	// orient boids

@@ -275,7 +275,7 @@ void GGJ15App::update()
 	{
 	    for(int i=0; i< birds.size(); i++)
 		{
-			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i]) )
+			 if( (*a != birds[i] ) && (*a)->collisionOptimized(birds[i],10) )
 			 {
 				// if they collide, remove from list and set norules
 				 Vec2f flap_vel = _flap->getVelocity();
