@@ -87,7 +87,7 @@ void main() {
 			
 			
 			//float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
-			birdsC += vec3 (lineD);
+			birdsC += vec3 (0.7, 0.6, 0.5) * lineD;
 		}
 	}
 	
@@ -111,9 +111,9 @@ void main() {
    	//goal
    	float dG = clamp (1. - distance (uv, normedGoalPosition) * 10. + cos(time)/10., 0., 1.) ;
     
-    vec3 targetOrbs = targetsC * 0.7;
+    vec3 targetOrbs = targetsC * 1.;
 	vec3 birdOrbs = birdsC * 0.9;
-   	vec3 goalOrb = vec3(.7, .2, .6) * vec3 (dG) * (1. + .25 *cos(10. * time));
+   	vec3 goalOrb = vec3(1., .5, .9) * vec3 (dG) * (1. + .25 *cos(10. * time));
     gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb + targetOrbs + birdOrbs;
 }
 
