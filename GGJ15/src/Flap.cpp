@@ -2,10 +2,10 @@
 #include "Flap.h"
 
 Flap::Flap()
-	: m_k_rule1(15)
+	: m_k_rule1(1)
 	, m_k_rule2(40)
 	, m_k_rule3(1.0)
-	, m_k_attractor_strength(0.05)
+	, m_k_attractor_strength(0.005)
 {
 }
 
@@ -22,6 +22,7 @@ void Flap::rule1(std::vector<Bird*> &m_birds)
 	{
 		//Vec2f perceivedCenter(com / (float)N_minus_one);	// this set the offset v1
 		Vec2f v1 = (m_attractorPosition - (*a)->getPosition()) / m_k_rule1;
+		v1.safeNormalize();
 		(*a)->setCenterAttraction(v1);
 	}
 }
