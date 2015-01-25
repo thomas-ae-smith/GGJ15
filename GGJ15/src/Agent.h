@@ -76,11 +76,10 @@ public:
 			m_v1.x = m_v2.x = m_v3.x = 0.0f;
 			m_v1.y = m_v2.y = m_v3.y = 0.0f;
 			m_position += (m_velocity);
-
 		}
 		else
 		{
-			m_position += (m_v1 +m_v2);
+			m_position += (m_velocity+m_v1 +m_v2);
 		}
     }
     

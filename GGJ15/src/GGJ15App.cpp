@@ -217,6 +217,7 @@ void GGJ15App::update()
 {
     // once collision, remove from list of clicked and set rules back
 	// for every clicked bird, check if it is colliding with the any other bird of the flock
+	bool collision = false;
 	for( std::list<Bird*>::iterator a = clickedbirds.begin(); a != clickedbirds.end();a++)
 	{
 	    for(int i=0; i< birds.size(); i++)
@@ -233,10 +234,13 @@ void GGJ15App::update()
 					 ori *=-1.0;
 				 _flap->setOrientation(ori / 2.0);
 
-				 //a = clickedbirds.erase(a);// STL trick
+				 a = clickedbirds.erase(a);
+				 collision = true;
 				 break;
 			 }
 		}
+		if(collision)
+			break;
 	}
 
 	// this applies the rules and updates attractor
