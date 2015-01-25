@@ -50,7 +50,7 @@ void main() {
     p += .2 * vec3(sin(time / 16.), sin(time / 12.),  sin(time / 128.));
     float t = field(p);
     float v = (1. - exp((abs(uv.x) - 1.) * 6.)) * (1. - exp((abs(uv.y) - 1.) * 6.));
-    gl_FragColor = mix(.4, 1., v) * vec4(1.8 * t * t * t, 1.2 * t * t, t, 1.0);
+    gl_FragColor = mix(.4, 1., v) * vec4(1.8 * t * t * t, 1.2 * t * t, t, 1.0) * 0.7;
 	
 	
 	// Birds
@@ -60,6 +60,7 @@ void main() {
 		for (int i = 0; i < numBirds; i++)
 		{
 			vec2 birdPos = vec2(normedBirdCoords[i*2], normedBirdCoords[i*2+1]);
+
 			float ang = 0.;
 			float offset = float(mod (birdOrientations[i], 90.) == 0.) * 90.;
 			ang = ( (mod (birdOrientations[i] + offset, 360.)) / 360.) * 2. * pi;
@@ -69,7 +70,7 @@ void main() {
 			vec2 point = vec2 (x, y);
 			vec2 v = birdPos - point;
 			float lineD = clamp (1. - unnormedPointLineDistance (birdPos, point, uv) * 200., 0., 1.);
-//			if (birdOrientations[i], 90. == 0
+			//			if (birdOrientations[i], 90. == 0
 			float offsetPolarity = float(mod (birdOrientations[i], 180.) < 91.) * 2. - 1.;
 			if (birdOrientations[i] == 90.)
 			{
@@ -77,17 +78,18 @@ void main() {
 			}
 			if (birdOrientations[i] != 270.)
 			{
-				lineD *= clamp (1. - abs(distance (uv, birdPos + v * 10. * offsetPolarity)),0.,1.);;
+				lineD *= clamp (1. - abs(distance (uv, birdPos + v * 10. * offsetPolarity)),0.,1.);
 			}
 			else
 			{
 				lineD = 0.;
 			}
+			
+			
+			
+			//float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+			birdsC += vec3  ( lineD);
 
-			
-			
-			float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
-			birdsC += vec3 (0.7, 0.6, 0.5) * lineD;
 		}
 	}
 	
