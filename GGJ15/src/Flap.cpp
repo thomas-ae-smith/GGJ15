@@ -2,10 +2,10 @@
 #include "Flap.h"
 
 Flap::Flap()
-	: m_k_rule1(100)
-	, m_k_rule2(35)
-	, m_k_rule3(1.0)
-	, m_k_attractor_strength(0.003)
+	: m_k_rule1(100)				// how much agents get attracted to center
+	, m_k_rule2(30)					// separation distance
+	, m_k_rule3(1.0)				// 
+	, m_k_attractor_strength(0.03)	// force magnitude multiplier	
 	, velMult (1.)
 {
 }
@@ -23,7 +23,7 @@ void Flap::rule1(std::vector<Bird*> &m_birds)
 	{
 		//Vec2f perceivedCenter(com / (float)N_minus_one);	// this set the offset v1
 		Vec2f v1 = (m_attractorPosition - (*a)->getPosition()) / m_k_rule1;
-		v1.safeNormalize();
+		//v1.safeNormalize();
 		(*a)->setCenterAttraction(v1);
 	}
 }
@@ -78,7 +78,7 @@ void Flap::orientation(std::vector<Bird*> &m_birds)
 // NOTE : dir has to be NORMALIZED (.normalized())
 void Flap::update(std::vector<Bird*> &m_birds)
 {
-	m_attractorPosition += m_attractorVelocity * velMult;
+	m_attractorPosition += (m_attractorVelocity * velMult);
 
 	// apply attraction rule (rule1)
 	rule1(m_birds);
