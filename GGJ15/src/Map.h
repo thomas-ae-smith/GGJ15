@@ -16,7 +16,7 @@
 #include "Resources.h"
 
 #include <stdio.h>
-
+#define MAX_BIRDS 12
 #define MAX_TARGETS 11
 
 using namespace ci;
@@ -31,6 +31,7 @@ enum cellState
 };
 
 const int maxTargetCoords = MAX_TARGETS * 2;
+const int maxBirdCoords = MAX_BIRDS * 2;
 class Map
 {
 public:
@@ -56,10 +57,17 @@ public:
 //		goalPosition = Vec2f(13., 9.);
 		targetIndex = 0;
 		numTargets = 0;
+		numBirds = 0;
 		goalRadius = 40.;
 		for (int i = 0; i < maxTargetCoords; i++)
 		{
 			m_normedTargetCoords[i] = 0.;
+		}
+		for (int i = 0; i < MAX_BIRDS; i++)
+		{
+			m_birdPositions[i*2] = 0.;
+			m_birdPositions[i*2+1] = 0.;
+			m_birdOrientatons[i] = 0.;
 		}
     };
     
@@ -96,6 +104,24 @@ public:
         return m_grid[y*m_width+x];
     }
 	
+	void addBirdAtPosition (Vec2f position, float orientation)
+	{
+		Vec2f normedPos = position / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPos.y *= -1.f;
+		m_birdPositions[numBirds*2] = normedPos.x;
+		m_birdPositions[numBirds*2+1]=normedPos.y;
+		m_birdOrientatons[numBirds] = orientation;
+		numBirds ++;
+	}
+	void setBirdPositionOrientation (Vec2f position, float orientation, int index)
+	{
+		Vec2f normedPos = position / Vec2f ((float) getWindowWidth(), (float) getWindowHeight()) * 2.f - Vec2f (1.f, 1.f);
+		normedPos.y *= -1.f;
+		m_birdPositions[index * 2] = normedPos.x;
+		m_birdPositions[index * 2 + 1] = normedPos.y;
+		m_birdOrientatons[index] = orientation;
+	}
+	
 	void addObstacle (int x, int y, int radius)
 	{
 		for (int i = x; i < x + radius*2; x++)
@@ -117,10 +143,13 @@ public:
 		m_shader.uniform ("numTargets", numTargets);
 		m_shader.uniform ("normedTargetCoords", m_normedTargetCoords, maxTargetCoords);
 		
-		if (m_normedTargetPositions.size() > 0)
-		{
-			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
-		}
+//		if (m_normedTargetPositions.size() > 0)
+//		{
+//			m_shader.uniform ("normedTargetPosition", m_normedTargetPositions[targetIndex]);
+//		}
+		m_shader.uniform ("numBirds", numBirds);
+		m_shader.uniform ("normedBirdCoords", m_birdPositions, maxBirdCoords);
+		m_shader.uniform ("birdOrientations", m_birdOrientatons, MAX_BIRDS);
 		m_shader.uniform ("normedGoalPosition", m_normedGoalPos);
 		m_shader.uniform ("resolution", Vec2f ((float) getWindowWidth(), (float) getWindowHeight()));
 		m_shader.uniform ("time", float(getElapsedSeconds()));
@@ -180,6 +209,9 @@ private:
 	std::vector<Vec2f> m_normedTargetPositions;
 	std::vector<Vec2f> m_targetPositions;
 	float m_normedTargetCoords [maxTargetCoords];
+	float m_birdPositions [maxBirdCoords];
+	float m_birdOrientatons [MAX_BIRDS];
+	int numBirds;
 	int numTargets;
 	float goalRadius;
 };

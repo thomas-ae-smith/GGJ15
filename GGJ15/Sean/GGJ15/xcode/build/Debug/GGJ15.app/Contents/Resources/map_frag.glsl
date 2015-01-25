@@ -8,7 +8,10 @@ uniform vec2 resolution;
 uniform vec2 normedTargetPosition;
 uniform int numTargets;
 uniform vec2 normedGoalPosition;
-uniform float normedTargetCoords [12];
+uniform float normedTargetCoords [22];
+uniform int numBirds;
+uniform float normedBirdCoords [24];
+uniform float birdOrientations [12];
 uniform vec2 radius;
 
 uniform vec3 outputColor;
@@ -43,7 +46,22 @@ void main() {
     float t = field(p);
     float v = (1. - exp((abs(uv.x) - 1.) * 6.)) * (1. - exp((abs(uv.y) - 1.) * 6.));
     gl_FragColor = mix(.4, 1., v) * vec4(1.8 * t * t * t, 1.2 * t * t, t, 1.0);
-    
+	
+	
+	// Birds
+	vec3 birdsC = vec3(0.);
+	if (numBirds > 0)
+	{
+		for (int i = 0; i < numBirds; i++)
+		{
+			float ang = (birdOrientations[i] / 360.) * 2. * pi;
+			vec2 birdPos = vec2(normedBirdCoords[i*2], normedBirdCoords[i*2+1]);
+			float d = clamp (1. - distance (uv, birdPos) * (10. + abs(sin(time)) * 5.), 0., 1.);
+			birdsC += vec3 (d);
+		}
+	}
+	
+	
 //    targets
 	vec3 targetsC = vec3(0.);
 	if (numTargets > 0)
@@ -64,6 +82,7 @@ void main() {
    	float dG = clamp (1. - distance (uv, normedGoalPosition) * 10. + cos(time)/10., 0., 1.) ;
     
     vec3 targetOrbs = targetsC * 0.7;
+	vec3 birdOrbs = birdsC * 0.9;
    	vec3 goalOrb = vec3(.7, .2, .6) * vec3 (dG) * (1. + .25 *cos(10. * time));
-    gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb + targetOrbs;
+    gl_FragColor.xyz = gl_FragColor.xyz  + goalOrb + targetOrbs + birdOrbs;
 }

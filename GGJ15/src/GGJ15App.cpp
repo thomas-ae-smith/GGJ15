@@ -225,6 +225,7 @@ void GGJ15App::keyDown( KeyEvent event ) {
 void GGJ15App::addBirdAtGridPosition (int x, int y, float vX, float vY, float r)
 {
 	birds.push_back (new Bird (Vec2f ((x + 0.5) * r * 2., ((y + 0.5) * r * 2.)), Vec2f (vX, vY), r));
+	map->addBirdAtPosition (birds[birds.size() - 1]->getPosition(), birds[birds.size() - 1]->getOrientation());
 }
 
 void GGJ15App::addGoalAtPosition (int x, int y, float vX, float vY, float r)
@@ -294,6 +295,7 @@ void GGJ15App::update()
 	}
 	for (int b = 0; b < birds.size(); b++)
 	{
+		map->setBirdPositionOrientation (birds[b]->getPosition(), birds[b]->getOrientation(), b);
 		if (map->getNumTargets() > 0)
 		{
 			if (birds[b]->contains (map->getCurrentTargetPos()))
