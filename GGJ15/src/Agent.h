@@ -117,7 +117,7 @@ public:
 
     bool collision( Agent *otherAgent);
     bool collision( Map *map);
-    bool collisionOptimized( Agent *otherAgent);
+    bool collisionOptimized( Agent *otherAgent, float _offset);
 	bool contains(Vec2f mouse);
 
 	void setNoRules(bool _b)
