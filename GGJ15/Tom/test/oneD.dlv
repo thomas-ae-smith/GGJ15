@@ -1,7 +1,9 @@
-#const width=12.
-#const height=12.
-#const numbirds = 7.
+#const width=19.
+#const height=19.
+#const numbirds = 10.
 
+width(width+1).
+height(height+1).
 %% Hide empty atoms from the output (doesn't seem to work)
 %#hide empty(X,Y).
 
@@ -9,11 +11,14 @@
 dimX(0..width).
 dimY(0..height).
 
+border(0;;width,Y) :- dimY(Y).
+border(X,0;;height) :- dimX(X).
+
 %% We must have a goal
 1{goal(X,Y):dimX(X),dimY(Y)}1.
 
 %% We must have a bird(s)
-numbirds {bird(X,Y,N):dimX(X),dimY(Y),dir(N,_,_)} numbirds.
+numbirds {bird(X,Y,N):border(X,Y),dir(N,_,_)} numbirds.
 
 %% No bird may start on the goal
 :- bird(X, Y,_), goal(X, Y).
@@ -82,8 +87,26 @@ iSumXN(I+O,X,Y) :- I = {in(N, X, Y, -1, _):dir(N,_,_)}, O = {out(N, X, Y, 1, _):
 iSumYP(I+O,X,Y) :- I = {in(N, X, Y, _, 1):dir(N,_,_)}, O = {out(N, X, Y, _, -1):dir(N,_,_)}, change(X,Y).
 iSumYN(I+O,X,Y) :- I = {in(N, X, Y, _, -1):dir(N,_,_)}, O = {out(N, X, Y, _, 1):dir(N,_,_)}, change(X,Y).
 
+%% Ensure that intersections are legal
 :- iSumYP(P,X,Y), iSumYN(N,X,Y), P != N.
 :- iSumXP(P,X,Y), iSumXN(N,X,Y), P != N.
+
+%width + height + width {obstacle(X,Y,N):dir(N,_,_),empty(X,Y)} width + height + width.
+%6 {obstacle(X+OX+OY,N)} width :- obstacle(X,Y,N), dir(N,OX,OY), empty(X+OX,Y+OY).
+%:- {obstacle(_,_,N):dir(N,_,_)} 2.
+%:- 5{obstacle(X,_,_):dimX(X)} .
+%:- 5{obstacle(_,Y,_):dimY(Y)} .
+
+
+%% Optimise for distribution
+%dist(|AX-BX|,|AY-BY|) :- change(AX,AY), change(BX,BY), AX != BX, AY != BY.
+%dist(|AX-BX|,|AY-BY|) :- change(AX,AY), goal(BX,BY).
+%dist(|AX-BX|,|AY-BY|) :- change(AX,AY), bird(BX,BY,N).
+%dist(|AX-BX|,|AY-BY|) :- bird(AX,AY,N), bird(BX,BY,N).
+%dist(|AX-BX|,|AY-BY|) :- goal(AX,AY), bird(BX,BY,N).
+
+%#maximize{X+Y:dist(X,Y)}.
+%:- dist(X,Y), X+Y < 3.
 
 %% DEBUG asserted facts for testing
 %goal(20,7).
@@ -106,6 +129,14 @@ iSumYN(I+O,X,Y) :- I = {in(N, X, Y, _, -1):dir(N,_,_)}, O = {out(N, X, Y, _, 1):
 
 %% Output codes for the renderer
 charAt(b, X, Y) :- bird(X, Y, N).
+%charAt("0", X, Y) :- obstacle(X, Y, q).
+%charAt("1", X, Y) :- obstacle(X, Y, w).
+%charAt("2", X, Y) :- obstacle(X, Y, e).
+%charAt("3", X, Y) :- obstacle(X, Y, d).
+%charAt("4", X, Y) :- obstacle(X, Y, c).
+%charAt("5", X, Y) :- obstacle(X, Y, x).
+%charAt("6", X, Y) :- obstacle(X, Y, z).
+%charAt("7", X, Y) :- obstacle(X, Y, a).
 charAt("G", X, Y) :- goal(X,Y).
 charAt("d", X, Y) :- path(X, Y, d).
 charAt("a", X, Y) :- path(X, Y, a).
